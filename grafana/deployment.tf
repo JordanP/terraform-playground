@@ -1,0 +1,161 @@
+resource "kubernetes_deployment" "grafana" {
+  "metadata" {
+    name      = "grafana"
+    namespace = "monitoring"
+  }
+
+  "spec" {
+    replicas = 1
+
+    strategy {
+      rolling_update {
+        max_unavailable = "1"
+      }
+    }
+
+    selector {
+      match_labels {
+        name  = "grafana"
+        phase = "prod"
+      }
+    }
+
+    "template" {
+      "metadata" {
+        labels {
+          name  = "grafana"
+          phase = "prod"
+        }
+
+        /*annotations {
+          "seccomp.security.alpha.kubernetes.io/pod" = "docker/default"
+        }*/
+      }
+
+      "spec" {
+        container {
+          name  = "grafana"
+          image = "grafana/grafana:6.1.3"
+
+          env {
+            name  = "GF_PATHS_CONFIG"
+            value = "/etc/grafana/custom.ini"
+          }
+
+          port {
+            name           = "http"
+            container_port = 8080
+          }
+
+          liveness_probe {
+            http_get {
+              path = "/metrics"
+              port = "8080"
+            }
+
+            initial_delay_seconds = 10
+          }
+
+          readiness_probe {
+            http_get {
+              path = "/api/health"
+              port = "8080"
+            }
+
+            initial_delay_seconds = 10
+          }
+
+          resources {
+            requests {
+              cpu    = "100m"
+              memory = "100Mi"
+            }
+
+            limits {
+              cpu    = "200m"
+              memory = "200Mi"
+            }
+          }
+
+          volume_mount {
+            name       = "config"
+            mount_path = "/etc/grafana"
+          }
+
+          volume_mount {
+            name       = "datasources"
+            mount_path = "/etc/grafana/provisioning/datasources"
+          }
+
+          volume_mount {
+            name       = "providers"
+            mount_path = "/etc/grafana/provisioning/dashboards"
+          }
+
+          volume_mount {
+            name       = "dashboards-etcd"
+            mount_path = "/etc/grafana/dashboards/kubernetes/etcd"
+          }
+
+          volume_mount {
+            name       = "dashboards-k8s"
+            mount_path = "/etc/grafana/dashboards/kubernetes/k8s"
+          }
+
+          volume_mount {
+            name       = "dashboards-k8s-resources"
+            mount_path = "/etc/grafana/dashboards/kubernetes/k8s-resources"
+          }
+        }
+
+        volume {
+          name = "config"
+
+          config_map {
+            name = "${kubernetes_config_map.grafana_config.metadata.0.name}"
+          }
+        }
+
+        volume {
+          name = "datasources"
+
+          config_map {
+            name = "${kubernetes_config_map.grafana_datasources.metadata.0.name}"
+          }
+        }
+
+        volume {
+          name = "providers"
+
+          config_map {
+            name = "${kubernetes_config_map.grafana_providers.metadata.0.name}"
+          }
+        }
+
+        volume {
+          name = "dashboards-etcd"
+
+          config_map {
+            name = "${kubernetes_config_map.grafana_dashboards_etcd.metadata.0.name}"
+          }
+        }
+
+        volume {
+          name = "dashboards-k8s"
+
+          config_map {
+            name = "${kubernetes_config_map.grafana_dashboards_k8s.metadata.0.name}"
+          }
+        }
+
+        volume {
+          name = "dashboards-k8s-resources"
+
+          config_map {
+            name = "${kubernetes_config_map.grafana_dashboards_k8s_resources.metadata.0.name}"
+          }
+        }
+      }
+    }
+  }
+}
