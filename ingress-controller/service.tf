@@ -1,7 +1,7 @@
 resource "kubernetes_service" "ingress" {
   metadata {
     name      = "nginx-ingress-controller"
-    namespace = "${var.namespace}"
+    namespace = "${kubernetes_namespace.ingress.metadata.0.name}"
 
     annotations {
       "prometheus.io/scrape" = "true"

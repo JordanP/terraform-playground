@@ -2,12 +2,14 @@ apiVersion: 1
 providers:
   - name: 'kubernetes'
     ordId: 1
+    updateIntervalSeconds: 60 #how often Grafana will scan for changed dashboards
     folder: 'Kubernetes'
     type: file
     options:
       path: /etc/grafana/dashboards/kubernetes
   - name: 'nodes'
     ordId: 1
+    updateIntervalSeconds: 60 #how often Grafana will scan for changed dashboards
     folder: 'Nodes'
     type: file
     options:

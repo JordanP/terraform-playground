@@ -15,17 +15,17 @@ locals {
 module "nginx" {
   source = "./ingress-controller"
 
-  providers = {
+  /*providers = {
     kubernetes = "kubernetes"
-  }
+  }*/
 }
 
 module "grafana" {
   source = "./grafana"
 
-  providers = {
+  /*providers = {
     kubernetes = "kubernetes"
-  }
+  }*/
 }
 
 module "google-cloud-jordan" {
@@ -46,7 +46,7 @@ module "google-cloud-jordan" {
   dns_zone_name = "${local.dns_zone_name}"
 
   # configuration
-  ssh_authorized_key = "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAn4Ku2f1Nuojd5XZwkLXjM+IqQcFDsVll3ITQvcbHg5D+Y2EKPq3BjN2vh1OQ05C2KfxOC0gosh2pdG+LLo82J05p5EIyLMMpNh20tSy8Q5D0PJ3meKaUaP/0N22u4DNOPvRC/KCaDMKrFVVv4QnxPL08oC7KsEbfho7xt/n5s5ehVfF81FGAFGDs++OpCmGjv9+5WKGLUAkWrLOEPBECtwawIb/ieOWj9113oLafwktRgvry53jL93Q//YSkhETchtaHTqWaPUu/PXgV/zxZ+kAirXDk1ZUzuxxheoMBkKwWMUqpVOsXBwnCCpYJjv7pXEJn/1GGXWPjHl9Mk0TmNw== jordan@rezel.net"
+  ssh_authorized_key = "${file(pathexpand("~/.ssh/id_rsa.pub"))}"
   asset_dir          = "${local.asset_dir}"
 
   # optional

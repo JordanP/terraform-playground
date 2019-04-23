@@ -1,7 +1,7 @@
 resource "kubernetes_service" "grafana" {
   "metadata" {
     name      = "grafana"
-    namespace = "monitoring"
+    namespace = "${kubernetes_namespace.monitoring.metadata.0.name}"
 
     annotations {
       "prometheus.io/scrape" = "true"

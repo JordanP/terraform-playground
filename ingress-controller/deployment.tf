@@ -1,7 +1,7 @@
 resource "kubernetes_deployment" "ingress" {
   "metadata" {
     name      = "nginx-ingress-controller"
-    namespace = "${var.namespace}"
+    namespace = "${kubernetes_namespace.ingress.metadata.0.name}"
   }
 
   spec {

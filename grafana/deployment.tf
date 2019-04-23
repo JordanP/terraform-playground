@@ -1,7 +1,7 @@
 resource "kubernetes_deployment" "grafana" {
   "metadata" {
     name      = "grafana"
-    namespace = "monitoring"
+    namespace = "${kubernetes_namespace.monitoring.metadata.0.name}"
   }
 
   "spec" {
@@ -40,6 +40,22 @@ resource "kubernetes_deployment" "grafana" {
           env {
             name  = "GF_PATHS_CONFIG"
             value = "/etc/grafana/custom.ini"
+          }
+
+          env {
+            name  = "GF_SECURITY_ADMIN_USER"
+            value = "admin"
+          }
+
+          env {
+            name = "GF_SECURITY_ADMIN_PASSWORD"
+
+            value_from {
+              secret_key_ref {
+                name = "${kubernetes_secret.grafana_secret.metadata.0.name}"
+                key  = "grafana-admin-password"
+              }
+            }
           }
 
           port {
