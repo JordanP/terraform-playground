@@ -1,11 +1,10 @@
-resource "kubernetes_service" "grafana" {
+resource "kubernetes_service" "prometheus" {
   "metadata" {
-    name      = "grafana"
+    name      = "prometheus"
     namespace = "${var.namespace}"
 
     annotations {
       "prometheus.io/scrape" = "true"
-      "prometheus.io/port"   = "10254'"
     }
   }
 
@@ -13,15 +12,15 @@ resource "kubernetes_service" "grafana" {
     type = "ClusterIP"
 
     selector {
-      name  = "grafana"
+      name  = "prometheus"
       phase = "prod"
     }
 
     port {
-      name        = "http"
+      name        = "web"
       protocol    = "TCP"
-      port        = 80
-      target_port = "8080"
+      port        = "80"
+      target_port = "9090"
     }
   }
 }

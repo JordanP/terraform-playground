@@ -14,18 +14,42 @@ locals {
 
 module "nginx" {
   source = "./ingress-controller"
+}
 
-  /*providers = {
-    kubernetes = "kubernetes"
-  }*/
+resource "kubernetes_namespace" "monitoring" {
+  metadata {
+    name = "monitoring"
+
+    labels {
+      "name" = "monitoring"
+    }
+  }
 }
 
 module "grafana" {
-  source = "./grafana"
+  source    = "./grafana"
+  namespace = "${kubernetes_namespace.monitoring.metadata.0.name}"
+}
 
-  /*providers = {
-    kubernetes = "kubernetes"
-  }*/
+resource "google_dns_record_set" "monitoring" {
+  provider = "google.default"
+
+  # DNS zone name
+  managed_zone = "${local.dns_zone_name}"
+
+  # DNS record
+  name = "monitoring.${local.dns_zone}."
+  type = "A"
+  ttl  = 300
+
+  rrdatas = [
+    "${module.google-cloud-jordan.ingress_static_ipv4}",
+  ]
+}
+
+module "prometheus" {
+  source    = "./prometheus"
+  namespace = "${kubernetes_namespace.monitoring.metadata.0.name}"
 }
 
 module "google-cloud-jordan" {

@@ -1,0 +1,20 @@
+{
+  "groups": [
+  {
+    "name": "extra.rules",
+    "rules": [
+    {
+      "alert": "InactiveRAIDDisk",
+      "annotations": {
+        "message": "{{ $value }} RAID disk(s) on node {{ $labels.instance }} are inactive."
+      },
+      "expr": "node_md_disks - node_md_disks_active > 0",
+      "for": "10m",
+      "labels": {
+        "severity": "warning"
+      }
+    }
+    ]
+  }
+  ]
+}

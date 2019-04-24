@@ -1,7 +1,7 @@
 resource "kubernetes_deployment" "grafana" {
   "metadata" {
     name      = "grafana"
-    namespace = "${kubernetes_namespace.monitoring.metadata.0.name}"
+    namespace = "${var.namespace}"
   }
 
   "spec" {

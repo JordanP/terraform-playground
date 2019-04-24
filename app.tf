@@ -67,22 +67,6 @@ resource "google_dns_record_set" "app-record-a" {
   ]
 }
 
-resource "google_dns_record_set" "monitoring" {
-  provider = "google.default"
-
-  # DNS zone name
-  managed_zone = "${local.dns_zone_name}"
-
-  # DNS record
-  name = "monitoring.${local.dns_zone}."
-  type = "A"
-  ttl  = 300
-
-  rrdatas = [
-    "${module.google-cloud-jordan.ingress_static_ipv4}",
-  ]
-}
-
 /*
 KUBECONFIG=/home/jordan/.secrets/clusters/tf-playground/auth/kubeconfig ./kubectl apply -f - <<EOF
 apiVersion: extensions/v1beta1
