@@ -1,22 +1,3 @@
-resource "random_id" "grafana_config_cm_name" {
-  byte_length = 4
-
-  keepers {
-    data = "${filebase64sha256("${path.module}/config/custom.ini")}"
-  }
-}
-
-resource "kubernetes_config_map" "grafana_config" {
-  metadata {
-    name      = "grafana-config-${random_id.grafana_config_cm_name.hex}"
-    namespace = "${var.namespace}"
-  }
-
-  data {
-    custom.ini = "${file("${path.module}/config/custom.ini")}"
-  }
-}
-
 resource "random_id" "grafana_dashboards_etcd_cm_name" {
   byte_length = 4
 
@@ -71,6 +52,25 @@ resource "kubernetes_config_map" "grafana_dashboards_k8s" {
 
   data {
     k8s-cluster-rsrc-use.json = "${file("${path.module}/config/k8s-cluster-rsrc-use.json")}"
+  }
+}
+
+resource "random_id" "grafana_config_cm_name" {
+  byte_length = 4
+
+  keepers {
+    data = "${filebase64sha256("${path.module}/config/custom.ini")}"
+  }
+}
+
+resource "kubernetes_config_map" "grafana_config" {
+  metadata {
+    name      = "grafana-config-${random_id.grafana_config_cm_name.hex}"
+    namespace = "${var.namespace}"
+  }
+
+  data {
+    custom.ini = "${file("${path.module}/config/custom.ini")}"
   }
 }
 
