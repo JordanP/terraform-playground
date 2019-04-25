@@ -25,7 +25,6 @@ resource "random_id" "prometheus_rules_cm_name" {
     data2 = "${filebase64sha256("${path.module}/config/rules/extra.yaml")}"
     data3 = "${filebase64sha256("${path.module}/config/rules/kube.yaml")}"
     data4 = "${filebase64sha256("${path.module}/config/rules/kubeprom.yaml")}"
-
   }
 }
 
@@ -36,9 +35,9 @@ resource "kubernetes_config_map" "prometheus_rules" {
   }
 
   data {
-    etcd.yaml = "${file("${path.module}/config/rules/etcd.yaml")}"
-    extra.yaml = "${file("${path.module}/config/rules/extra.yaml")}"
-    kube.yaml = "${file("${path.module}/config/rules/kube.yaml")}"
+    etcd.yaml     = "${file("${path.module}/config/rules/etcd.yaml")}"
+    extra.yaml    = "${file("${path.module}/config/rules/extra.yaml")}"
+    kube.yaml     = "${file("${path.module}/config/rules/kube.yaml")}"
     kubeprom.yaml = "${file("${path.module}/config/rules/kubeprom.yaml")}"
   }
 }

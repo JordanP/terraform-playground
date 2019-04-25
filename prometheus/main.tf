@@ -9,5 +9,5 @@ module "prometheus_exporters" {
 }
 
 module "prometheus_discovery" {
-  source    = "./discovery"
+  source = "./discovery"
 }

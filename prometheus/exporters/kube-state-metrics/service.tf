@@ -1,6 +1,6 @@
-resource "kubernetes_service" "node_exporter" {
+resource "kubernetes_service" "kube_scheduler" {
   "metadata" {
-    name      = "node-exporter"
+    name      = "kube-state-metrics"
     namespace = "${var.namespace}"
 
     annotations {
@@ -13,15 +13,15 @@ resource "kubernetes_service" "node_exporter" {
     cluster_ip = "None"
 
     selector {
-      name  = "node-exporter"
+      name  = "kube-state-metrics"
       phase = "prod"
     }
 
     port {
       name        = "metrics"
       protocol    = "TCP"
-      port        = "90"
-      target_port = "9100"
+      port        = "8080"
+      target_port = "8080"
     }
   }
 }
