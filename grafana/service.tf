@@ -1,5 +1,5 @@
 resource "kubernetes_service" "grafana" {
-  "metadata" {
+  metadata {
     name      = "grafana"
     namespace = "${var.namespace}"
 
@@ -9,7 +9,7 @@ resource "kubernetes_service" "grafana" {
     }
   }
 
-  "spec" {
+  spec {
     type = "ClusterIP"
 
     selector {

@@ -1,5 +1,5 @@
 resource "kubernetes_service" "prometheus" {
-  "metadata" {
+  metadata {
     name      = "prometheus"
     namespace = "${var.namespace}"
 
@@ -8,7 +8,7 @@ resource "kubernetes_service" "prometheus" {
     }
   }
 
-  "spec" {
+  spec {
     type = "ClusterIP"
 
     selector {

@@ -21,7 +21,7 @@ provider "null" {
   alias   = "default"
 }
 
-provider "template" {
+provider template {
   version = "~> 1.0"
   alias   = "default"
 }

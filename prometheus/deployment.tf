@@ -1,10 +1,10 @@
 resource "kubernetes_deployment" "prometheus" {
-  "metadata" {
+  metadata {
     name      = "prometheus"
     namespace = "${var.namespace}"
   }
 
-  "spec" {
+  spec {
     replicas = 1
 
     selector {
@@ -14,8 +14,8 @@ resource "kubernetes_deployment" "prometheus" {
       }
     }
 
-    "template" {
-      "metadata" {
+    template {
+      metadata {
         labels {
           name  = "prometheus"
           phase = "prod"
@@ -26,7 +26,7 @@ resource "kubernetes_deployment" "prometheus" {
         }*/
       }
 
-      "spec" {
+      spec {
         service_account_name = "${module.prometheus_rbac.service_account_name}"
 
         container {

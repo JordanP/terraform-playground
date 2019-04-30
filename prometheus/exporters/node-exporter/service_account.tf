@@ -1,7 +1,7 @@
 variable "namespace" {}
 
 resource "kubernetes_service_account" "node_exporter" {
-  "metadata" {
+  metadata {
     name      = "node-exporter"
     namespace = "${var.namespace}"
   }

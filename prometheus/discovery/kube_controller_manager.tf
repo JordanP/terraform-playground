@@ -1,5 +1,5 @@
 resource "kubernetes_service" "kube_controller_manager" {
-  "metadata" {
+  metadata {
     name      = "kube-controller-manager"
     namespace = "kube-system"
 
@@ -8,7 +8,7 @@ resource "kubernetes_service" "kube_controller_manager" {
     }
   }
 
-  "spec" {
+  spec {
     type       = "ClusterIP"
     cluster_ip = "None"
 

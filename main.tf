@@ -21,7 +21,7 @@ resource "kubernetes_namespace" "monitoring" {
     name = "monitoring"
 
     labels {
-      "name" = "monitoring"
+      name = "monitoring"
     }
   }
 }

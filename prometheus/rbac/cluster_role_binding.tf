@@ -1,5 +1,5 @@
 resource "kubernetes_cluster_role_binding" "prometheus" {
-  "metadata" {
+  metadata {
     name = "prometheus"
   }
 

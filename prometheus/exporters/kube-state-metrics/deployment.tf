@@ -1,12 +1,12 @@
 variable "namespace" {}
 
 resource "kubernetes_deployment" "kube_state_metrics" {
-  "metadata" {
+  metadata {
     name      = "kube-state-metrics"
     namespace = "${var.namespace}"
   }
 
-  "spec" {
+  spec {
     replicas = "1"
 
     selector {
@@ -16,15 +16,15 @@ resource "kubernetes_deployment" "kube_state_metrics" {
       }
     }
 
-    "template" {
-      "metadata" {
+    template {
+      metadata {
         labels {
           name  = "kube-state-metrics"
           phase = "prod"
         }
       }
 
-      "spec" {
+      spec {
         service_account_name = "${kubernetes_service_account.kube_state_metrics.metadata.0.name}"
 
         container {

@@ -1,5 +1,5 @@
 resource "kubernetes_service" "kube_scheduler" {
-  "metadata" {
+  metadata {
     name      = "kube-state-metrics"
     namespace = "${var.namespace}"
 
@@ -8,7 +8,7 @@ resource "kubernetes_service" "kube_scheduler" {
     }
   }
 
-  "spec" {
+  spec {
     type       = "ClusterIP"
     cluster_ip = "None"
 

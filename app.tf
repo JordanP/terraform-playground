@@ -1,9 +1,9 @@
 resource "kubernetes_deployment" "test-app" {
-  "metadata" {
+  metadata {
     name = "test-app"
   }
 
-  "spec" {
+  spec {
     replicas = 1
 
     selector {
@@ -12,14 +12,14 @@ resource "kubernetes_deployment" "test-app" {
       }
     }
 
-    "template" {
-      "metadata" {
+    template {
+      metadata {
         labels {
           app = "test-app"
         }
       }
 
-      "spec" {
+      spec {
         container {
           name  = "echo"
           image = "k8s.gcr.io/echoserver:1.10"
@@ -35,11 +35,11 @@ resource "kubernetes_deployment" "test-app" {
 }
 
 resource "kubernetes_service" "test-app" {
-  "metadata" {
+  metadata {
     name = "test-app"
   }
 
-  "spec" {
+  spec {
     selector {
       app = "${kubernetes_deployment.test-app.metadata.0.name}"
     }

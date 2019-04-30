@@ -1,10 +1,10 @@
 resource "kubernetes_deployment" "grafana" {
-  "metadata" {
+  metadata {
     name      = "grafana"
     namespace = "${var.namespace}"
   }
 
-  "spec" {
+  spec {
     replicas = 1
 
     strategy {
@@ -20,8 +20,8 @@ resource "kubernetes_deployment" "grafana" {
       }
     }
 
-    "template" {
-      "metadata" {
+    template {
+      metadata {
         labels {
           name  = "grafana"
           phase = "prod"
@@ -32,7 +32,7 @@ resource "kubernetes_deployment" "grafana" {
         }*/
       }
 
-      "spec" {
+      spec {
         container {
           name  = "grafana"
           image = "grafana/grafana:6.1.3"

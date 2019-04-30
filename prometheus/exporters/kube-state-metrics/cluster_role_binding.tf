@@ -1,5 +1,5 @@
 resource "kubernetes_cluster_role_binding" "kube_state_metrics" {
-  "metadata" {
+  metadata {
     name = "kube-state-metrics"
   }
 

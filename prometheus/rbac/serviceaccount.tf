@@ -1,5 +1,5 @@
 resource "kubernetes_service_account" "prometheus" {
-  "metadata" {
+  metadata {
     name      = "prometheus"
     namespace = "${var.namespace}"
   }

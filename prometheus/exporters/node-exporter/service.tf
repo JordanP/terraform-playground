@@ -1,5 +1,5 @@
 resource "kubernetes_service" "node_exporter" {
-  "metadata" {
+  metadata {
     name      = "node-exporter"
     namespace = "${var.namespace}"
 
@@ -8,7 +8,7 @@ resource "kubernetes_service" "node_exporter" {
     }
   }
 
-  "spec" {
+  spec {
     type       = "ClusterIP"
     cluster_ip = "None"
 

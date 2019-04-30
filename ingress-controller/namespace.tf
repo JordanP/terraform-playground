@@ -3,7 +3,7 @@ resource "kubernetes_namespace" "ingress" {
     name = "${var.namespace}"
 
     labels {
-      "name" = "${var.namespace}"
+      name = "${var.namespace}"
     }
   }
 }
