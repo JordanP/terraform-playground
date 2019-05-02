@@ -15,16 +15,14 @@ resource "kubernetes_deployment" "ingress" {
 
     selector {
       match_labels {
-        name  = "nginx-ingress-controller"
-        phase = "prod"
+        name = "nginx-ingress-controller"
       }
     }
 
     template {
       metadata {
         labels {
-          name  = "nginx-ingress-controller"
-          phase = "prod"
+          name = "nginx-ingress-controller"
         }
 
         /*annotations {

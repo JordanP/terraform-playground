@@ -12,8 +12,7 @@ resource "kubernetes_service" "prometheus" {
     type = "ClusterIP"
 
     selector {
-      name  = "prometheus"
-      phase = "prod"
+      name = "prometheus"
     }
 
     port {

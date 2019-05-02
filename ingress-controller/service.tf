@@ -13,8 +13,7 @@ resource "kubernetes_service" "ingress" {
     type = "ClusterIP"
 
     selector {
-      name  = "nginx-ingress-controller"
-      phase = "prod"
+      name = "nginx-ingress-controller"
     }
 
     port {

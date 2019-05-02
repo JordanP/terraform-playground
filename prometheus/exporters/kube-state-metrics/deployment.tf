@@ -11,16 +11,14 @@ resource "kubernetes_deployment" "kube_state_metrics" {
 
     selector {
       match_labels {
-        name  = "kube-state-metrics"
-        phase = "prod"
+        name = "kube-state-metrics"
       }
     }
 
     template {
       metadata {
         labels {
-          name  = "kube-state-metrics"
-          phase = "prod"
+          name = "kube-state-metrics"
         }
       }
 

@@ -9,16 +9,14 @@ resource "kubernetes_deployment" "prometheus" {
 
     selector {
       match_labels {
-        name  = "prometheus"
-        phase = "prod"
+        name = "prometheus"
       }
     }
 
     template {
       metadata {
         labels {
-          name  = "prometheus"
-          phase = "prod"
+          name = "prometheus"
         }
 
         /*annotations {

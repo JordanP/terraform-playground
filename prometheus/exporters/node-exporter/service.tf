@@ -13,8 +13,7 @@ resource "kubernetes_service" "node_exporter" {
     cluster_ip = "None"
 
     selector {
-      name  = "node-exporter"
-      phase = "prod"
+      name = "node-exporter"
     }
 
     port {

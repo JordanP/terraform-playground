@@ -15,16 +15,14 @@ resource "kubernetes_deployment" "grafana" {
 
     selector {
       match_labels {
-        name  = "grafana"
-        phase = "prod"
+        name = "grafana"
       }
     }
 
     template {
       metadata {
         labels {
-          name  = "grafana"
-          phase = "prod"
+          name = "grafana"
         }
 
         /*annotations {

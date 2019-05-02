@@ -15,16 +15,14 @@ resource "kubernetes_daemonset" "node_exporter" {
 
     selector {
       match_labels {
-        name  = "node-exporter"
-        phase = "prod"
+        name = "node-exporter"
       }
     }
 
     template {
       metadata {
         labels {
-          name  = "node-exporter"
-          phase = "prod"
+          name = "node-exporter"
         }
       }
 

@@ -13,8 +13,7 @@ resource "kubernetes_service" "grafana" {
     type = "ClusterIP"
 
     selector {
-      name  = "grafana"
-      phase = "prod"
+      name = "grafana"
     }
 
     port {

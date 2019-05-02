@@ -13,8 +13,7 @@ resource "kubernetes_service" "kube_scheduler" {
     cluster_ip = "None"
 
     selector {
-      name  = "kube-state-metrics"
-      phase = "prod"
+      name = "kube-state-metrics"
     }
 
     port {
