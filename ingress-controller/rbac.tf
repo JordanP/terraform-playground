@@ -209,8 +209,6 @@ resource "kubernetes_role" "ingress" {
 
     verbs = [
       "get",
-      "create",
-      "update",
     ]
   }
 }

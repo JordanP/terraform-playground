@@ -74,7 +74,8 @@ module "google-cloud-jordan" {
   asset_dir          = "${local.asset_dir}"
 
   # optional
-  worker_count    = 2
-  controller_type = "g1-small"
-  worker_type     = "g1-small"
+  worker_count       = 2
+  controller_type    = "g1-small"
+  worker_type        = "g1-small"
+  worker_preemptible = "true"
 }
