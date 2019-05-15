@@ -40,7 +40,7 @@ resource "kubernetes_deployment" "ingress" {
       spec {
         service_account_name = "${kubernetes_service_account.ingress.metadata.0.name}"
 
-        node_selector {
+        node_selector = {
           "node-role.kubernetes.io/node" = ""
         }
 

@@ -3,7 +3,7 @@ resource "kubernetes_service" "grafana" {
     name      = "grafana"
     namespace = "${var.namespace}"
 
-    annotations {
+    annotations = {
       "prometheus.io/scrape" = "true"
       "prometheus.io/port"   = "10254'"
     }

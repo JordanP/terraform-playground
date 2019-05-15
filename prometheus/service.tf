@@ -3,7 +3,7 @@ resource "kubernetes_service" "prometheus" {
     name      = "prometheus"
     namespace = "${var.namespace}"
 
-    annotations {
+    annotations = {
       "prometheus.io/scrape" = "true"
     }
   }

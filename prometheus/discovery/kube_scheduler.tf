@@ -3,7 +3,7 @@ resource "kubernetes_service" "kube_scheduler" {
     name      = "kube-scheduler"
     namespace = "kube-system"
 
-    annotations {
+    annotations = {
       "prometheus.io/scrape" = "true"
     }
   }

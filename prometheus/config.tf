@@ -12,7 +12,7 @@ resource "kubernetes_config_map" "prometheus_config" {
     namespace = "${var.namespace}"
   }
 
-  data {
+  data = {
     prometheus.yaml = "${file("${path.module}/config/config.yaml")}"
   }
 }
@@ -34,7 +34,7 @@ resource "kubernetes_config_map" "prometheus_rules" {
     namespace = "${var.namespace}"
   }
 
-  data {
+  data = {
     etcd.yaml     = "${file("${path.module}/config/rules/etcd.yaml")}"
     extra.yaml    = "${file("${path.module}/config/rules/extra.yaml")}"
     kube.yaml     = "${file("${path.module}/config/rules/kube.yaml")}"

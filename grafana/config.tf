@@ -12,7 +12,7 @@ resource "kubernetes_config_map" "grafana_dashboards_etcd" {
     namespace = "${var.namespace}"
   }
 
-  data {
+  data = {
     etcd.json = "${file("${path.module}/config/dashboards-etcd.json")}"
   }
 }
@@ -31,7 +31,7 @@ resource "kubernetes_config_map" "grafana_dashboards_k8s_resources" {
     namespace = "${var.namespace}"
   }
 
-  data {
+  data = {
     k8s-resources-cluster.json = "${file("${path.module}/config/k8s-resources-cluster.json")}"
   }
 }
@@ -50,7 +50,7 @@ resource "kubernetes_config_map" "grafana_dashboards_k8s" {
     namespace = "${var.namespace}"
   }
 
-  data {
+  data = {
     k8s-cluster-rsrc-use.json = "${file("${path.module}/config/k8s-cluster-rsrc-use.json")}"
   }
 }
@@ -69,7 +69,7 @@ resource "kubernetes_config_map" "grafana_config" {
     namespace = "${var.namespace}"
   }
 
-  data {
+  data = {
     custom.ini = "${file("${path.module}/config/custom.ini")}"
   }
 }
@@ -89,7 +89,7 @@ resource "kubernetes_config_map" "grafana_datasources" {
     namespace = "${var.namespace}"
   }
 
-  data {
+  data = {
     prometheus.yaml = "${file("${path.module}/config/prometheus.yaml")}"
     loki.yaml       = "${file("${path.module}/config/loki.yaml")}"
   }
@@ -109,7 +109,7 @@ resource "kubernetes_config_map" "grafana_providers" {
     namespace = "${var.namespace}"
   }
 
-  data {
+  data = {
     providers.yaml = "${file("${path.module}/config/providers.yaml")}"
   }
 }
@@ -124,7 +124,7 @@ resource "kubernetes_secret" "grafana_secret" {
     namespace     = "${var.namespace}"
   }
 
-  data {
+  data = {
     grafana-admin-password = "${random_id.grafana_admin_password.hex}"
   }
 }
