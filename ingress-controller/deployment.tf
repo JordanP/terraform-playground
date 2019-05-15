@@ -1,3 +1,10 @@
+resource "kubernetes_config_map" "tcp-services" {
+  metadata {
+    name = "tcp-services"
+    namespace = "${kubernetes_namespace.ingress.metadata.0.name}"
+  }
+}
+
 resource "kubernetes_deployment" "ingress" {
   metadata {
     name      = "nginx-ingress-controller"
@@ -44,6 +51,7 @@ resource "kubernetes_deployment" "ingress" {
           args = [
             "/nginx-ingress-controller",
             "--ingress-class=public",
+            "--tcp-services-configmap=$(POD_NAMESPACE)/tcp-services"
           ]
 
           env {
