@@ -114,17 +114,17 @@ resource "kubernetes_config_map" "grafana_providers" {
   }
 }
 
-resource "random_id" "grafana_admin_password" {
+resource "random_id" "grafana_initial_admin_password" {
   byte_length = 8
 }
 
-resource "kubernetes_secret" "grafana_secret" {
+resource "kubernetes_secret" "grafana_initial_admin_password" {
   metadata {
-    generate_name = "grafana-secret"
-    namespace     = "${var.namespace}"
+    name      = "grafana-initial-admin-password"
+    namespace = "${var.namespace}"
   }
 
   data = {
-    grafana-admin-password = "${random_id.grafana_admin_password.hex}"
+    grafana-admin-password = "${random_id.grafana_initial_admin_password.hex}"
   }
 }

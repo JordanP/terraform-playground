@@ -6,15 +6,17 @@ terraform {
 }
 
 locals {
-  project_id    = "terraform-playground-237915"
-  cluster_name  = "jordan"
-  dns_zone      = "jordanpittier.net"
-  dns_zone_name = "jordanpittier-net"
-  asset_dir     = "/home/jordan/.secrets/clusters/tf-playground"
+  project_id          = "terraform-playground-237915"
+  cluster_name        = "jordan"
+  dns_zone            = "jordanpittier.net"
+  dns_zone_name       = "jordanpittier-net"
+  asset_dir           = "/home/jordan/.secrets/clusters/tf-playground"
+  gitlab_release_name = "my-gitlab"
 }
 
 module "nginx" {
-  source = "./ingress-controller"
+  source              = "./ingress-controller"
+  gitlab_release_name = "${local.gitlab_release_name}"
 }
 
 resource "kubernetes_namespace" "monitoring" {

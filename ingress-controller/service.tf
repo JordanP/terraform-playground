@@ -5,7 +5,7 @@ resource "kubernetes_service" "ingress" {
 
     annotations = {
       "prometheus.io/scrape" = "true"
-      "prometheus.io/port"   = "10254'"
+      "prometheus.io/port"   = "10254"
     }
   }
 
@@ -28,6 +28,12 @@ resource "kubernetes_service" "ingress" {
       protocol    = "TCP"
       port        = 443
       target_port = "443"
+    }
+
+    port {
+      name        = "metrics"
+      port        = 10254
+      target_port = 10254
     }
   }
 }

@@ -1,9 +1,9 @@
-resource "random_id" "sql-instance-name" {
+resource "random_id" "sql_instance_name" {
   byte_length = 4
 }
 
 resource "google_sql_database_instance" "default" {
-  name             = "master-gitlab-${random_id.sql-instance-name.hex}"
+  name             = "master-gitlab-${random_id.sql_instance_name.hex}"
   database_version = "POSTGRES_9_6"
   region           = "europe-west4"
   provider         = "google.default"
@@ -32,23 +32,19 @@ resource "google_sql_database_instance" "default" {
   }
 }
 
-resource "random_id" "postgres-gitlab-password" {
+resource "random_id" "postgres_gitlab_password" {
   byte_length = 8
 }
 
-resource "google_sql_user" "gitlab-user" {
+resource "google_sql_user" "gitlab_user" {
   provider = "google.default"
   name     = "gitlab"
   instance = "${google_sql_database_instance.default.name}"
-  password = "${random_id.postgres-gitlab-password.hex}"
+  password = "${random_id.postgres_gitlab_password.hex}"
 }
 
-resource "google_sql_database" "gitlab-db" {
+resource "google_sql_database" "gitlab_db" {
   provider = "google.default"
   instance = "${google_sql_database_instance.default.name}"
   name     = "gitlab"
-}
-
-output "gitlab-dsn" {
-  value = "postgres://gitlab:${random_id.postgres-gitlab-password.hex}@${google_sql_database_instance.default.first_ip_address}/gitlab"
 }

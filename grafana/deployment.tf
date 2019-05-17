@@ -50,7 +50,7 @@ resource "kubernetes_deployment" "grafana" {
 
             value_from {
               secret_key_ref {
-                name = "${kubernetes_secret.grafana_secret.metadata.0.name}"
+                name = "${kubernetes_secret.grafana_initial_admin_password.metadata.0.name}"
                 key  = "grafana-admin-password"
               }
             }

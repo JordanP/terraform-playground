@@ -1,7 +1,11 @@
-resource "kubernetes_config_map" "tcp-services" {
+resource "kubernetes_config_map" "tcp_services" {
   metadata {
-    name = "tcp-services"
+    name      = "tcp-services"
     namespace = "${kubernetes_namespace.ingress.metadata.0.name}"
+  }
+
+  data = {
+    "8022" = "gitlab-ce/${var.gitlab_release_name}-gitlab-shell:22"
   }
 }
 
@@ -51,7 +55,7 @@ resource "kubernetes_deployment" "ingress" {
           args = [
             "/nginx-ingress-controller",
             "--ingress-class=public",
-            "--tcp-services-configmap=$(POD_NAMESPACE)/tcp-services"
+            "--tcp-services-configmap=$(POD_NAMESPACE)/tcp-services",
           ]
 
           env {
@@ -90,6 +94,12 @@ resource "kubernetes_deployment" "ingress" {
             container_port = 10254
             host_port      = 10254
             name           = "health"
+          }
+
+          port {
+            container_port = 8022
+            host_port      = 8022
+            name           = "proxied-ssh"
           }
 
           liveness_probe {

@@ -1,4 +1,4 @@
-resource "kubernetes_role_binding" "kube-state-metrics" {
+resource "kubernetes_role_binding" "kube_state_metrics" {
   metadata {
     name      = "kube-state-metrics"
     namespace = "${var.namespace}"
