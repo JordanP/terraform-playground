@@ -42,14 +42,6 @@ module "prometheus" {
 module "google-cloud-jordan" {
   source = "git::https://github.com/poseidon/typhoon//google-cloud/container-linux/kubernetes?ref=93f7a3508a70d18841418a1a2183f9e815719383"
 
-  providers = {
-    google   = "google.default"
-    local    = "local.default"
-    null     = "null.default"
-    template = "template.default"
-    tls      = "tls.default"
-  }
-
   # Google Cloud
   cluster_name  = "${local.cluster_name}"
   region        = "europe-west4"
@@ -65,4 +57,12 @@ module "google-cloud-jordan" {
   controller_type    = "g1-small"
   worker_type        = "n1-standard-1"
   worker_preemptible = "true"
+
+  providers = {
+    google   = "google.default"
+    local    = "local.default"
+    null     = "null.default"
+    template = "template.default"
+    tls      = "tls.default"
+  }
 }
