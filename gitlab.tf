@@ -1,9 +1,14 @@
 module "gitlab" {
-  source              = "./gitlab"
-  helm_release_name   = "${local.gitlab_release_name}"
-  postgresql_password = "${random_id.postgres_gitlab_password.hex}"
-  postgresql_host     = "${google_sql_database_instance.default.first_ip_address}"
-  postgresql_database = "${google_sql_database.gitlab_db.name}"
+  source                = "./gitlab"
+  helm_release_name     = "${local.gitlab_release_name}"
+  postgresql_password   = "${random_id.postgres_gitlab_password.hex}"
+  postgresql_host       = "${google_sql_database_instance.default.first_ip_address}"
+  postgresql_database   = "${google_sql_database.gitlab_db.name}"
+  force_destroy_buckets = "true"
+
+  providers = {
+    google = "google.default"
+  }
 }
 
 resource "google_compute_firewall" "git_clone_ssh" {

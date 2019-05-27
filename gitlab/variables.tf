@@ -5,3 +5,5 @@ variable postgresql_password {}
 variable postgresql_host {}
 
 variable postgresql_database {}
+
+variable force_destroy_buckets {}

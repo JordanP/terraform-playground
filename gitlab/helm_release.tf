@@ -134,4 +134,106 @@ resource "helm_release" "gitlab" {
     name  = "global.ingress.tls.secretName"
     value = "${kubernetes_secret.gitlab_wildcard_certificate.metadata.0.name}"
   }
+
+  // https://gitlab.com/charts/gitlab/tree/master/doc/charts/registry#storage
+  // https://gitlab.com/charts/gitlab/blob/master/doc/charts/globals.md#connection
+  set {
+    name  = "registry.storage.secret"
+    value = "${kubernetes_secret.gitlab_gcs_storage.metadata.0.name}"
+  }
+
+  set {
+    name  = "registry.storage.key"
+    value = "config"
+  }
+
+  set {
+    name  = "registry.storage.extraKey"
+    value = "keyfile"
+  }
+
+  set {
+    name  = "global.minio.enabled"
+    value = "false"
+  }
+
+  set {
+    name  = "global.appConfig.lfs.bucket"
+    value = "gitlab-lfs-storage-jpittier"
+  }
+
+  set {
+    name  = "global.appConfig.lfs.connection.secret"
+    value = "${kubernetes_secret.gitlab_gcs_storage.metadata.0.name}"
+  }
+
+  set {
+    name  = "global.appConfig.artifacts.bucket"
+    value = "gitlab-artifacts-storage-jpittier"
+  }
+
+  set {
+    name  = "global.appConfig.artifacts.connection.secret"
+    value = "${kubernetes_secret.gitlab_gcs_storage.metadata.0.name}"
+  }
+
+  set {
+    name  = "global.appConfig.uploads.bucket"
+    value = "gitlab-uploads-storage-jpittier"
+  }
+
+  set {
+    name  = "global.appConfig.uploads.connection.secret"
+    value = "${kubernetes_secret.gitlab_gcs_storage.metadata.0.name}"
+  }
+
+  set {
+    name  = "global.appConfig.packages.bucket"
+    value = "gitlab-packages-storage-jpittier"
+  }
+
+  set {
+    name  = "global.appConfig.packages.connection.secret"
+    value = "${kubernetes_secret.gitlab_gcs_storage.metadata.0.name}"
+  }
+
+  set {
+    name  = "global.appConfig.registry.bucket"
+    value = "gitlab-registry-storage-jpittier"
+  }
+
+  set {
+    name  = "global.appConfig.backups.bucket"
+    value = "gitlab-backup-storage-jpittier"
+  }
+
+  set {
+    name  = "global.appConfig.backups.tmpBucket"
+    value = "gitlab-tmp-storage-jpittier"
+  }
+
+  set {
+    name  = "gitlab.task-runner.backups.objectStorage.config.secret"
+    value = "${kubernetes_secret.gitlab_gcs_storage.metadata.0.name}"
+  }
+
+  set {
+    name  = "gitlab.task-runner.backups.objectStorage.config.key"
+    value = "s3cfg-config"
+  }
+
+  set {
+    name  = "gitlab-runner.runners.cache.cacheType"
+    value = "gcs"
+  }
+
+  set {
+    name  = "gitlab-runner.runners.cache.gcsBucketName"
+    value = "gitlab-cache-storage-jpittier"
+  }
+
+  set {
+    name  = "gitlab-runner.runners.cache.secretName"
+    value = "${kubernetes_secret.gitlab_gcs_storage.metadata.0.name}"
+  }
 }
