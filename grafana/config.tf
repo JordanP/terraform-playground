@@ -1,46 +1,10 @@
-resource "random_id" "grafana_dashboards_etcd_cm_name" {
-  byte_length = 4
-
-  keepers {
-    data = "${filebase64sha256("${path.module}/config/dashboards-etcd.json")}"
-  }
-}
-
-resource "kubernetes_config_map" "grafana_dashboards_etcd" {
-  metadata {
-    name      = "grafana-dashboards-etcd-${random_id.grafana_dashboards_etcd_cm_name.hex}"
-    namespace = "${var.namespace}"
-  }
-
-  data = {
-    etcd.json = "${file("${path.module}/config/dashboards-etcd.json")}"
-  }
-}
-
-resource "random_id" "grafana_dashboards_k8s_resources_cm_name" {
-  byte_length = 4
-
-  keepers {
-    data = "${filebase64sha256("${path.module}/config/k8s-resources-cluster.json")}"
-  }
-}
-
-resource "kubernetes_config_map" "grafana_dashboards_k8s_resources" {
-  metadata {
-    name      = "grafana-dashboards-k8s-resources-${random_id.grafana_dashboards_k8s_resources_cm_name.hex}"
-    namespace = "${var.namespace}"
-  }
-
-  data = {
-    k8s-resources-cluster.json = "${file("${path.module}/config/k8s-resources-cluster.json")}"
-  }
-}
-
 resource "random_id" "grafana_dashboards_k8s_cm_name" {
   byte_length = 4
 
   keepers {
-    data = "${filebase64sha256("${path.module}/config/k8s-cluster-rsrc-use.json")}"
+    data1 = "${filebase64sha256("${path.module}/config/dashboards-etcd.json")}"
+    data2 = "${filebase64sha256("${path.module}/config/k8s-resources-cluster.json")}"
+    data3 = "${filebase64sha256("${path.module}/config/k8s-cluster-rsrc-use.json")}"
   }
 }
 
@@ -51,7 +15,28 @@ resource "kubernetes_config_map" "grafana_dashboards_k8s" {
   }
 
   data = {
-    k8s-cluster-rsrc-use.json = "${file("${path.module}/config/k8s-cluster-rsrc-use.json")}"
+    etcd.json                  = "${file("${path.module}/config/dashboards-etcd.json")}"
+    k8s-resources-cluster.json = "${file("${path.module}/config/k8s-resources-cluster.json")}"
+    k8s-cluster-rsrc-use.json  = "${file("${path.module}/config/k8s-cluster-rsrc-use.json")}"
+  }
+}
+
+resource "random_id" "grafana_dashboards_nodes_cm_name" {
+  byte_length = 4
+
+  keepers {
+    data1 = "${filebase64sha256("${path.module}/config/node-exporter-full.json")}"
+  }
+}
+
+resource "kubernetes_config_map" "grafana_dashboards_nodes" {
+  metadata {
+    name      = "grafana-dashboards-nodes-${random_id.grafana_dashboards_nodes_cm_name.hex}"
+    namespace = "${var.namespace}"
+  }
+
+  data = {
+    node-exporter-full.json = "${file("${path.module}/config/node-exporter-full.json")}"
   }
 }
 

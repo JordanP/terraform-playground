@@ -107,18 +107,13 @@ resource "kubernetes_deployment" "grafana" {
           }
 
           volume_mount {
-            name       = "dashboards-etcd"
-            mount_path = "/etc/grafana/dashboards/kubernetes/etcd"
-          }
-
-          volume_mount {
             name       = "dashboards-k8s"
-            mount_path = "/etc/grafana/dashboards/kubernetes/k8s"
+            mount_path = "/etc/grafana/dashboards/kubernetes"
           }
 
           volume_mount {
-            name       = "dashboards-k8s-resources"
-            mount_path = "/etc/grafana/dashboards/kubernetes/k8s-resources"
+            name       = "dashboards-nodes"
+            mount_path = "/etc/grafana/dashboards/nodes"
           }
         }
 
@@ -147,14 +142,6 @@ resource "kubernetes_deployment" "grafana" {
         }
 
         volume {
-          name = "dashboards-etcd"
-
-          config_map {
-            name = "${kubernetes_config_map.grafana_dashboards_etcd.metadata.0.name}"
-          }
-        }
-
-        volume {
           name = "dashboards-k8s"
 
           config_map {
@@ -163,10 +150,10 @@ resource "kubernetes_deployment" "grafana" {
         }
 
         volume {
-          name = "dashboards-k8s-resources"
+          name = "dashboards-nodes"
 
           config_map {
-            name = "${kubernetes_config_map.grafana_dashboards_k8s_resources.metadata.0.name}"
+            name = "${kubernetes_config_map.grafana_dashboards_nodes.metadata.0.name}"
           }
         }
       }
