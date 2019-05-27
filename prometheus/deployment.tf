@@ -29,7 +29,7 @@ resource "kubernetes_deployment" "prometheus" {
 
         container {
           name  = "prometheus"
-          image = "quay.io/prometheus/prometheus:v2.9.1"
+          image = "quay.io/prometheus/prometheus:v2.10.0"
 
           args = [
             "--web.listen-address=0.0.0.0:9090",

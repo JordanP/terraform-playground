@@ -27,7 +27,7 @@ resource "kubernetes_deployment" "kube_state_metrics" {
 
         container {
           name  = "kube-state-metrics"
-          image = "quay.io/coreos/kube-state-metrics:v1.5.0"
+          image = "quay.io/coreos/kube-state-metrics:v1.6.0"
 
           port {
             name           = "metrics"
