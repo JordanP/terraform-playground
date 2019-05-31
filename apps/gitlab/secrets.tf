@@ -24,10 +24,19 @@ resource "kubernetes_secret" "gitlab_initial_root_password" {
   }
 }
 
+resource "random_id" "gitlab_wildcard_certificate_name_suffix" {
+  byte_length = 4
+
+  keepers {
+    "tls.crt" = "${base64sha256(file("${path.module}/certs/jordanpittier.net.cer"))}"
+    "tls.key" = "${base64sha256(file("${path.module}/certs/jordanpittier.net.key"))}"
+  }
+}
+
 resource "kubernetes_secret" "gitlab_wildcard_certificate" {
   metadata {
     namespace = "${kubernetes_namespace.gitlab_ce.metadata.0.name}"
-    name      = "my-wild-card-certificate"
+    name      = "my-wild-card-certificate-${random_id.gitlab_wildcard_certificate_name_suffix.hex}"
   }
 
   type = "kubernetes.io/tls"
@@ -56,29 +65,41 @@ data "template_file" "other_storage" {
   }
 }
 
+locals {
+  # https://console.cloud.google.com/storage/settings -> Interoperability
+  access_key = "GOOGLGQBY3UGMNCCUB4RLIXQ"
+  secret_key = "xxxx"
+}
+
 data template_file "s3cfg" {
   template = "${file("${path.module}/storage/s3cfg.tpl")}"
 
   vars {
-    access_key = "GOOGLGQBY3UGMNCCUB4RLIXQ"
-    secret_key = "xxx"
+    access_key = "${local.access_key}"
+    secret_key = "${local.secret_key}"
+  }
+}
+
+resource "random_id" "gitlab_gcs_storage_secret_name_suffix" {
+  byte_length = 4
+
+  keepers {
+    config          = "${data.template_file.registry_storage.rendered}"                        # registry.storage
+    keyfile         = "${base64decode(google_service_account_key.gitlab_storage.private_key)}"
+    connection      = "${data.template_file.other_storage.rendered}"                           # global.appConfig.*.connection
+    gcs-access-id   = "${local.access_key}"                                                    # gitlab-runner.runners.cache
+    gcs-private-key = "${local.secret_key}"                                                    # gitlab-runner.runners.cache
+    s3cfg-config    = "${data.template_file.s3cfg.rendered}"                                   # gitlab.task-runner.backups.objectStorage.config.key
   }
 }
 
 resource "kubernetes_secret" "gitlab_gcs_storage" {
   metadata = {
-    name      = "gcs-storage"
+    name      = "gcs-storage-${random_id.gitlab_gcs_storage_secret_name_suffix.hex}"
     namespace = "${kubernetes_namespace.gitlab_ce.metadata.0.name}"
   }
 
-  data = {
-    config          = "${data.template_file.registry_storage.rendered}"                        # registry.storage
-    keyfile         = "${base64decode(google_service_account_key.gitlab_storage.private_key)}"
-    connection      = "${data.template_file.other_storage.rendered}"                           # global.appConfig.*.connection
-    gcs-access-id   = "GOOGLGQBY3UGMNCCUB4RLIXQ"                                               # gitlab-runner.runners.cache
-    gcs-private-key = "xxx"                                                                    # gitlab-runner.runners.cache
-    s3cfg-config    = "${data.template_file.s3cfg.rendered}"                                   # gitlab.task-runner.backups.objectStorage.config
-  }
+  data = "${random_id.gitlab_gcs_storage_secret_name_suffix.keepers}"
 }
 
 output "gitlab_initial_root_password" {

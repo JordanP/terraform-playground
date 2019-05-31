@@ -1,7 +1,7 @@
 resource "kubernetes_service_account" "ingress" {
   metadata {
     name      = "nginx-ingress-serviceaccount"
-    namespace = "${var.namespace}"
+    namespace = "${kubernetes_namespace.ingress.metadata.0.name}"
   }
 }
 
@@ -18,7 +18,7 @@ resource "kubernetes_cluster_role_binding" "ingress" {
 
   subject {
     kind      = "ServiceAccount"
-    namespace = "${var.namespace}"
+    namespace = "${kubernetes_namespace.ingress.metadata.0.name}"
     name      = "${kubernetes_service_account.ingress.metadata.0.name}"
   }
 }
@@ -126,7 +126,7 @@ resource "kubernetes_cluster_role" "ingress" {
 resource "kubernetes_role_binding" "ingress" {
   metadata {
     name      = "ingress"
-    namespace = "${var.namespace}"
+    namespace = "${kubernetes_namespace.ingress.metadata.0.name}"
   }
 
   role_ref {
@@ -137,7 +137,7 @@ resource "kubernetes_role_binding" "ingress" {
 
   subject {
     kind      = "ServiceAccount"
-    namespace = "${var.namespace}"
+    namespace = "${kubernetes_namespace.ingress.metadata.0.name}"
     name      = "${kubernetes_service_account.ingress.metadata.0.name}"
   }
 }
@@ -145,7 +145,7 @@ resource "kubernetes_role_binding" "ingress" {
 resource "kubernetes_role" "ingress" {
   metadata {
     name      = "ingress"
-    namespace = "${var.namespace}"
+    namespace = "${kubernetes_namespace.ingress.metadata.0.name}"
   }
 
   rule {

@@ -1,42 +1,42 @@
 terraform {
   backend "gcs" {
-    credentials = "account.json"
+    credentials = "../account.json"
     bucket      = "tf-playground-tf-state"
+    prefix      = "infra"
   }
 }
 
 locals {
-  project_id          = "terraform-playground-237915"
-  cluster_name        = "jordan"
-  dns_zone            = "jordanpittier.net"
-  dns_zone_name       = "jordanpittier-net"
-  asset_dir           = "/home/jordan/.secrets/clusters/tf-playground"
-  gitlab_release_name = "my-gitlab"
+  project_id    = "terraform-playground-237915"
+  cluster_name  = "jordan"
+  dns_zone      = "jordanpittier.net"
+  dns_zone_name = "jordanpittier-net"
+  asset_dir     = "/home/jordan/.secrets/clusters/tf-playground"
 }
 
-module "nginx" {
-  source              = "./ingress-controller"
-  gitlab_release_name = "${local.gitlab_release_name}"
-}
+resource "google_compute_firewall" "git_clone_ssh" {
+  provider = "google.default"
+  name     = "git-clone-ssh"
+  network  = "${module.google-cloud-jordan.network_name}"
 
-resource "kubernetes_namespace" "monitoring" {
-  metadata {
-    name = "monitoring"
+  allow {
+    protocol = "TCP"
 
-    labels {
-      name = "monitoring"
-    }
+    ports = [
+      8022,
+    ]
   }
+
+  target_tags = [
+    "${local.cluster_name}-worker",
+  ]
 }
 
-module "grafana" {
-  source    = "./grafana"
-  namespace = "${kubernetes_namespace.monitoring.metadata.0.name}"
-}
-
-module "prometheus" {
-  source    = "./prometheus"
-  namespace = "${kubernetes_namespace.monitoring.metadata.0.name}"
+resource "google_compute_forwarding_rule" "gitlab" {
+  provider   = "google.default"
+  name       = "gitlab"
+  target     = "${module.google-cloud-jordan.worker_target_pool}"
+  port_range = "1-65535"
 }
 
 module "google-cloud-jordan" {

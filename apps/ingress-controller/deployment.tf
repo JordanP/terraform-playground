@@ -16,7 +16,7 @@ resource "kubernetes_deployment" "ingress" {
   }
 
   spec {
-    replicas = 2
+    replicas = 3
 
     strategy {
       rolling_update {
