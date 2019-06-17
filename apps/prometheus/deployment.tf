@@ -1,31 +1,31 @@
 resource "kubernetes_deployment" "prometheus" {
   metadata {
     name      = "prometheus"
-    namespace = "${var.namespace}"
+    namespace = var.namespace
   }
 
   spec {
     replicas = 1
 
     selector {
-      match_labels {
+      match_labels = {
         name = "prometheus"
       }
     }
 
     template {
       metadata {
-        labels {
+        labels = {
           name = "prometheus"
         }
 
-        /*annotations {
+        /*annotations = {
           "seccomp.security.alpha.kubernetes.io/pod" = "docker/default"
         }*/
       }
 
       spec {
-        service_account_name = "${module.prometheus_rbac.service_account_name}"
+        service_account_name = module.prometheus_rbac.service_account_name
 
         container {
           name  = "prometheus"
@@ -66,7 +66,7 @@ resource "kubernetes_deployment" "prometheus" {
 
           volume_mount {
             mount_path = "/var/run/secrets/kubernetes.io/serviceaccount"
-            name       = "${module.prometheus_rbac.service_account_default_secret_name}"
+            name       = module.prometheus_rbac.service_account_default_secret_name
             read_only  = true
           }
 
@@ -94,10 +94,10 @@ resource "kubernetes_deployment" "prometheus" {
         termination_grace_period_seconds = 30
 
         volume {
-          name = "${module.prometheus_rbac.service_account_default_secret_name}"
+          name = module.prometheus_rbac.service_account_default_secret_name
 
           secret {
-            secret_name = "${module.prometheus_rbac.service_account_default_secret_name}"
+            secret_name = module.prometheus_rbac.service_account_default_secret_name
           }
         }
 
@@ -105,7 +105,7 @@ resource "kubernetes_deployment" "prometheus" {
           name = "config"
 
           config_map {
-            name = "${kubernetes_config_map.prometheus_config.metadata.0.name}"
+            name = kubernetes_config_map.prometheus_config.metadata[0].name
           }
         }
 
@@ -113,13 +113,14 @@ resource "kubernetes_deployment" "prometheus" {
           name = "rules"
 
           config_map {
-            name = "${kubernetes_config_map.prometheus_rules.metadata.0.name}"
+            name = kubernetes_config_map.prometheus_rules.metadata[0].name
           }
         }
 
         volume {
-          name      = "data"
-          empty_dir = {}
+          name = "data"
+          empty_dir {
+          }
         }
       }
     }

@@ -1,7 +1,7 @@
 resource "kubernetes_service" "ingress" {
   metadata {
     name      = "nginx-ingress-controller"
-    namespace = "${kubernetes_namespace.ingress.metadata.0.name}"
+    namespace = kubernetes_namespace.ingress.metadata[0].name
 
     annotations = {
       "prometheus.io/scrape" = "true"
@@ -12,7 +12,7 @@ resource "kubernetes_service" "ingress" {
   spec {
     type = "ClusterIP"
 
-    selector {
+    selector = {
       name = "nginx-ingress-controller"
     }
 

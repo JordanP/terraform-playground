@@ -1,7 +1,7 @@
 resource "kubernetes_role_binding" "kube_state_metrics" {
   metadata {
     name      = "kube-state-metrics"
-    namespace = "${var.namespace}"
+    namespace = var.namespace
   }
 
   role_ref {
@@ -12,7 +12,7 @@ resource "kubernetes_role_binding" "kube_state_metrics" {
 
   subject {
     kind      = "ServiceAccount"
-    namespace = "${var.namespace}"
-    name      = "${kubernetes_service_account.kube_state_metrics.metadata.0.name}"
+    namespace = var.namespace
+    name      = kubernetes_service_account.kube_state_metrics.metadata[0].name
   }
 }

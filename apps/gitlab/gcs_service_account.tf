@@ -4,7 +4,7 @@ resource "google_service_account" "gitlab_storage" {
 }
 
 resource "google_service_account_key" "gitlab_storage" {
-  service_account_id = "${google_service_account.gitlab_storage.id}"
+  service_account_id = google_service_account.gitlab_storage.id
 }
 
 locals {
@@ -20,21 +20,22 @@ locals {
     "gitlab-cache-storage",
   ]
 
-  all-buckets = "${concat(local.other-buckets, list(local.registry-bucket))}"
+  all-buckets = concat(local.other-buckets, list(local.registry-bucket))
 }
 
 resource "google_storage_bucket" "gitlab_storage" {
-  count         = "${length(local.all-buckets)}"
+  count         = length(local.all-buckets)
   name          = "${element(local.all-buckets, count.index)}-jpittier"
   location      = "europe-west4"
   storage_class = "REGIONAL"
-  force_destroy = "${var.force_destroy_buckets}"
+  force_destroy = var.force_destroy_buckets
 }
 
 resource "google_storage_bucket_iam_member" "gitlab_object_admin" {
-  count      = "${length(local.all-buckets)}"
-  bucket     = "${element(local.all-buckets, count.index)}-jpittier"
-  member     = "serviceAccount:${google_service_account.gitlab_storage.email}"
-  role       = "roles/storage.objectAdmin"
-  depends_on = ["google_storage_bucket.gitlab_storage"]
+  count  = length(local.all-buckets)
+  bucket = "${element(local.all-buckets, count.index)}-jpittier"
+  member = "serviceAccount:${google_service_account.gitlab_storage.email}"
+  role   = "roles/storage.objectAdmin"
+  depends_on = [
+  "google_storage_bucket.gitlab_storage"]
 }

@@ -1,7 +1,7 @@
 resource "kubernetes_config_map" "tcp_services" {
   metadata {
     name      = "tcp-services"
-    namespace = "${kubernetes_namespace.ingress.metadata.0.name}"
+    namespace = kubernetes_namespace.ingress.metadata[0].name
   }
 
   data = {
@@ -12,7 +12,7 @@ resource "kubernetes_config_map" "tcp_services" {
 resource "kubernetes_deployment" "ingress" {
   metadata {
     name      = "nginx-ingress-controller"
-    namespace = "${kubernetes_namespace.ingress.metadata.0.name}"
+    namespace = kubernetes_namespace.ingress.metadata[0].name
   }
 
   spec {
@@ -25,24 +25,24 @@ resource "kubernetes_deployment" "ingress" {
     }
 
     selector {
-      match_labels {
+      match_labels = {
         name = "nginx-ingress-controller"
       }
     }
 
     template {
       metadata {
-        labels {
+        labels = {
           name = "nginx-ingress-controller"
         }
 
-        /*annotations {
+        /*annotations = {
           "seccomp.security.alpha.kubernetes.io/pod" = "docker/default"
         }*/
       }
 
       spec {
-        service_account_name = "${kubernetes_service_account.ingress.metadata.0.name}"
+        service_account_name = kubernetes_service_account.ingress.metadata[0].name
 
         node_selector = {
           "node-role.kubernetes.io/node" = ""
@@ -147,16 +147,16 @@ resource "kubernetes_deployment" "ingress" {
 
           volume_mount {
             mount_path = "/var/run/secrets/kubernetes.io/serviceaccount"
-            name       = "${kubernetes_service_account.ingress.default_secret_name}"
+            name       = kubernetes_service_account.ingress.default_secret_name
             read_only  = true
           }
         }
 
         volume {
-          name = "${kubernetes_service_account.ingress.default_secret_name}"
+          name = kubernetes_service_account.ingress.default_secret_name
 
           secret {
-            secret_name = "${kubernetes_service_account.ingress.default_secret_name}"
+            secret_name = kubernetes_service_account.ingress.default_secret_name
           }
         }
 

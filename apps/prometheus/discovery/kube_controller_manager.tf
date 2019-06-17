@@ -3,7 +3,7 @@ resource "kubernetes_service" "kube_controller_manager" {
     name      = "kube-controller-manager"
     namespace = "kube-system"
 
-    annotations {
+    annotations = {
       "prometheus.io/scrape" = "true"
     }
   }
@@ -12,7 +12,7 @@ resource "kubernetes_service" "kube_controller_manager" {
     type       = "ClusterIP"
     cluster_ip = "None"
 
-    selector {
+    selector = {
       k8s-app = "kube-controller-manager"
     }
 

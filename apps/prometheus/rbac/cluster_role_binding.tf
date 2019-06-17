@@ -3,15 +3,15 @@ resource "kubernetes_cluster_role_binding" "prometheus" {
     name = "prometheus"
   }
 
-  "role_ref" {
+  role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "ClusterRole"
     name      = "prometheus"
   }
 
-  "subject" {
+  subject {
     kind      = "ServiceAccount"
     name      = "prometheus"
-    namespace = "${var.namespace}"
+    namespace = var.namespace
   }
 }

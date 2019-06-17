@@ -1,7 +1,7 @@
 resource "kubernetes_role" "kube_state_metrics_resizer" {
   metadata {
     name      = "kube-state-metrics-resizer"
-    namespace = "${var.namespace}"
+    namespace = var.namespace
   }
 
   rule {
@@ -27,7 +27,8 @@ resource "kubernetes_role" "kube_state_metrics_resizer" {
       "pods",
     ]
 
-    resource_names = ["kube-state-metrics"]
+    resource_names = [
+    "kube-state-metrics"]
 
     verbs = [
       "get",
@@ -44,7 +45,8 @@ resource "kubernetes_role" "kube_state_metrics_resizer" {
       "deployments",
     ]
 
-    resource_names = ["kube-state-metrics"]
+    resource_names = [
+    "kube-state-metrics"]
 
     verbs = [
       "get",

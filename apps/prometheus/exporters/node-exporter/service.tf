@@ -1,9 +1,9 @@
 resource "kubernetes_service" "node_exporter" {
   metadata {
     name      = "node-exporter"
-    namespace = "${var.namespace}"
+    namespace = var.namespace
 
-    annotations {
+    annotations = {
       "prometheus.io/scrape" = "true"
     }
   }
@@ -12,7 +12,7 @@ resource "kubernetes_service" "node_exporter" {
     type       = "ClusterIP"
     cluster_ip = "None"
 
-    selector {
+    selector = {
       name = "node-exporter"
     }
 

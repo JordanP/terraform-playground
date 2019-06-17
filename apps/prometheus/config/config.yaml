@@ -13,7 +13,7 @@ alerting:
 # This uses separate scrape configs for cluster components (i.e. API server, node)
 # and services to allow each to use different authentication configs.
 #
-# Kubernetes labels will be added as Prometheus labels on metrics via the
+# Kubernetes labels = will be added as Prometheus labels = on metrics via the
 # `labelmap` relabeling action.
 scrape_configs:
 

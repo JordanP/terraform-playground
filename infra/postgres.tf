@@ -6,7 +6,6 @@ resource "google_sql_database_instance" "default" {
   name             = "master-gitlab-${random_id.sql_instance_name.hex}"
   database_version = "POSTGRES_9_6"
   region           = "europe-west4"
-  provider         = "google.default"
 
   settings {
     tier = "db-f1-micro"
@@ -35,27 +34,26 @@ resource "random_id" "postgres_gitlab_password" {
 }
 
 resource "google_sql_user" "gitlab_user" {
-  provider = "google.default"
   name     = "gitlab"
-  instance = "${google_sql_database_instance.default.name}"
-  password = "${random_id.postgres_gitlab_password.hex}"
+  instance = google_sql_database_instance.default.name
+  password = random_id.postgres_gitlab_password.hex
 }
 
 resource "google_sql_database" "gitlab_database" {
-  provider = "google.default"
-  instance = "${google_sql_database_instance.default.name}"
+  instance = google_sql_database_instance.default.name
   name     = "gitlab"
 }
 
 output "postgresql_host" {
-  value = "${google_sql_database_instance.default.first_ip_address}"
+  value = google_sql_database_instance.default.first_ip_address
 }
 
-output postgresql_gitlab_database {
-  value = "${google_sql_database.gitlab_database.name}"
+output "postgresql_gitlab_database" {
+  value = google_sql_database.gitlab_database.name
 }
 
 output "postgresql_gitlab_password" {
-  value     = "${random_id.postgres_gitlab_password.hex}"
+  value     = random_id.postgres_gitlab_password.hex
   sensitive = true
 }
+

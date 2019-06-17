@@ -1,7 +1,7 @@
 resource "kubernetes_daemonset" "node_exporter" {
   metadata {
     name      = "node-exporter"
-    namespace = "${var.namespace}"
+    namespace = var.namespace
   }
 
   spec {
@@ -14,20 +14,20 @@ resource "kubernetes_daemonset" "node_exporter" {
     }
 
     selector {
-      match_labels {
+      match_labels = {
         name = "node-exporter"
       }
     }
 
     template {
       metadata {
-        labels {
+        labels = {
           name = "node-exporter"
         }
       }
 
       spec {
-        service_account_name = "${kubernetes_service_account.node_exporter.metadata.0.name}"
+        service_account_name = kubernetes_service_account.node_exporter.metadata[0].name
 
         security_context {
           run_as_non_root = "true"

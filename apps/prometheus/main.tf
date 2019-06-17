@@ -1,13 +1,13 @@
 module "prometheus_rbac" {
-  source    = "rbac"
-  namespace = "${var.namespace}"
+  source    = "./rbac"
+  namespace = var.namespace
 }
 
 module "prometheus_exporters" {
-  source    = "exporters"
-  namespace = "${var.namespace}"
+  source    = "./exporters"
+  namespace = var.namespace
 }
 
 module "prometheus_discovery" {
-  source = "discovery"
+  source = "./discovery"
 }

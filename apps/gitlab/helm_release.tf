@@ -4,11 +4,11 @@ data "helm_repository" "gitlab" {
 }
 
 resource "helm_release" "gitlab" {
-  name       = "${var.helm_release_name}"
-  repository = "${data.helm_repository.gitlab.metadata.0.name}"
+  name       = var.helm_release_name
+  repository = data.helm_repository.gitlab.metadata[0].name
   chart      = "gitlab"
   timeout    = 600
-  namespace  = "${kubernetes_namespace.gitlab_ce.metadata.0.name}"
+  namespace  = kubernetes_namespace.gitlab_ce.metadata[0].name
 
   set {
     name  = "global.hosts.domain"
@@ -77,17 +77,17 @@ resource "helm_release" "gitlab" {
 
   set {
     name  = "global.psql.host"
-    value = "${var.postgresql_host}"
+    value = var.postgresql_host
   }
 
   set {
     name  = "global.psql.database"
-    value = "${var.postgresql_database}"
+    value = var.postgresql_database
   }
 
   set {
     name  = "global.psql.password.secret"
-    value = "${kubernetes_secret.gitlab_postgresql_password.metadata.0.name}"
+    value = kubernetes_secret.gitlab_postgresql_password.metadata[0].name
   }
 
   set {
@@ -132,14 +132,14 @@ resource "helm_release" "gitlab" {
 
   set {
     name  = "global.ingress.tls.secretName"
-    value = "${kubernetes_secret.gitlab_wildcard_certificate.metadata.0.name}"
+    value = kubernetes_secret.gitlab_wildcard_certificate.metadata[0].name
   }
 
   // https://gitlab.com/charts/gitlab/tree/master/doc/charts/registry#storage
   // https://gitlab.com/charts/gitlab/blob/master/doc/charts/globals.md#connection
   set {
     name  = "registry.storage.secret"
-    value = "${kubernetes_secret.gitlab_gcs_storage.metadata.0.name}"
+    value = kubernetes_secret.gitlab_gcs_storage.metadata[0].name
   }
 
   set {
@@ -164,7 +164,7 @@ resource "helm_release" "gitlab" {
 
   set {
     name  = "global.appConfig.lfs.connection.secret"
-    value = "${kubernetes_secret.gitlab_gcs_storage.metadata.0.name}"
+    value = kubernetes_secret.gitlab_gcs_storage.metadata[0].name
   }
 
   set {
@@ -174,7 +174,7 @@ resource "helm_release" "gitlab" {
 
   set {
     name  = "global.appConfig.artifacts.connection.secret"
-    value = "${kubernetes_secret.gitlab_gcs_storage.metadata.0.name}"
+    value = kubernetes_secret.gitlab_gcs_storage.metadata[0].name
   }
 
   set {
@@ -184,7 +184,7 @@ resource "helm_release" "gitlab" {
 
   set {
     name  = "global.appConfig.uploads.connection.secret"
-    value = "${kubernetes_secret.gitlab_gcs_storage.metadata.0.name}"
+    value = kubernetes_secret.gitlab_gcs_storage.metadata[0].name
   }
 
   set {
@@ -194,7 +194,7 @@ resource "helm_release" "gitlab" {
 
   set {
     name  = "global.appConfig.packages.connection.secret"
-    value = "${kubernetes_secret.gitlab_gcs_storage.metadata.0.name}"
+    value = kubernetes_secret.gitlab_gcs_storage.metadata[0].name
   }
 
   set {
@@ -214,7 +214,7 @@ resource "helm_release" "gitlab" {
 
   set {
     name  = "gitlab.task-runner.backups.objectStorage.config.secret"
-    value = "${kubernetes_secret.gitlab_gcs_storage.metadata.0.name}"
+    value = kubernetes_secret.gitlab_gcs_storage.metadata[0].name
   }
 
   set {
@@ -234,6 +234,6 @@ resource "helm_release" "gitlab" {
 
   set {
     name  = "gitlab-runner.runners.cache.secretName"
-    value = "${kubernetes_secret.gitlab_gcs_storage.metadata.0.name}"
+    value = kubernetes_secret.gitlab_gcs_storage.metadata[0].name
   }
 }

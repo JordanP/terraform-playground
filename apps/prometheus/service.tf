@@ -1,7 +1,7 @@
 resource "kubernetes_service" "prometheus" {
   metadata {
     name      = "prometheus"
-    namespace = "${var.namespace}"
+    namespace = var.namespace
 
     annotations = {
       "prometheus.io/scrape" = "true"
@@ -11,7 +11,7 @@ resource "kubernetes_service" "prometheus" {
   spec {
     type = "ClusterIP"
 
-    selector {
+    selector = {
       name = "prometheus"
     }
 

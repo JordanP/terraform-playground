@@ -12,7 +12,7 @@ resource "kubernetes_service" "kube_scheduler" {
     type       = "ClusterIP"
     cluster_ip = "None"
 
-    selector {
+    selector = {
       k8s-app = "kube-scheduler"
     }
 

@@ -1,32 +1,13 @@
 provider "google" {
-  version = "~> 2.3.0"
-  alias   = "default"
+  version = "2.7.0"
 
-  credentials = "${file("../account.json")}"
+  credentials = file("../account.json")
   project     = "terraform-playground-237915"
   region      = "europe-west4"
 }
 
+
 provider "ct" {
-  version = "0.3.1"
+  version = "0.3.2"
 }
 
-provider "local" {
-  version = "~> 1.0"
-  alias   = "default"
-}
-
-provider "null" {
-  version = "~> 1.0"
-  alias   = "default"
-}
-
-provider template {
-  version = "~> 1.0"
-  alias   = "default"
-}
-
-provider "tls" {
-  version = "~> 1.0"
-  alias   = "default"
-}

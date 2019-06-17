@@ -1,9 +1,9 @@
 resource "kubernetes_service" "kube_scheduler" {
   metadata {
     name      = "kube-state-metrics"
-    namespace = "${var.namespace}"
+    namespace = var.namespace
 
-    annotations {
+    annotations = {
       "prometheus.io/scrape" = "true"
     }
   }
@@ -12,7 +12,7 @@ resource "kubernetes_service" "kube_scheduler" {
     type       = "ClusterIP"
     cluster_ip = "None"
 
-    selector {
+    selector = {
       name = "kube-state-metrics"
     }
 

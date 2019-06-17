@@ -1,7 +1,7 @@
 resource "kubernetes_deployment" "grafana" {
   metadata {
     name      = "grafana"
-    namespace = "${var.namespace}"
+    namespace = var.namespace
   }
 
   spec {
@@ -14,18 +14,18 @@ resource "kubernetes_deployment" "grafana" {
     }
 
     selector {
-      match_labels {
+      match_labels = {
         name = "grafana"
       }
     }
 
     template {
       metadata {
-        labels {
+        labels = {
           name = "grafana"
         }
 
-        /*annotations {
+        /*annotations = {
           "seccomp.security.alpha.kubernetes.io/pod" = "docker/default"
         }*/
       }
@@ -50,7 +50,7 @@ resource "kubernetes_deployment" "grafana" {
 
             value_from {
               secret_key_ref {
-                name = "${kubernetes_secret.grafana_initial_admin_password.metadata.0.name}"
+                name = kubernetes_secret.grafana_initial_admin_password.metadata[0].name
                 key  = "grafana-admin-password"
               }
             }
@@ -121,7 +121,7 @@ resource "kubernetes_deployment" "grafana" {
           name = "config"
 
           config_map {
-            name = "${kubernetes_config_map.grafana_config.metadata.0.name}"
+            name = kubernetes_config_map.grafana_config.metadata[0].name
           }
         }
 
@@ -129,7 +129,7 @@ resource "kubernetes_deployment" "grafana" {
           name = "datasources"
 
           config_map {
-            name = "${kubernetes_config_map.grafana_datasources.metadata.0.name}"
+            name = kubernetes_config_map.grafana_datasources.metadata[0].name
           }
         }
 
@@ -137,7 +137,7 @@ resource "kubernetes_deployment" "grafana" {
           name = "providers"
 
           config_map {
-            name = "${kubernetes_config_map.grafana_providers.metadata.0.name}"
+            name = kubernetes_config_map.grafana_providers.metadata[0].name
           }
         }
 
@@ -145,7 +145,7 @@ resource "kubernetes_deployment" "grafana" {
           name = "dashboards-k8s"
 
           config_map {
-            name = "${kubernetes_config_map.grafana_dashboards_k8s.metadata.0.name}"
+            name = kubernetes_config_map.grafana_dashboards_k8s.metadata[0].name
           }
         }
 
@@ -153,7 +153,7 @@ resource "kubernetes_deployment" "grafana" {
           name = "dashboards-nodes"
 
           config_map {
-            name = "${kubernetes_config_map.grafana_dashboards_nodes.metadata.0.name}"
+            name = kubernetes_config_map.grafana_dashboards_nodes.metadata[0].name
           }
         }
       }
