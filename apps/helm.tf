@@ -25,7 +25,6 @@ resource "kubernetes_cluster_role_binding" "tiller" {
 }
 
 resource "kubernetes_deployment" "tiller_with_rbac" {
-  count = 0
   metadata {
     name      = "tiller-deploy"
     namespace = kubernetes_service_account.tiller.metadata[0].namespace
@@ -59,7 +58,7 @@ resource "kubernetes_deployment" "tiller_with_rbac" {
 
         container {
           name  = "tiller"
-          image = "gcr.io/kubernetes-helm/tiller:v2.14.0"
+          image = "gcr.io/kubernetes-helm/tiller:v2.14.1"
 
           port {
             name           = "tiller"
@@ -120,4 +119,8 @@ resource "kubernetes_deployment" "tiller_with_rbac" {
       }
     }
   }
+  depends_on = [
+    kubernetes_cluster_role_binding.tiller,
+    kubernetes_service_account.tiller
+  ]
 }

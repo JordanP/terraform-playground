@@ -9,6 +9,10 @@ resource "kubernetes_deployment" "kube_state_metrics" {
   spec {
     replicas = "1"
 
+    strategy {
+      type = "RollingUpdate"
+    }
+
     selector {
       match_labels = {
         name = "kube-state-metrics"

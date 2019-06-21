@@ -12,10 +12,9 @@ provider "helm" {
   kubernetes {
     config_path = "${local.asset_dir}/auth/kubeconfig"
   }
-
-  install_tiller  = true
-  service_account = kubernetes_service_account.tiller.metadata[0].name
-  namespace       = kubernetes_service_account.tiller.metadata[0].namespace
+  install_tiller  = false
+  service_account = kubernetes_deployment.tiller_with_rbac.spec[0].template[0].spec[0].service_account_name
+  namespace       = kubernetes_deployment.tiller_with_rbac.metadata[0].namespace
 }
 
 provider "kubernetes" {
