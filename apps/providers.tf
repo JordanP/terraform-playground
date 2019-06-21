@@ -1,5 +1,5 @@
 provider "google" {
-  version = "2.7.0"
+  version = "2.9.0"
 
   credentials = file("../account.json")
   project     = "terraform-playground-237915"
@@ -7,15 +7,15 @@ provider "google" {
 }
 
 provider "helm" {
-  version = "~> 0.9"
+  version = "~> 0.10"
 
   kubernetes {
     config_path = "${local.asset_dir}/auth/kubeconfig"
   }
 
-  install_tiller  = "true"
+  install_tiller  = true
   service_account = kubernetes_service_account.tiller.metadata[0].name
-  namespace       = "kube-system"
+  namespace       = kubernetes_service_account.tiller.metadata[0].namespace
 }
 
 provider "kubernetes" {
