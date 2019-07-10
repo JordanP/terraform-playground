@@ -6,6 +6,7 @@ data "helm_repository" "gitlab" {
 resource "helm_release" "gitlab" {
   name       = var.helm_release_name
   repository = data.helm_repository.gitlab.metadata[0].name
+  version    = "1.9.6"
   chart      = "gitlab"
   timeout    = 600
   namespace  = kubernetes_namespace.gitlab_ce.metadata[0].name

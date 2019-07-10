@@ -50,7 +50,7 @@ resource "kubernetes_deployment" "ingress" {
 
         container {
           name  = "nginx-ingress-controller"
-          image = "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.24.1"
+          image = "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.25.0"
 
           args = [
             "/nginx-ingress-controller",
