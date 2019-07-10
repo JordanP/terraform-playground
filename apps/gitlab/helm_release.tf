@@ -119,8 +119,8 @@ resource "helm_release" "gitlab" {
   }
 
   // https://gitlab.com/charts/gitlab/blob/master/doc/installation/tls.md#option-2-use-your-own-wildcard-certificate
-  // gcloud config configurations list && export CLOUDSDK_ACTIVE_CONFIG_NAME=default
-  // acme.sh --issue --dns dns_gcloud -d jordanpittier.net -d '*.jordanpittier.net'
+  // gcloud config set account jordan.pittier@gmail.com && gcloud config set project terraform-playground-237915
+  // acme.sh --issue --dns dns_gcloud -d jordanpittier.net -d '*.jordanpittier.net' --key-file apps/gitlab/certs/jordanpittier.net.key  --fullchain-file apps/gitlab/certs/jordanpittier.net.cer
   set {
     name  = "certmanager.install"
     value = "false"
