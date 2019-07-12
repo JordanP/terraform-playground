@@ -3,6 +3,56 @@ data "helm_repository" "gitlab" {
   url  = "https://charts.gitlab.io/"
 }
 
+locals {
+  env_variables = {
+    "global.hosts.domain" : "jordanpittier.net"
+    "global.edition" : "ce"
+    "certmanager-issuer.email" : "jordan@rezel.net"
+    "nginx-ingress.enabled" : "false"
+    "global.ingress.class" : "public"
+    "prometheus.install" : "false"
+    "redis.persistence.enabled" : "false"
+    "minio.persistence.enabled" : "false"
+    "gitlab.gitaly.persistence.enabled" : "false"
+    "gitlab.unicorn.minReplicas" : "1"
+    "gitlab.gitlab-shell.minReplicas" : "1"
+    "registry.minReplicas" : "1"
+    "postgresql.install" : "false"
+    "global.psql.host" : var.postgresql_host
+    "global.psql.database" : var.postgresql_database
+    "global.psql.password.secret" : kubernetes_secret.gitlab_postgresql_password.metadata[0].name
+    "global.psql.password.key" : "postgres-password"
+    "global.shell.port" : "8022"
+    "gitlab-runner.runners.privileged" : "true"
+    "certmanager-issuer.image.repository" : "gcr.io/google_containers/hyperkube"
+    "certmanager-issuer.image.tag" : "v1.14.0"
+    "certmanager.install" : "false"
+    "global.ingress.configureCertmanager" : "false"
+    "global.ingress.tls.secretName" : kubernetes_secret.gitlab_wildcard_certificate.metadata[0].name
+    "registry.storage.secret" : kubernetes_secret.gitlab_gcs_storage.metadata[0].name
+    "registry.storage.key" : "config"
+    "registry.storage.extraKey" : "keyfile"
+    "global.minio.enabled" : "false"
+    "global.appConfig.lfs.bucket" : "gitlab-lfs-storage-jpittier"
+    "global.appConfig.lfs.connection.secret" : kubernetes_secret.gitlab_gcs_storage.metadata[0].name
+    "global.appConfig.artifacts.bucket" : "gitlab-artifacts-storage-jpittier"
+    "global.appConfig.artifacts.connection.secret" : kubernetes_secret.gitlab_gcs_storage.metadata[0].name
+    "global.appConfig.uploads.bucket" : "gitlab-uploads-storage-jpittier"
+    "global.appConfig.uploads.connection.secret" : kubernetes_secret.gitlab_gcs_storage.metadata[0].name
+    "global.appConfig.packages.bucket" : "gitlab-packages-storage-jpittier"
+    "global.appConfig.packages.connection.secret" : kubernetes_secret.gitlab_gcs_storage.metadata[0].name
+    "global.appConfig.registry.bucket" : "gitlab-registry-storage-jpittier"
+    "global.appConfig.backups.bucket" : "gitlab-backup-storage-jpittier"
+    "global.appConfig.backups.tmpBucket" : "gitlab-tmp-storage-jpittier"
+    "gitlab.task-runner.backups.objectStorage.config.secret" : kubernetes_secret.gitlab_gcs_storage.metadata[0].name
+    "gitlab.task-runner.backups.objectStorage.config.key" : "s3cfg-config"
+    "gitlab-runner.runners.cache.cacheType" : "gcs"
+    "gitlab-runner.runners.cache.gcsBucketName" : "gitlab-cache-storage-jpittier"
+    "gitlab-runner.runners.cache.secretName" : kubernetes_secret.gitlab_gcs_storage.metadata[0].name
+  }
+}
+
+
 resource "helm_release" "gitlab" {
   name       = var.helm_release_name
   repository = data.helm_repository.gitlab.metadata[0].name
@@ -11,230 +61,11 @@ resource "helm_release" "gitlab" {
   timeout    = 600
   namespace  = kubernetes_namespace.gitlab_ce.metadata[0].name
 
-  set {
-    name  = "global.hosts.domain"
-    value = "jordanpittier.net"
-  }
-
-  set {
-    name  = "global.edition"
-    value = "ce"
-  }
-
-  set {
-    name  = "certmanager-issuer.email"
-    value = "jordan@rezel.net"
-  }
-
-  set {
-    name  = "nginx-ingress.enabled"
-    value = "false"
-  }
-
-  set {
-    name  = "global.ingress.class"
-    value = "public"
-  }
-
-  set {
-    name  = "prometheus.install"
-    value = "false"
-  }
-
-  set {
-    name  = "redis.persistence.enabled"
-    value = "false"
-  }
-
-  set {
-    name  = "minio.persistence.enabled"
-    value = "false"
-  }
-
-  set {
-    name  = "gitlab.gitaly.persistence.enabled"
-    value = "false"
-  }
-
-  set {
-    name  = "gitlab.unicorn.minReplicas"
-    value = "1"
-  }
-
-  set {
-    name  = "gitlab.gitlab-shell.minReplicas"
-    value = "1"
-  }
-
-  set {
-    name  = "registry.minReplicas"
-    value = "1"
-  }
-
-  set {
-    name  = "postgresql.install"
-    value = "false"
-  }
-
-  set {
-    name  = "global.psql.host"
-    value = var.postgresql_host
-  }
-
-  set {
-    name  = "global.psql.database"
-    value = var.postgresql_database
-  }
-
-  set {
-    name  = "global.psql.password.secret"
-    value = kubernetes_secret.gitlab_postgresql_password.metadata[0].name
-  }
-
-  set {
-    name  = "global.psql.password.key"
-    value = "postgres-password"
-  }
-
-  set {
-    name  = "global.shell.port"
-    value = "8022"
-  }
-
-  // Required for Docker in Docker (DinD)
-  set {
-    name  = "gitlab-runner.runners.privileged"
-    value = "true"
-  }
-
-  // https://gitlab.com/charts/gitlab/issues/1272#note_158005007
-  set {
-    name  = "certmanager-issuer.image.repository"
-    value = "gcr.io/google_containers/hyperkube"
-  }
-
-  set {
-    name  = "certmanager-issuer.image.tag"
-    value = "v1.14.0"
-  }
-
-  // https://gitlab.com/charts/gitlab/blob/master/doc/installation/tls.md#option-2-use-your-own-wildcard-certificate
-  // gcloud config set account jordan.pittier@gmail.com && gcloud config set project terraform-playground-237915
-  // acme.sh --issue --dns dns_gcloud -d jordanpittier.net -d '*.jordanpittier.net' --key-file apps/gitlab/certs/jordanpittier.net.key  --fullchain-file apps/gitlab/certs/jordanpittier.net.cer
-  set {
-    name  = "certmanager.install"
-    value = "false"
-  }
-
-  set {
-    name  = "global.ingress.configureCertmanager"
-    value = "false"
-  }
-
-  set {
-    name  = "global.ingress.tls.secretName"
-    value = kubernetes_secret.gitlab_wildcard_certificate.metadata[0].name
-  }
-
-  // https://gitlab.com/charts/gitlab/tree/master/doc/charts/registry#storage
-  // https://gitlab.com/charts/gitlab/blob/master/doc/charts/globals.md#connection
-  set {
-    name  = "registry.storage.secret"
-    value = kubernetes_secret.gitlab_gcs_storage.metadata[0].name
-  }
-
-  set {
-    name  = "registry.storage.key"
-    value = "config"
-  }
-
-  set {
-    name  = "registry.storage.extraKey"
-    value = "keyfile"
-  }
-
-  set {
-    name  = "global.minio.enabled"
-    value = "false"
-  }
-
-  set {
-    name  = "global.appConfig.lfs.bucket"
-    value = "gitlab-lfs-storage-jpittier"
-  }
-
-  set {
-    name  = "global.appConfig.lfs.connection.secret"
-    value = kubernetes_secret.gitlab_gcs_storage.metadata[0].name
-  }
-
-  set {
-    name  = "global.appConfig.artifacts.bucket"
-    value = "gitlab-artifacts-storage-jpittier"
-  }
-
-  set {
-    name  = "global.appConfig.artifacts.connection.secret"
-    value = kubernetes_secret.gitlab_gcs_storage.metadata[0].name
-  }
-
-  set {
-    name  = "global.appConfig.uploads.bucket"
-    value = "gitlab-uploads-storage-jpittier"
-  }
-
-  set {
-    name  = "global.appConfig.uploads.connection.secret"
-    value = kubernetes_secret.gitlab_gcs_storage.metadata[0].name
-  }
-
-  set {
-    name  = "global.appConfig.packages.bucket"
-    value = "gitlab-packages-storage-jpittier"
-  }
-
-  set {
-    name  = "global.appConfig.packages.connection.secret"
-    value = kubernetes_secret.gitlab_gcs_storage.metadata[0].name
-  }
-
-  set {
-    name  = "global.appConfig.registry.bucket"
-    value = "gitlab-registry-storage-jpittier"
-  }
-
-  set {
-    name  = "global.appConfig.backups.bucket"
-    value = "gitlab-backup-storage-jpittier"
-  }
-
-  set {
-    name  = "global.appConfig.backups.tmpBucket"
-    value = "gitlab-tmp-storage-jpittier"
-  }
-
-  set {
-    name  = "gitlab.task-runner.backups.objectStorage.config.secret"
-    value = kubernetes_secret.gitlab_gcs_storage.metadata[0].name
-  }
-
-  set {
-    name  = "gitlab.task-runner.backups.objectStorage.config.key"
-    value = "s3cfg-config"
-  }
-
-  set {
-    name  = "gitlab-runner.runners.cache.cacheType"
-    value = "gcs"
-  }
-
-  set {
-    name  = "gitlab-runner.runners.cache.gcsBucketName"
-    value = "gitlab-cache-storage-jpittier"
-  }
-
-  set {
-    name  = "gitlab-runner.runners.cache.secretName"
-    value = kubernetes_secret.gitlab_gcs_storage.metadata[0].name
+  dynamic "set" {
+    for_each = local.env_variables
+    content {
+      name  = set.key
+      value = set.value
+    }
   }
 }
