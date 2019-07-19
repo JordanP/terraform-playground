@@ -12,3 +12,13 @@ resource "kubernetes_namespace" "gce_pd_csi" {
   }
 }
 
+resource "kubernetes_storage_class" "csi_gce_pd" {
+  metadata {
+    name = "csi-gce-pd"
+  }
+  storage_provisioner = "pd.csi.storage.gke.io"
+  parameters = {
+    type = "pd-standard"
+  }
+  volume_binding_mode = "WaitForFirstConsumer"
+}

@@ -1,4 +1,4 @@
-resource "kubernetes_deployment" "prometheus" {
+resource "kubernetes_stateful_set" "prometheus" {
   metadata {
     name      = "prometheus"
     namespace = var.namespace
@@ -26,7 +26,15 @@ resource "kubernetes_deployment" "prometheus" {
 
       spec {
         service_account_name = module.prometheus_rbac.service_account_name
-
+        init_container {
+          name    = "init-chown-data"
+          image   = "busybox"
+          command = ["chown", "-R", "65534:65534", "/var/lib/prometheus"]
+          volume_mount {
+            name       = "prometheus-data"
+            mount_path = "/var/lib/prometheus"
+          }
+        }
         container {
           name  = "prometheus"
           image = "quay.io/prometheus/prometheus:v2.11.0"
@@ -35,6 +43,7 @@ resource "kubernetes_deployment" "prometheus" {
             "--web.listen-address=0.0.0.0:9090",
             "--config.file=/etc/prometheus/prometheus.yaml",
             "--storage.tsdb.path=/var/lib/prometheus",
+            "--storage.tsdb.retention.time=15d"
           ]
 
           port {
@@ -60,7 +69,7 @@ resource "kubernetes_deployment" "prometheus" {
           }
 
           volume_mount {
-            name       = "data"
+            name       = "prometheus-data"
             mount_path = "/var/lib/prometheus"
           }
 
@@ -91,7 +100,7 @@ resource "kubernetes_deployment" "prometheus" {
           }
         }
 
-        termination_grace_period_seconds = 30
+        termination_grace_period_seconds = 300
 
         volume {
           name = module.prometheus_rbac.service_account_default_secret_name
@@ -117,9 +126,19 @@ resource "kubernetes_deployment" "prometheus" {
           }
         }
 
-        volume {
-          name = "data"
-          empty_dir {
+      }
+    }
+    service_name = "prometheus"
+    volume_claim_template {
+      metadata {
+        name = "prometheus-data"
+      }
+      spec {
+        access_modes       = ["ReadWriteOnce"]
+        storage_class_name = "csi-gce-pd"
+        resources {
+          requests = {
+            storage = "16Gi"
           }
         }
       }
