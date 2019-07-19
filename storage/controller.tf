@@ -11,6 +11,9 @@ resource "kubernetes_stateful_set" "csi_gce_pd_controller" {
         app = "gcp-compute-persistent-disk-csi-driver"
       }
     }
+    update_strategy {
+      type = "RollingUpdate"
+    }
     template {
       metadata {
         labels = {

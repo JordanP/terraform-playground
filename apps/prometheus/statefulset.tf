@@ -13,6 +13,12 @@ resource "kubernetes_stateful_set" "prometheus" {
       }
     }
 
+    update_strategy {
+      type = "RollingUpdate"
+      rolling_update {
+        partition = 0
+      }
+    }
     template {
       metadata {
         labels = {
