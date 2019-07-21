@@ -106,7 +106,7 @@ resource "kubernetes_stateful_set" "prometheus" {
           }
         }
 
-        termination_grace_period_seconds = 300
+        termination_grace_period_seconds = 30
 
         volume {
           name = module.prometheus_rbac.service_account_default_secret_name
