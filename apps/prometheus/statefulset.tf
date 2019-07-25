@@ -140,8 +140,7 @@ resource "kubernetes_stateful_set" "prometheus" {
         name = "prometheus-data"
       }
       spec {
-        access_modes       = ["ReadWriteOnce"]
-        storage_class_name = "csi-gce-pd"
+        access_modes = ["ReadWriteOnce"]
         resources {
           requests = {
             storage = "16Gi"

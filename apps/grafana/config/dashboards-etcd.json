@@ -10,7 +10,7 @@
   "id": 6,
   "links": [
   ],
-  "refresh": false,
+  "refresh": "10s",
   "rows": [
     {
       "collapse": false,

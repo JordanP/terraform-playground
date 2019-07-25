@@ -89,21 +89,6 @@ resource "kubernetes_cluster_role" "ingress" {
   rule {
     api_groups = [
       "networking.k8s.io",
-    ]
-
-    resources = [
-      "ingresses",
-    ]
-
-    verbs = [
-      "get",
-      "list",
-      "watch",
-    ]
-  }
-
-  rule {
-    api_groups = [
       "extensions",
     ]
 
@@ -133,23 +118,12 @@ resource "kubernetes_cluster_role" "ingress" {
     ]
   }
 
-  rule {
-    api_groups = [
-      "extensions",
-    ]
-
-    resources = [
-      "ingresses/status",
-    ]
-
-    verbs = [
-      "update",
-    ]
-  }
 
   rule {
     api_groups = [
       "networking.k8s.io",
+      "extensions",
+
     ]
 
     resources = [
