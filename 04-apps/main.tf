@@ -29,6 +29,7 @@ module "gitlab" {
   postgresql_database   = data.terraform_remote_state.infra.outputs.postgresql_gitlab_database
   postgresql_password   = data.terraform_remote_state.infra.outputs.postgresql_gitlab_password
   force_destroy_buckets = "true"
+  redis_password        = module.redis.redis_password
 }
 
 resource "kubernetes_namespace" "monitoring" {
@@ -55,5 +56,9 @@ module "grafana" {
 module "prometheus" {
   source    = "./prometheus"
   namespace = kubernetes_namespace.monitoring.metadata[0].name
+}
+
+module "redis" {
+  source = "./redis"
 }
 

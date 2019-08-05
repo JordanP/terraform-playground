@@ -7,7 +7,7 @@ provider "google" {
 }
 
 provider "kubernetes" {
-  version     = "0.0.0"
+  #version     = "0.0.0"
   config_path = "/home/jordan/.secrets/clusters/tf-playground/auth/kubeconfig"
 }
 
