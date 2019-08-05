@@ -11,7 +11,10 @@ locals {
     "nginx-ingress.enabled" : "false"
     "global.ingress.class" : "public"
     "prometheus.install" : "false"
-    "redis.persistence.enabled" : "false"
+    "redis.enabled" : "false"
+    "global.redis.host" : "redis.default"
+    "global.redis.password.secret" : kubernetes_secret.redis_password.metadata.0.name
+    "global.redis.password.key" : "secret"
     "minio.persistence.enabled" : "false"
     "gitlab.gitaly.persistence.enabled" : "false"
     "gitlab.unicorn.minReplicas" : "1"

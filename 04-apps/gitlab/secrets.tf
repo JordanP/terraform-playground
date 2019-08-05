@@ -1,3 +1,13 @@
+resource "kubernetes_secret" "redis_password" {
+  metadata {
+    name      = "gitlab-redis-password"
+    namespace = kubernetes_namespace.gitlab_ce.metadata[0].name
+  }
+  data = {
+    secret = var.redis_password
+  }
+}
+
 resource "kubernetes_secret" "gitlab_postgresql_password" {
   metadata {
     name      = "gitlab-postgresql-password"
