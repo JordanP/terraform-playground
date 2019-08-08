@@ -33,7 +33,7 @@ resource "kubernetes_deployment" "grafana" {
       spec {
         container {
           name  = "grafana"
-          image = "grafana/grafana:6.2.5"
+          image = "grafana/grafana:6.3.2"
 
           env {
             name  = "GF_PATHS_CONFIG"
