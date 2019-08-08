@@ -125,4 +125,16 @@ resource "kubernetes_cluster_role" "kube_state_metrics" {
       "watch",
     ]
   }
+
+  rule {
+    api_groups = ["storage.k8s.io"]
+    resources = ["storageclasses"]
+    verbs = ["list", "watch"]
+  }
+
+  rule {
+    api_groups = ["autoscaling.k8s.io"]
+    resources = ["verticalpodautoscalers"]
+    verbs = ["list", "watch"]
+  }
 }

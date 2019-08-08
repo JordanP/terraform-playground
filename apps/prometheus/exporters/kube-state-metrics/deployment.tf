@@ -31,7 +31,7 @@ resource "kubernetes_deployment" "kube_state_metrics" {
 
         container {
           name  = "kube-state-metrics"
-          image = "quay.io/coreos/kube-state-metrics:v1.6.0"
+          image = "quay.io/coreos/kube-state-metrics:v1.7.2"
 
           port {
             name           = "metrics"
@@ -39,6 +39,16 @@ resource "kubernetes_deployment" "kube_state_metrics" {
           }
 
           readiness_probe {
+            http_get {
+              path = "/healthz"
+              port = "8080"
+            }
+
+            initial_delay_seconds = 5
+            timeout_seconds       = 5
+          }
+
+          liveness_probe {
             http_get {
               path = "/healthz"
               port = "8080"
@@ -57,7 +67,7 @@ resource "kubernetes_deployment" "kube_state_metrics" {
 
         container {
           name  = "addon-resizer"
-          image = "k8s.gcr.io/addon-resizer:1.8.4"
+          image = "k8s.gcr.io/addon-resizer:1.8.5"
 
           resources {
             limits {
