@@ -49,6 +49,7 @@ module "nginx" {
 module "grafana" {
   source    = "./grafana"
   namespace = kubernetes_namespace.monitoring.metadata[0].name
+  hostname  = data.terraform_remote_state.infra.outputs.monitoring_hostname
 }
 
 module "prometheus" {

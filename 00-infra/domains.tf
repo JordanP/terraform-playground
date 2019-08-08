@@ -36,3 +36,7 @@ resource "google_dns_record_set" "gitlab" {
   ]
 }
 
+output "monitoring_hostname" {
+  value = "monitoring.${local.dns_zone}"
+}
+

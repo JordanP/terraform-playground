@@ -37,6 +37,19 @@ resource "google_sql_user" "gitlab_user" {
   name     = "gitlab"
   instance = google_sql_database_instance.default.name
   password = random_id.postgres_gitlab_password.hex
+
+  provisioner "local-exec" {
+    environment = {
+      PGPASSWORD = random_id.postgres_gitlab_password.hex
+      PGHOST     = google_sql_database_instance.default.ip_address[0].ip_address
+      PGUSER     = "gitlab"
+      PGDATABASE = "postgres"
+    }
+    when    = "destroy"
+    command = <<EOF
+psql -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = 'gitlab' AND procpid <> pg_backend_pid();"
+EOF
+  }
 }
 
 resource "google_sql_database" "gitlab_database" {
