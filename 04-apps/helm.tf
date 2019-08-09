@@ -87,7 +87,7 @@ resource "kubernetes_deployment" "tiller_with_rbac" {
             }
 
             initial_delay_seconds = 1
-            timeout_seconds       = 1
+            timeout_seconds       = 2
           }
 
           readiness_probe {
@@ -97,7 +97,7 @@ resource "kubernetes_deployment" "tiller_with_rbac" {
             }
 
             initial_delay_seconds = 1
-            timeout_seconds       = 1
+            timeout_seconds       = 2
           }
 
           # See https://github.com/terraform-providers/terraform-provider-kubernetes/issues/38#issuecomment-318581203

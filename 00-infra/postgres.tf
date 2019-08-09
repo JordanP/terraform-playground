@@ -47,7 +47,7 @@ resource "google_sql_user" "gitlab_user" {
     }
     when    = "destroy"
     command = <<EOF
-psql -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = 'gitlab' AND procpid <> pg_backend_pid();"
+psql -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = 'gitlab' AND application_name != 'psql';"
 EOF
   }
 }
@@ -55,6 +55,9 @@ EOF
 resource "google_sql_database" "gitlab_database" {
   instance = google_sql_database_instance.default.name
   name     = "gitlab"
+  # Makes sure the DB is deleted before the user, otherwise postgres complains with: role "XXX" cannot be dropped
+  # because some objects depend on it.
+  depends_on = [google_sql_user.gitlab_user]
 }
 
 output "postgresql_host" {
