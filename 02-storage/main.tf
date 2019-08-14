@@ -12,9 +12,9 @@ resource "kubernetes_namespace" "gce_pd_csi" {
   }
 }
 
-resource "kubernetes_storage_class" "csi_gce_pd" {
+resource "kubernetes_storage_class" "standard" {
   metadata {
-    name = "csi-gce-pd"
+    name = "standard"
     annotations = {
       "storageclass.kubernetes.io/is-default-class" = "true"
     }

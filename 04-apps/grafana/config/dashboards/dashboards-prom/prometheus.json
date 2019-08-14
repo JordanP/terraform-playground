@@ -1,367 +1,323 @@
 {
   "annotations": {
     "list": [
+
     ]
   },
-  "description": "etcd sample Grafana dashboard with Prometheus",
   "editable": true,
   "gnetId": null,
+  "graphTooltip": 0,
   "hideControls": false,
-  "id": 6,
   "links": [
+
   ],
   "refresh": "10s",
   "rows": [
     {
       "collapse": false,
-      "editable": true,
-      "height": "250px",
-      "panels": [
-        {
-          "cacheTimeout": null,
-          "colorBackground": false,
-          "colorValue": false,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "datasource": "$datasource",
-          "editable": true,
-          "error": false,
-          "format": "none",
-          "gauge": {
-            "maxValue": 100,
-            "minValue": 0,
-            "show": false,
-            "thresholdLabels": false,
-            "thresholdMarkers": true
-          },
-          "id": 28,
-          "interval": null,
-          "isNew": true,
-          "links": [
-          ],
-          "mappingType": 1,
-          "mappingTypes": [
-            {
-              "name": "value to text",
-              "value": 1
-            },
-            {
-              "name": "range to text",
-              "value": 2
-            }
-          ],
-          "maxDataPoints": 100,
-          "nullPointMode": "connected",
-          "nullText": null,
-          "postfix": "",
-          "postfixFontSize": "50%",
-          "prefix": "",
-          "prefixFontSize": "50%",
-          "rangeMaps": [
-            {
-              "from": "null",
-              "text": "N/A",
-              "to": "null"
-            }
-          ],
-          "span": 3,
-          "sparkline": {
-            "fillColor": "rgba(31, 118, 189, 0.18)",
-            "full": false,
-            "lineColor": "rgb(31, 120, 193)",
-            "show": false
-          },
-          "targets": [
-            {
-              "expr": "sum(etcd_server_has_leader{job=\"$cluster\"})",
-              "intervalFactor": 2,
-              "legendFormat": "",
-              "metric": "etcd_server_has_leader",
-              "refId": "A",
-              "step": 20
-            }
-          ],
-          "thresholds": "",
-          "title": "Up",
-          "type": "singlestat",
-          "valueFontSize": "200%",
-          "valueMaps": [
-            {
-              "op": "=",
-              "text": "N/A",
-              "value": "null"
-            }
-          ],
-          "valueName": "avg"
-        },
-        {
-          "aliasColors": {
-          },
-          "bars": false,
-          "datasource": "$datasource",
-          "editable": true,
-          "error": false,
-          "fill": 0,
-          "id": 23,
-          "isNew": true,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": false,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 2,
-          "links": [
-          ],
-          "nullPointMode": "connected",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [
-          ],
-          "span": 5,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "sum(rate(grpc_server_started_total{job=\"$cluster\",grpc_type=\"unary\"}[5m]))",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "RPC Rate",
-              "metric": "grpc_server_started_total",
-              "refId": "A",
-              "step": 2
-            },
-            {
-              "expr": "sum(rate(grpc_server_handled_total{job=\"$cluster\",grpc_type=\"unary\",grpc_code!=\"OK\"}[5m]))",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "RPC Failed Rate",
-              "metric": "grpc_server_handled_total",
-              "refId": "B",
-              "step": 2
-            }
-          ],
-          "thresholds": [
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "RPC Rate",
-          "tooltip": {
-            "msResolution": false,
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": [
-            ]
-          },
-          "yaxes": [
-            {
-              "format": "ops",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ]
-        },
-        {
-          "aliasColors": {
-          },
-          "bars": false,
-          "datasource": "$datasource",
-          "editable": true,
-          "error": false,
-          "fill": 0,
-          "id": 41,
-          "isNew": true,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": false,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 2,
-          "links": [
-          ],
-          "nullPointMode": "connected",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [
-          ],
-          "span": 4,
-          "stack": true,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "sum(grpc_server_started_total{job=\"$cluster\",grpc_service=\"etcdserverpb.Watch\",grpc_type=\"bidi_stream\"}) - sum(grpc_server_handled_total{job=\"$cluster\",grpc_service=\"etcdserverpb.Watch\",grpc_type=\"bidi_stream\"})",
-              "intervalFactor": 2,
-              "legendFormat": "Watch Streams",
-              "metric": "grpc_server_handled_total",
-              "refId": "A",
-              "step": 4
-            },
-            {
-              "expr": "sum(grpc_server_started_total{job=\"$cluster\",grpc_service=\"etcdserverpb.Lease\",grpc_type=\"bidi_stream\"}) - sum(grpc_server_handled_total{job=\"$cluster\",grpc_service=\"etcdserverpb.Lease\",grpc_type=\"bidi_stream\"})",
-              "intervalFactor": 2,
-              "legendFormat": "Lease Streams",
-              "metric": "grpc_server_handled_total",
-              "refId": "B",
-              "step": 4
-            }
-          ],
-          "thresholds": [
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Active Streams",
-          "tooltip": {
-            "msResolution": false,
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": [
-            ]
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": "",
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ]
-        }
-      ],
-      "showTitle": false,
-      "title": "Row"
-    },
-    {
-      "collapse": false,
-      "editable": true,
       "height": "250px",
       "panels": [
         {
           "aliasColors": {
+
           },
           "bars": false,
+          "dashLength": 10,
+          "dashes": false,
           "datasource": "$datasource",
-          "decimals": null,
-          "editable": true,
-          "error": false,
-          "fill": 0,
-          "grid": {
-          },
+          "fill": 1,
           "id": 1,
           "legend": {
             "avg": false,
             "current": false,
             "max": false,
             "min": false,
-            "show": false,
+            "show": true,
             "total": false,
             "values": false
           },
           "lines": true,
-          "linewidth": 2,
+          "linewidth": 1,
           "links": [
+
           ],
-          "nullPointMode": "connected",
+          "nullPointMode": "null as zero",
           "percentage": false,
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
           "seriesOverrides": [
+
           ],
-          "span": 4,
+          "spaceLength": 10,
+          "span": 12,
           "stack": false,
           "steppedLine": false,
+          "styles": [
+            {
+              "alias": "Time",
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "pattern": "Time",
+              "type": "hidden"
+            },
+            {
+              "alias": "Count",
+              "colorMode": null,
+              "colors": [
+
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "link": false,
+              "linkTooltip": "Drill down",
+              "linkUrl": "",
+              "pattern": "Value #A",
+              "thresholds": [
+
+              ],
+              "type": "hidden",
+              "unit": "short"
+            },
+            {
+              "alias": "Uptime",
+              "colorMode": null,
+              "colors": [
+
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "link": false,
+              "linkTooltip": "Drill down",
+              "linkUrl": "",
+              "pattern": "Value #B",
+              "thresholds": [
+
+              ],
+              "type": "number",
+              "unit": "short"
+            },
+            {
+              "alias": "Instance",
+              "colorMode": null,
+              "colors": [
+
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "link": false,
+              "linkTooltip": "Drill down",
+              "linkUrl": "",
+              "pattern": "instance",
+              "thresholds": [
+
+              ],
+              "type": "number",
+              "unit": "short"
+            },
+            {
+              "alias": "Job",
+              "colorMode": null,
+              "colors": [
+
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "link": false,
+              "linkTooltip": "Drill down",
+              "linkUrl": "",
+              "pattern": "job",
+              "thresholds": [
+
+              ],
+              "type": "number",
+              "unit": "short"
+            },
+            {
+              "alias": "Version",
+              "colorMode": null,
+              "colors": [
+
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "link": false,
+              "linkTooltip": "Drill down",
+              "linkUrl": "",
+              "pattern": "version",
+              "thresholds": [
+
+              ],
+              "type": "number",
+              "unit": "short"
+            },
+            {
+              "alias": "",
+              "colorMode": null,
+              "colors": [
+
+              ],
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "decimals": 2,
+              "pattern": "/.*/",
+              "thresholds": [
+
+              ],
+              "type": "string",
+              "unit": "short"
+            }
+          ],
           "targets": [
             {
-              "expr": "etcd_debugging_mvcc_db_total_size_in_bytes{job=\"$cluster\"}",
-              "hide": false,
-              "interval": "",
+              "expr": "count by (job, instance, version) (prometheus_build_info{job=~\"$job\", instance=~\"$instance\"})",
+              "format": "table",
+              "instant": true,
               "intervalFactor": 2,
-              "legendFormat": "{{instance}} DB Size",
-              "metric": "",
+              "legendFormat": "",
               "refId": "A",
-              "step": 4
+              "step": 10
+            },
+            {
+              "expr": "max by (job, instance) (time() - process_start_time_seconds{job=~\"$job\", instance=~\"$instance\"})",
+              "format": "table",
+              "instant": true,
+              "intervalFactor": 2,
+              "legendFormat": "",
+              "refId": "B",
+              "step": 10
             }
           ],
           "thresholds": [
+
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "DB Size",
+          "title": "Prometheus Stats",
           "tooltip": {
-            "msResolution": false,
             "shared": true,
             "sort": 0,
-            "value_type": "cumulative"
+            "value_type": "individual"
           },
-          "type": "graph",
+          "transform": "table",
+          "type": "table",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
             "name": null,
             "show": true,
             "values": [
+
             ]
           },
           "yaxes": [
             {
-              "format": "bytes",
+              "format": "short",
+              "label": null,
               "logBase": 1,
               "max": null,
-              "min": null,
+              "min": 0,
               "show": true
             },
             {
               "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ]
+        }
+      ],
+      "repeat": null,
+      "repeatIteration": null,
+      "repeatRowId": null,
+      "showTitle": true,
+      "title": "Prometheus Stats",
+      "titleSize": "h6"
+    },
+    {
+      "collapse": false,
+      "height": "250px",
+      "panels": [
+        {
+          "aliasColors": {
+
+          },
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "$datasource",
+          "fill": 1,
+          "id": 2,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [
+
+          ],
+          "nullPointMode": "null as zero",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [
+
+          ],
+          "spaceLength": 10,
+          "span": 6,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "sum(rate(prometheus_target_sync_length_seconds_sum{job=~\"$job\",instance=~\"$instance\"}[5m])) by (scrape_job) * 1e3",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "{{scrape_job}}",
+              "legendLink": null,
+              "step": 10
+            }
+          ],
+          "thresholds": [
+
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Target Sync",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": [
+
+            ]
+          },
+          "yaxes": [
+            {
+              "format": "ms",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
               "logBase": 1,
               "max": null,
               "min": null,
@@ -371,86 +327,181 @@
         },
         {
           "aliasColors": {
+
           },
           "bars": false,
+          "dashLength": 10,
+          "dashes": false,
           "datasource": "$datasource",
-          "editable": true,
-          "error": false,
-          "fill": 0,
-          "grid": {
-          },
+          "fill": 10,
           "id": 3,
           "legend": {
             "avg": false,
             "current": false,
             "max": false,
             "min": false,
-            "show": false,
+            "show": true,
             "total": false,
             "values": false
           },
           "lines": true,
-          "linewidth": 2,
+          "linewidth": 0,
           "links": [
+
           ],
-          "nullPointMode": "connected",
+          "nullPointMode": "null as zero",
           "percentage": false,
-          "pointradius": 1,
+          "pointradius": 5,
           "points": false,
           "renderer": "flot",
           "seriesOverrides": [
+
           ],
-          "span": 4,
-          "stack": false,
-          "steppedLine": true,
+          "spaceLength": 10,
+          "span": 6,
+          "stack": true,
+          "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.99, sum(rate(etcd_disk_wal_fsync_duration_seconds_bucket{job=\"$cluster\"}[5m])) by (instance, le))",
-              "hide": false,
+              "expr": "sum(prometheus_sd_discovered_targets{job=~\"$job\",instance=~\"$instance\"})",
+              "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{instance}} WAL fsync",
-              "metric": "etcd_disk_wal_fsync_duration_seconds_bucket",
-              "refId": "A",
-              "step": 4
-            },
-            {
-              "expr": "histogram_quantile(0.99, sum(rate(etcd_disk_backend_commit_duration_seconds_bucket{job=\"$cluster\"}[5m])) by (instance, le))",
-              "intervalFactor": 2,
-              "legendFormat": "{{instance}} DB fsync",
-              "metric": "etcd_disk_backend_commit_duration_seconds_bucket",
-              "refId": "B",
-              "step": 4
+              "legendFormat": "Targets",
+              "legendLink": null,
+              "step": 10
             }
           ],
           "thresholds": [
+
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Disk Sync Duration",
+          "title": "Targets",
           "tooltip": {
-            "msResolution": false,
             "shared": true,
             "sort": 0,
-            "value_type": "cumulative"
+            "value_type": "individual"
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
             "name": null,
             "show": true,
             "values": [
+
             ]
           },
           "yaxes": [
             {
-              "format": "s",
+              "format": "short",
+              "label": null,
               "logBase": 1,
               "max": null,
-              "min": null,
+              "min": 0,
               "show": true
             },
             {
               "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ]
+        }
+      ],
+      "repeat": null,
+      "repeatIteration": null,
+      "repeatRowId": null,
+      "showTitle": true,
+      "title": "Discovery",
+      "titleSize": "h6"
+    },
+    {
+      "collapse": false,
+      "height": "250px",
+      "panels": [
+        {
+          "aliasColors": {
+
+          },
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "$datasource",
+          "fill": 1,
+          "id": 4,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [
+
+          ],
+          "nullPointMode": "null as zero",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [
+
+          ],
+          "spaceLength": 10,
+          "span": 4,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "rate(prometheus_target_interval_length_seconds_sum{job=~\"$job\",instance=~\"$instance\"}[5m]) / rate(prometheus_target_interval_length_seconds_count{job=~\"$job\",instance=~\"$instance\"}[5m]) * 1e3",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "{{interval}} configured",
+              "legendLink": null,
+              "step": 10
+            }
+          ],
+          "thresholds": [
+
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Average Scrape Interval Duration",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": [
+
+            ]
+          },
+          "yaxes": [
+            {
+              "format": "ms",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
               "logBase": 1,
               "max": null,
               "min": null,
@@ -460,162 +511,102 @@
         },
         {
           "aliasColors": {
+
           },
           "bars": false,
+          "dashLength": 10,
+          "dashes": false,
           "datasource": "$datasource",
-          "editable": true,
-          "error": false,
-          "fill": 0,
-          "id": 29,
-          "isNew": true,
+          "fill": 10,
+          "id": 5,
           "legend": {
             "avg": false,
             "current": false,
             "max": false,
             "min": false,
-            "show": false,
+            "show": true,
             "total": false,
             "values": false
           },
           "lines": true,
-          "linewidth": 2,
+          "linewidth": 0,
           "links": [
+
           ],
-          "nullPointMode": "connected",
+          "nullPointMode": "null as zero",
           "percentage": false,
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
           "seriesOverrides": [
+
           ],
+          "spaceLength": 10,
           "span": 4,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "process_resident_memory_bytes{job=\"$cluster\"}",
-              "intervalFactor": 2,
-              "legendFormat": "{{instance}} Resident Memory",
-              "metric": "process_resident_memory_bytes",
-              "refId": "A",
-              "step": 4
-            }
-          ],
-          "thresholds": [
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Memory",
-          "tooltip": {
-            "msResolution": false,
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": [
-            ]
-          },
-          "yaxes": [
-            {
-              "format": "bytes",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ]
-        }
-      ],
-      "title": "New row"
-    },
-    {
-      "collapse": false,
-      "editable": true,
-      "height": "250px",
-      "panels": [
-        {
-          "aliasColors": {
-          },
-          "bars": false,
-          "datasource": "$datasource",
-          "editable": true,
-          "error": false,
-          "fill": 5,
-          "id": 22,
-          "isNew": true,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": false,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 2,
-          "links": [
-          ],
-          "nullPointMode": "connected",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [
-          ],
-          "span": 3,
           "stack": true,
           "steppedLine": false,
           "targets": [
             {
-              "expr": "rate(etcd_network_client_grpc_received_bytes_total{job=\"$cluster\"}[5m])",
+              "expr": "sum by (job) (rate(prometheus_target_scrapes_exceeded_sample_limit_total[1m]))",
+              "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{instance}} Client Traffic In",
-              "metric": "etcd_network_client_grpc_received_bytes_total",
-              "refId": "A",
-              "step": 4
+              "legendFormat": "exceeded sample limit: {{job}}",
+              "legendLink": null,
+              "step": 10
+            },
+            {
+              "expr": "sum by (job) (rate(prometheus_target_scrapes_sample_duplicate_timestamp_total[1m]))",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "duplicate timestamp: {{job}}",
+              "legendLink": null,
+              "step": 10
+            },
+            {
+              "expr": "sum by (job) (rate(prometheus_target_scrapes_sample_out_of_bounds_total[1m]))",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "out of bounds: {{job}}",
+              "legendLink": null,
+              "step": 10
+            },
+            {
+              "expr": "sum by (job) (rate(prometheus_target_scrapes_sample_out_of_order_total[1m]))",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "out of order: {{job}}",
+              "legendLink": null,
+              "step": 10
             }
           ],
           "thresholds": [
+
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Client Traffic In",
+          "title": "Scrape failures",
           "tooltip": {
-            "msResolution": false,
             "shared": true,
             "sort": 0,
             "value_type": "individual"
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
             "name": null,
             "show": true,
             "values": [
+
             ]
           },
           "yaxes": [
             {
-              "format": "Bps",
+              "format": "short",
               "label": null,
               "logBase": 1,
               "max": null,
-              "min": null,
+              "min": 0,
               "show": true
             },
             {
@@ -624,79 +615,84 @@
               "logBase": 1,
               "max": null,
               "min": null,
-              "show": true
+              "show": false
             }
           ]
         },
         {
           "aliasColors": {
+
           },
           "bars": false,
+          "dashLength": 10,
+          "dashes": false,
           "datasource": "$datasource",
-          "editable": true,
-          "error": false,
-          "fill": 5,
-          "id": 21,
-          "isNew": true,
+          "fill": 10,
+          "id": 6,
           "legend": {
             "avg": false,
             "current": false,
             "max": false,
             "min": false,
-            "show": false,
+            "show": true,
             "total": false,
             "values": false
           },
           "lines": true,
-          "linewidth": 2,
+          "linewidth": 0,
           "links": [
+
           ],
-          "nullPointMode": "connected",
+          "nullPointMode": "null as zero",
           "percentage": false,
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
           "seriesOverrides": [
+
           ],
-          "span": 3,
+          "spaceLength": 10,
+          "span": 4,
           "stack": true,
           "steppedLine": false,
           "targets": [
             {
-              "expr": "rate(etcd_network_client_grpc_sent_bytes_total{job=\"$cluster\"}[5m])",
+              "expr": "rate(prometheus_tsdb_head_samples_appended_total{job=~\"$job\",instance=~\"$instance\"}[5m])",
+              "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{instance}} Client Traffic Out",
-              "metric": "etcd_network_client_grpc_sent_bytes_total",
-              "refId": "A",
-              "step": 4
+              "legendFormat": "{{job}} {{instance}}",
+              "legendLink": null,
+              "step": 10
             }
           ],
           "thresholds": [
+
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Client Traffic Out",
+          "title": "Appended Samples",
           "tooltip": {
-            "msResolution": false,
             "shared": true,
             "sort": 0,
             "value_type": "individual"
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
             "name": null,
             "show": true,
             "values": [
+
             ]
           },
           "yaxes": [
             {
-              "format": "Bps",
+              "format": "short",
               "label": null,
               "logBase": 1,
               "max": null,
-              "min": null,
+              "min": 0,
               "show": true
             },
             {
@@ -705,274 +701,96 @@
               "logBase": 1,
               "max": null,
               "min": null,
-              "show": true
-            }
-          ]
-        },
-        {
-          "aliasColors": {
-          },
-          "bars": false,
-          "datasource": "$datasource",
-          "editable": true,
-          "error": false,
-          "fill": 0,
-          "id": 20,
-          "isNew": true,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": false,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 2,
-          "links": [
-          ],
-          "nullPointMode": "connected",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [
-          ],
-          "span": 3,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "sum(rate(etcd_network_peer_received_bytes_total{job=\"$cluster\"}[5m])) by (instance)",
-              "intervalFactor": 2,
-              "legendFormat": "{{instance}} Peer Traffic In",
-              "metric": "etcd_network_peer_received_bytes_total",
-              "refId": "A",
-              "step": 4
-            }
-          ],
-          "thresholds": [
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Peer Traffic In",
-          "tooltip": {
-            "msResolution": false,
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": [
-            ]
-          },
-          "yaxes": [
-            {
-              "format": "Bps",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ]
-        },
-        {
-          "aliasColors": {
-          },
-          "bars": false,
-          "datasource": "$datasource",
-          "decimals": null,
-          "editable": true,
-          "error": false,
-          "fill": 0,
-          "grid": {
-          },
-          "id": 16,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": false,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 2,
-          "links": [
-          ],
-          "nullPointMode": "connected",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [
-          ],
-          "span": 3,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "sum(rate(etcd_network_peer_sent_bytes_total{job=\"$cluster\"}[5m])) by (instance)",
-              "hide": false,
-              "interval": "",
-              "intervalFactor": 2,
-              "legendFormat": "{{instance}} Peer Traffic Out",
-              "metric": "etcd_network_peer_sent_bytes_total",
-              "refId": "A",
-              "step": 4
-            }
-          ],
-          "thresholds": [
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Peer Traffic Out",
-          "tooltip": {
-            "msResolution": false,
-            "shared": true,
-            "sort": 0,
-            "value_type": "cumulative"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": [
-            ]
-          },
-          "yaxes": [
-            {
-              "format": "Bps",
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
+              "show": false
             }
           ]
         }
       ],
-      "title": "New row"
+      "repeat": null,
+      "repeatIteration": null,
+      "repeatRowId": null,
+      "showTitle": true,
+      "title": "Retrieval",
+      "titleSize": "h6"
     },
     {
       "collapse": false,
-      "editable": true,
       "height": "250px",
       "panels": [
         {
           "aliasColors": {
+
           },
           "bars": false,
+          "dashLength": 10,
+          "dashes": false,
           "datasource": "$datasource",
-          "editable": true,
-          "error": false,
-          "fill": 0,
-          "id": 40,
-          "isNew": true,
+          "fill": 10,
+          "id": 7,
           "legend": {
             "avg": false,
             "current": false,
             "max": false,
             "min": false,
-            "show": false,
+            "show": true,
             "total": false,
             "values": false
           },
           "lines": true,
-          "linewidth": 2,
+          "linewidth": 0,
           "links": [
+
           ],
-          "nullPointMode": "connected",
+          "nullPointMode": "null as zero",
           "percentage": false,
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
           "seriesOverrides": [
+
           ],
+          "spaceLength": 10,
           "span": 6,
-          "stack": false,
+          "stack": true,
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(etcd_server_proposals_failed_total{job=\"$cluster\"}[5m]))",
+              "expr": "prometheus_tsdb_head_series{job=~\"$job\",instance=~\"$instance\"}",
+              "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "Proposal Failure Rate",
-              "metric": "etcd_server_proposals_failed_total",
-              "refId": "A",
-              "step": 2
-            },
-            {
-              "expr": "sum(etcd_server_proposals_pending{job=\"$cluster\"})",
-              "intervalFactor": 2,
-              "legendFormat": "Proposal Pending Total",
-              "metric": "etcd_server_proposals_pending",
-              "refId": "B",
-              "step": 2
-            },
-            {
-              "expr": "sum(rate(etcd_server_proposals_committed_total{job=\"$cluster\"}[5m]))",
-              "intervalFactor": 2,
-              "legendFormat": "Proposal Commit Rate",
-              "metric": "etcd_server_proposals_committed_total",
-              "refId": "C",
-              "step": 2
-            },
-            {
-              "expr": "sum(rate(etcd_server_proposals_applied_total{job=\"$cluster\"}[5m]))",
-              "intervalFactor": 2,
-              "legendFormat": "Proposal Apply Rate",
-              "refId": "D",
-              "step": 2
+              "legendFormat": "{{job}} {{instance}} head series",
+              "legendLink": null,
+              "step": 10
             }
           ],
           "thresholds": [
+
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Raft Proposals",
+          "title": "Head Series",
           "tooltip": {
-            "msResolution": false,
             "shared": true,
             "sort": 0,
             "value_type": "individual"
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
             "name": null,
             "show": true,
             "values": [
+
             ]
           },
           "yaxes": [
             {
               "format": "short",
-              "label": "",
+              "label": null,
               "logBase": 1,
               "max": null,
-              "min": null,
+              "min": 0,
               "show": true
             },
             {
@@ -981,73 +799,75 @@
               "logBase": 1,
               "max": null,
               "min": null,
-              "show": true
+              "show": false
             }
           ]
         },
         {
           "aliasColors": {
+
           },
           "bars": false,
+          "dashLength": 10,
+          "dashes": false,
           "datasource": "$datasource",
-          "decimals": 0,
-          "editable": true,
-          "error": false,
-          "fill": 0,
-          "id": 19,
-          "isNew": true,
+          "fill": 10,
+          "id": 8,
           "legend": {
-            "alignAsTable": false,
             "avg": false,
             "current": false,
             "max": false,
             "min": false,
-            "rightSide": false,
-            "show": false,
+            "show": true,
             "total": false,
             "values": false
           },
           "lines": true,
-          "linewidth": 2,
+          "linewidth": 0,
           "links": [
+
           ],
-          "nullPointMode": "connected",
+          "nullPointMode": "null as zero",
           "percentage": false,
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
           "seriesOverrides": [
+
           ],
+          "spaceLength": 10,
           "span": 6,
-          "stack": false,
+          "stack": true,
           "steppedLine": false,
           "targets": [
             {
-              "expr": "changes(etcd_server_leader_changes_seen_total{job=\"$cluster\"}[1d])",
+              "expr": "prometheus_tsdb_head_chunks{job=~\"$job\",instance=~\"$instance\"}",
+              "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{instance}} Total Leader Elections Per Day",
-              "metric": "etcd_server_leader_changes_seen_total",
-              "refId": "A",
-              "step": 2
+              "legendFormat": "{{job}} {{instance}} head chunks",
+              "legendLink": null,
+              "step": 10
             }
           ],
           "thresholds": [
+
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Total Leader Elections Per Day",
+          "title": "Head Chunks",
           "tooltip": {
-            "msResolution": false,
             "shared": true,
             "sort": 0,
             "value_type": "individual"
           },
           "type": "graph",
           "xaxis": {
+            "buckets": null,
             "mode": "time",
             "name": null,
             "show": true,
             "values": [
+
             ]
           },
           "yaxes": [
@@ -1056,7 +876,7 @@
               "label": null,
               "logBase": 1,
               "max": null,
-              "min": null,
+              "min": 0,
               "show": true
             },
             {
@@ -1065,18 +885,207 @@
               "logBase": 1,
               "max": null,
               "min": null,
-              "show": true
+              "show": false
             }
           ]
         }
       ],
-      "title": "New row"
+      "repeat": null,
+      "repeatIteration": null,
+      "repeatRowId": null,
+      "showTitle": true,
+      "title": "Storage",
+      "titleSize": "h6"
+    },
+    {
+      "collapse": false,
+      "height": "250px",
+      "panels": [
+        {
+          "aliasColors": {
+
+          },
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "$datasource",
+          "fill": 10,
+          "id": 9,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 0,
+          "links": [
+
+          ],
+          "nullPointMode": "null as zero",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [
+
+          ],
+          "spaceLength": 10,
+          "span": 6,
+          "stack": true,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "rate(prometheus_engine_query_duration_seconds_count{job=~\"$job\",instance=~\"$instance\",slice=\"inner_eval\"}[5m])",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "{{job}} {{instance}}",
+              "legendLink": null,
+              "step": 10
+            }
+          ],
+          "thresholds": [
+
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Query Rate",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": [
+
+            ]
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ]
+        },
+        {
+          "aliasColors": {
+
+          },
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "$datasource",
+          "fill": 10,
+          "id": 10,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 0,
+          "links": [
+
+          ],
+          "nullPointMode": "null as zero",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [
+
+          ],
+          "spaceLength": 10,
+          "span": 6,
+          "stack": true,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "max by (slice) (prometheus_engine_query_duration_seconds{quantile=\"0.9\",job=~\"$job\",instance=~\"$instance\"}) * 1e3",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "{{slice}}",
+              "legendLink": null,
+              "step": 10
+            }
+          ],
+          "thresholds": [
+
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Stage Duration",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": [
+
+            ]
+          },
+          "yaxes": [
+            {
+              "format": "ms",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": false
+            }
+          ]
+        }
+      ],
+      "repeat": null,
+      "repeatIteration": null,
+      "repeatRowId": null,
+      "showTitle": true,
+      "title": "Query",
+      "titleSize": "h6"
     }
   ],
-  "schemaVersion": 13,
-  "sharedCrosshair": false,
+  "schemaVersion": 14,
   "style": "dark",
   "tags": [
+
   ],
   "templating": {
     "list": [
@@ -1089,6 +1098,7 @@
         "label": null,
         "name": "datasource",
         "options": [
+
         ],
         "query": "prometheus",
         "refresh": 1,
@@ -1098,23 +1108,54 @@
       {
         "allValue": null,
         "current": {
-          "text": "prod",
-          "value": "prod"
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
         },
         "datasource": "$datasource",
         "hide": 0,
-        "includeAll": false,
-        "label": "cluster",
-        "multi": false,
-        "name": "cluster",
+        "includeAll": true,
+        "label": "job",
+        "multi": true,
+        "name": "job",
         "options": [
+
         ],
-        "query": "label_values(etcd_server_has_leader, job)",
+        "query": "label_values(prometheus_build_info, job)",
         "refresh": 1,
         "regex": "",
         "sort": 2,
         "tagValuesQuery": "",
         "tags": [
+
+        ],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": "$datasource",
+        "hide": 0,
+        "includeAll": true,
+        "label": "instance",
+        "multi": true,
+        "name": "instance",
+        "options": [
+
+        ],
+        "query": "label_values(prometheus_build_info, instance)",
+        "refresh": 1,
+        "regex": "",
+        "sort": 2,
+        "tagValuesQuery": "",
+        "tags": [
+
         ],
         "tagsQuery": "",
         "type": "query",
@@ -1123,11 +1164,10 @@
     ]
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-1h",
     "to": "now"
   },
   "timepicker": {
-    "now": true,
     "refresh_intervals": [
       "5s",
       "10s",
@@ -1152,7 +1192,8 @@
       "30d"
     ]
   },
-  "timezone": "browser",
-  "title": "etcd",
-  "version": 215
+  "timezone": "utc",
+  "title": "Prometheus",
+  "uid": "",
+  "version": 0
 }

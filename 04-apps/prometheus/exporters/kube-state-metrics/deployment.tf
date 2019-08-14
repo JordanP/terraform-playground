@@ -27,8 +27,8 @@ resource "kubernetes_deployment" "kube_state_metrics" {
       }
 
       spec {
-        service_account_name = kubernetes_service_account.kube_state_metrics.metadata[0].name
-
+        service_account_name            = kubernetes_service_account.kube_state_metrics.metadata[0].name
+        automount_service_account_token = true
         container {
           name  = "kube-state-metrics"
           image = "quay.io/coreos/kube-state-metrics:v1.7.2"
@@ -58,11 +58,6 @@ resource "kubernetes_deployment" "kube_state_metrics" {
             timeout_seconds       = 5
           }
 
-          volume_mount {
-            mount_path = "/var/run/secrets/kubernetes.io/serviceaccount"
-            name       = kubernetes_service_account.kube_state_metrics.default_secret_name
-            read_only  = true
-          }
         }
 
         container {
@@ -112,19 +107,6 @@ resource "kubernetes_deployment" "kube_state_metrics" {
             "--deployment=kube-state-metrics",
           ]
 
-          volume_mount {
-            mount_path = "/var/run/secrets/kubernetes.io/serviceaccount"
-            name       = kubernetes_service_account.kube_state_metrics.default_secret_name
-            read_only  = true
-          }
-        }
-
-        volume {
-          name = kubernetes_service_account.kube_state_metrics.default_secret_name
-
-          secret {
-            secret_name = kubernetes_service_account.kube_state_metrics.default_secret_name
-          }
         }
       }
     }

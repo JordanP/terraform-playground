@@ -31,7 +31,8 @@ resource "kubernetes_stateful_set" "prometheus" {
       }
 
       spec {
-        service_account_name = module.prometheus_rbac.service_account_name
+        service_account_name            = module.prometheus_rbac.service_account_name
+        automount_service_account_token = true
         init_container {
           name    = "init-chown-data"
           image   = "busybox"
@@ -79,11 +80,6 @@ resource "kubernetes_stateful_set" "prometheus" {
             mount_path = "/var/lib/prometheus"
           }
 
-          volume_mount {
-            mount_path = "/var/run/secrets/kubernetes.io/serviceaccount"
-            name       = module.prometheus_rbac.service_account_default_secret_name
-            read_only  = true
-          }
 
           liveness_probe {
             http_get {

@@ -11,3 +11,6 @@ provider "kubernetes" {
   config_path = "/home/jordan/.secrets/clusters/tf-playground/auth/kubeconfig"
 }
 
+terraform {
+  required_version = ">= 0.12"
+}

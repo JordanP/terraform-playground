@@ -49,6 +49,7 @@ resource "kubernetes_secret" "cloud_sa" {
 
 
 resource "kubernetes_service_account" "csi_node_sa" {
+  automount_service_account_token = true
   metadata {
     name      = "csi-node-sa"
     namespace = kubernetes_namespace.gce_pd_csi.metadata.0.name
@@ -83,6 +84,7 @@ resource "kubernetes_cluster_role_binding" "driver_registrar_binding" {
 }
 
 resource "kubernetes_service_account" "csi_controller_sa" {
+  automount_service_account_token = true
   metadata {
     name      = "csi-controller-sa"
     namespace = kubernetes_namespace.gce_pd_csi.metadata.0.name

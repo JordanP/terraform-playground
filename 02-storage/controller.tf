@@ -21,7 +21,8 @@ resource "kubernetes_stateful_set" "csi_gce_pd_controller" {
         }
       }
       spec {
-        service_account_name = kubernetes_service_account.csi_controller_sa.metadata.0.name
+        service_account_name            = kubernetes_service_account.csi_controller_sa.metadata.0.name
+        automount_service_account_token = true
         container {
           name  = "csi-provisioner"
           image = "gke.gcr.io/csi-provisioner:v1.2.1-gke.0"
@@ -34,11 +35,7 @@ resource "kubernetes_stateful_set" "csi_gce_pd_controller" {
             mount_path = "/csi"
             name       = "socket-dir"
           }
-          volume_mount {
-            mount_path = "/var/run/secrets/kubernetes.io/serviceaccount"
-            name       = kubernetes_service_account.csi_controller_sa.default_secret_name
-            read_only  = true
-          }
+
         }
         container {
           name  = "csi-attacher"
@@ -51,11 +48,7 @@ resource "kubernetes_stateful_set" "csi_gce_pd_controller" {
             mount_path = "/csi"
             name       = "socket-dir"
           }
-          volume_mount {
-            mount_path = "/var/run/secrets/kubernetes.io/serviceaccount"
-            name       = kubernetes_service_account.csi_controller_sa.default_secret_name
-            read_only  = true
-          }
+
         }
         container {
           name  = "gce-pd-driver"
@@ -86,13 +79,6 @@ resource "kubernetes_stateful_set" "csi_gce_pd_controller" {
           name = "cloud-sa-volume"
           secret {
             secret_name = kubernetes_secret.cloud_sa.metadata.0.name
-          }
-        }
-        volume {
-          name = kubernetes_service_account.csi_controller_sa.default_secret_name
-
-          secret {
-            secret_name = kubernetes_service_account.csi_controller_sa.default_secret_name
           }
         }
       }

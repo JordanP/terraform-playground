@@ -42,8 +42,8 @@ resource "kubernetes_deployment" "ingress" {
       }
 
       spec {
-        service_account_name = kubernetes_service_account.ingress.metadata[0].name
-
+        service_account_name            = kubernetes_service_account.ingress.metadata[0].name
+        automount_service_account_token = true
         node_selector = {
           "node-role.kubernetes.io/node" = ""
         }
@@ -144,22 +144,7 @@ resource "kubernetes_deployment" "ingress" {
 
             run_as_user = 33
           }
-
-          volume_mount {
-            mount_path = "/var/run/secrets/kubernetes.io/serviceaccount"
-            name       = kubernetes_service_account.ingress.default_secret_name
-            read_only  = true
-          }
         }
-
-        volume {
-          name = kubernetes_service_account.ingress.default_secret_name
-
-          secret {
-            secret_name = kubernetes_service_account.ingress.default_secret_name
-          }
-        }
-
         restart_policy                   = "Always"
         termination_grace_period_seconds = 60
       }

@@ -1,4 +1,5 @@
 resource "kubernetes_service_account" "tiller" {
+  automount_service_account_token = true
   metadata {
     name      = "tiller"
     namespace = "kube-system"
@@ -54,8 +55,8 @@ resource "kubernetes_deployment" "tiller_with_rbac" {
       }
 
       spec {
-        service_account_name = kubernetes_service_account.tiller.metadata[0].name
-
+        service_account_name            = kubernetes_service_account.tiller.metadata[0].name
+        automount_service_account_token = true
         container {
           name  = "tiller"
           image = "gcr.io/kubernetes-helm/tiller:v2.14.1"
@@ -100,21 +101,6 @@ resource "kubernetes_deployment" "tiller_with_rbac" {
             timeout_seconds       = 2
           }
 
-          # See https://github.com/terraform-providers/terraform-provider-kubernetes/issues/38#issuecomment-318581203
-          volume_mount {
-            mount_path = "/var/run/secrets/kubernetes.io/serviceaccount"
-            name       = kubernetes_service_account.tiller.default_secret_name
-            read_only  = true
-          }
-        }
-
-        # See https://github.com/terraform-providers/terraform-provider-kubernetes/issues/38#issuecomment-318581203
-        volume {
-          name = kubernetes_service_account.tiller.default_secret_name
-
-          secret {
-            secret_name = kubernetes_service_account.tiller.default_secret_name
-          }
         }
       }
     }

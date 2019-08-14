@@ -17,7 +17,8 @@ resource "kubernetes_daemonset" "node" {
         }
       }
       spec {
-        service_account_name = kubernetes_service_account.csi_node_sa.metadata.0.name
+        service_account_name            = kubernetes_service_account.csi_node_sa.metadata.0.name
+        automount_service_account_token = true
         container {
           name  = "csi-driver-registrar"
           image = "gke.gcr.io/csi-node-driver-registrar:v1.1.0-gke.0"
@@ -51,11 +52,7 @@ resource "kubernetes_daemonset" "node" {
             mount_path = "/registration"
             name       = "registration-dir"
           }
-          volume_mount {
-            mount_path = "/var/run/secrets/kubernetes.io/serviceaccount"
-            name       = kubernetes_service_account.csi_node_sa.default_secret_name
-            read_only  = true
-          }
+
         }
         container {
           name = "gce-pd-driver"
@@ -105,11 +102,7 @@ resource "kubernetes_daemonset" "node" {
             mount_path = "/sys"
             name       = "sys"
           }
-          volume_mount {
-            mount_path = "/var/run/secrets/kubernetes.io/serviceaccount"
-            name       = kubernetes_service_account.csi_node_sa.default_secret_name
-            read_only  = true
-          }
+
         }
         volume {
           name = "registration-dir"
@@ -165,13 +158,6 @@ resource "kubernetes_daemonset" "node" {
           host_path {
             path = "/sys"
             type = "Directory"
-          }
-        }
-        volume {
-          name = kubernetes_service_account.csi_node_sa.default_secret_name
-
-          secret {
-            secret_name = kubernetes_service_account.csi_node_sa.default_secret_name
           }
         }
         volume {

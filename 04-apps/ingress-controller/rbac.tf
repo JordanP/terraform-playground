@@ -1,4 +1,5 @@
 resource "kubernetes_service_account" "ingress" {
+  automount_service_account_token = true
   metadata {
     name      = "nginx-ingress-serviceaccount"
     namespace = kubernetes_namespace.ingress.metadata[0].name

@@ -6,3 +6,9 @@ datasources:
     url: http://prometheus.monitoring.svc.cluster.local
     version: 1
     editable: false
+  - name: loki
+    type: loki
+    access: proxy
+    url: http://loki.monitoring.svc.cluster.local
+    version: 1
+    editable: false
