@@ -14,7 +14,7 @@ resource "kubernetes_secret" "redis_password" {
 resource "random_id" "redis_cm_name" {
   byte_length = 4
   keepers = {
-    "redis.conf" = <<EOF
+    "redis.conf"   = <<EOF
 # stay in foreground
 daemonize no
 # listen on all interfaces
@@ -37,11 +37,11 @@ save 60 1000
 save 300 10
 save 900 1
 EOF
-    "configure"  = <<EOF
+    "configure.sh" = <<EOF
     set -e
-    cat /config/redis.conf > /redis/redis.conf;
-    echo "requirepass $REDIS_PASSWORD" >> /redis/redis.conf
-    chmod 640 /redis/redis.conf
+    cat /configmap/redis.conf > /etc/redis/redis.conf
+    echo "requirepass $REDIS_PASSWORD" >> /etc/redis/redis.conf
+    chmod 640 /etc/redis/redis.conf
 EOF
     # So that the configMap name is regenerated if the password changes
     passwd = sha1(random_id.redis_password.hex)

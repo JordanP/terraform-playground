@@ -35,17 +35,17 @@ resource "kubernetes_deployment" "redis" {
         init_container {
           name    = "configure"
           image   = "busybox:latest"
-          command = ["sh", "/config/configure"]
+          command = ["sh", "/configmap/configure.sh"]
           security_context {
             allow_privilege_escalation = false
           }
           volume_mount {
-            mount_path = "/config"
-            name       = "redis"
+            mount_path = "/configmap"
+            name       = "configmap"
             read_only  = true
           }
           volume_mount {
-            mount_path = "/redis"
+            mount_path = "/etc/redis"
             name       = "redis-config"
           }
           env {
@@ -129,7 +129,7 @@ resource "kubernetes_deployment" "redis" {
           }
         }
         volume {
-          name = "redis"
+          name = "configmap"
           config_map {
             name = kubernetes_config_map.redis_config.metadata.0.name
           }

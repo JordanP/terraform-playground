@@ -22,7 +22,7 @@ locals {
 }
 
 # terraform destroy -auto-approve -target module.gitlab
-module "gitlab" {
+/*module "gitlab" {
   source                = "./gitlab"
   helm_release_name     = local.gitlab_release_name
   postgresql_host       = data.terraform_remote_state.infra.outputs.postgresql_host
@@ -30,7 +30,7 @@ module "gitlab" {
   postgresql_password   = data.terraform_remote_state.infra.outputs.postgresql_gitlab_password
   force_destroy_buckets = "true"
   redis_password        = module.redis.redis_password
-}
+}*/
 
 resource "kubernetes_namespace" "monitoring" {
   metadata {
@@ -60,5 +60,13 @@ module "prometheus" {
 
 module "redis" {
   source = "./redis"
+}
+
+module "rabbitmq" {
+  source = "./rabbitmq"
+  namespace = "rabbitmq"
+  disk_size = "10"
+  image = "rabbitmq:3.7.17"
+  node_selector = null
 }
 
