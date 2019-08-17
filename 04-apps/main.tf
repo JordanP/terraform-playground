@@ -63,10 +63,10 @@ module "redis" {
 }
 
 module "rabbitmq" {
-  source = "./rabbitmq"
-  namespace = "rabbitmq"
-  disk_size = "10"
-  image = "rabbitmq:3.7.17"
+  source        = "./rabbitmq"
+  namespace     = "rabbitmq"
+  disk_size     = "10"
+  image         = "rabbitmq:3.7.17"
   node_selector = null
 }
 

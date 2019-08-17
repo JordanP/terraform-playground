@@ -10,6 +10,7 @@
 
     ]
   },
+  "description": "Nginx Ingress Controller",
   "editable": false,
   "gnetId": null,
   "graphTooltip": 0,
@@ -34,7 +35,7 @@
             "#d44a3a"
           ],
           "datasource": "$datasource",
-          "format": "none",
+          "format": "rps",
           "gauge": {
             "maxValue": 100,
             "minValue": 0,
@@ -45,6 +46,7 @@
           "gridPos": {
 
           },
+          "height": "100px",
           "id": 2,
           "interval": null,
           "links": [
@@ -75,17 +77,17 @@
               "to": "null"
             }
           ],
-          "span": 2,
+          "span": 4,
           "sparkline": {
             "fillColor": "rgba(31, 118, 189, 0.18)",
-            "full": false,
+            "full": "true",
             "lineColor": "rgb(31, 120, 193)",
-            "show": false
+            "show": "true"
           },
           "tableColumn": "",
           "targets": [
             {
-              "expr": "sum(up{job=\"kube-controller-manager\"})",
+              "expr": "round(sum(irate(nginx_ingress_controller_requests{controller_pod=~\"$controller\",controller_class=~\"$controller_class\",namespace=~\"$namespace\"}[2m])), 0.01)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "",
@@ -93,10 +95,7 @@
             }
           ],
           "thresholds": "",
-          "title": "Up",
-          "tooltip": {
-            "shared": false
-          },
+          "title": "Request Volume",
           "type": "singlestat",
           "valueFontSize": "80%",
           "valueMaps": [
@@ -106,202 +105,171 @@
               "value": "null"
             }
           ],
-          "valueName": "min"
+          "valueName": "avg"
         },
         {
-          "aliasColors": {
-
-          },
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
+          "cacheTimeout": null,
+          "colorBackground": false,
+          "colorValue": false,
+          "colors": [
+            "#299c46",
+            "rgba(237, 129, 40, 0.89)",
+            "#d44a3a"
+          ],
           "datasource": "$datasource",
-          "fill": 1,
+          "format": "none",
+          "gauge": {
+            "maxValue": 100,
+            "minValue": 0,
+            "show": false,
+            "thresholdLabels": false,
+            "thresholdMarkers": true
+          },
           "gridPos": {
 
           },
+          "height": "100px",
           "id": 3,
-          "legend": {
-            "alignAsTable": "true",
-            "avg": false,
-            "current": "true",
-            "max": false,
-            "min": false,
-            "rightSide": "true",
-            "show": "true",
-            "total": false,
-            "values": "true"
-          },
-          "lines": true,
-          "linewidth": 1,
+          "interval": null,
           "links": [
 
           ],
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "repeat": null,
-          "seriesOverrides": [
-
+          "mappingType": 1,
+          "mappingTypes": [
+            {
+              "name": "value to text",
+              "value": 1
+            },
+            {
+              "name": "range to text",
+              "value": 2
+            }
           ],
-          "spaceLength": 10,
-          "span": 10,
-          "stack": false,
-          "steppedLine": false,
+          "maxDataPoints": 100,
+          "nullPointMode": "connected",
+          "nullText": null,
+          "postfix": "",
+          "postfixFontSize": "50%",
+          "prefix": "",
+          "prefixFontSize": "50%",
+          "rangeMaps": [
+            {
+              "from": "null",
+              "text": "N/A",
+              "to": "null"
+            }
+          ],
+          "span": 4,
+          "sparkline": {
+            "fillColor": "rgba(31, 118, 189, 0.18)",
+            "full": "true",
+            "lineColor": "rgb(31, 120, 193)",
+            "show": "true"
+          },
+          "tableColumn": "",
           "targets": [
             {
-              "expr": "sum(rate(workqueue_adds_total{job=\"kube-controller-manager\", instance=~\"$instance\"}[5m])) by (instance, name)",
+              "expr": "sum(avg_over_time(nginx_ingress_controller_nginx_process_connections{controller_pod=~\"$controller\",controller_class=~\"$controller_class\",controller_namespace=~\"$namespace\"}[2m]))",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{instance}} {{name}}",
+              "legendFormat": "",
               "refId": "A"
             }
           ],
-          "thresholds": [
-
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Work Queue Add Rate",
-          "tooltip": {
-            "shared": false,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": [
-
-            ]
-          },
-          "yaxes": [
+          "thresholds": "",
+          "title": "Connections",
+          "type": "singlestat",
+          "valueFontSize": "80%",
+          "valueMaps": [
             {
-              "format": "ops",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "ops",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
+              "op": "=",
+              "text": "N/A",
+              "value": "null"
             }
-          ]
-        }
-      ],
-      "repeat": null,
-      "repeatIteration": null,
-      "repeatRowId": null,
-      "showTitle": false,
-      "title": "Dashboard Row",
-      "titleSize": "h6",
-      "type": "row"
-    },
-    {
-      "collapse": false,
-      "collapsed": false,
-      "panels": [
+          ],
+          "valueName": "avg"
+        },
         {
-          "aliasColors": {
-
-          },
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
+          "cacheTimeout": null,
+          "colorBackground": false,
+          "colorValue": false,
+          "colors": [
+            "#299c46",
+            "rgba(237, 129, 40, 0.89)",
+            "#d44a3a"
+          ],
           "datasource": "$datasource",
-          "fill": 1,
+          "format": "percentunit",
+          "gauge": {
+            "maxValue": 100,
+            "minValue": 0,
+            "show": false,
+            "thresholdLabels": false,
+            "thresholdMarkers": true
+          },
           "gridPos": {
 
           },
+          "height": "100px",
           "id": 4,
-          "legend": {
-            "alignAsTable": "true",
-            "avg": false,
-            "current": "true",
-            "max": false,
-            "min": false,
-            "rightSide": "true",
-            "show": "true",
-            "total": false,
-            "values": "true"
-          },
-          "lines": true,
-          "linewidth": 1,
+          "interval": null,
           "links": [
 
           ],
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "repeat": null,
-          "seriesOverrides": [
-
+          "mappingType": 1,
+          "mappingTypes": [
+            {
+              "name": "value to text",
+              "value": 1
+            },
+            {
+              "name": "range to text",
+              "value": 2
+            }
           ],
-          "spaceLength": 10,
-          "span": 12,
-          "stack": false,
-          "steppedLine": false,
+          "maxDataPoints": 100,
+          "nullPointMode": "connected",
+          "nullText": null,
+          "postfix": "",
+          "postfixFontSize": "50%",
+          "prefix": "",
+          "prefixFontSize": "50%",
+          "rangeMaps": [
+            {
+              "from": "null",
+              "text": "N/A",
+              "to": "null"
+            }
+          ],
+          "span": 4,
+          "sparkline": {
+            "fillColor": "rgba(31, 118, 189, 0.18)",
+            "full": "true",
+            "lineColor": "rgb(31, 120, 193)",
+            "show": "true"
+          },
+          "tableColumn": "",
           "targets": [
             {
-              "expr": "sum(rate(workqueue_depth{job=\"kube-controller-manager\", instance=~\"$instance\"}[5m])) by (instance, name)",
+              "expr": "sum(rate(nginx_ingress_controller_requests{controller_pod=~\"$controller\",controller_class=~\"$controller_class\",namespace=~\"$namespace\",status!~\"[4-5].*\"}[2m])) / sum(rate(nginx_ingress_controller_requests{controller_pod=~\"$controller\",controller_class=~\"$controller_class\",namespace=~\"$namespace\"}[2m]))",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{instance}} {{name}}",
+              "legendFormat": "",
               "refId": "A"
             }
           ],
-          "thresholds": [
-
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Work Queue Depth",
-          "tooltip": {
-            "shared": false,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": [
-
-            ]
-          },
-          "yaxes": [
+          "thresholds": "",
+          "title": "Success Rate",
+          "type": "singlestat",
+          "valueFontSize": "80%",
+          "valueMaps": [
             {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": 0,
-              "show": true
+              "op": "=",
+              "text": "N/A",
+              "value": "null"
             }
-          ]
+          ],
+          "valueName": "avg"
         }
       ],
       "repeat": null,
@@ -341,7 +309,7 @@
             "values": "true"
           },
           "lines": true,
-          "linewidth": 1,
+          "linewidth": 2,
           "links": [
 
           ],
@@ -355,15 +323,15 @@
 
           ],
           "spaceLength": 10,
-          "span": 12,
+          "span": 6,
           "stack": false,
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.99, sum(rate(workqueue_queue_duration_seconds_bucket{job=\"kube-controller-manager\", instance=~\"$instance\"}[5m])) by (instance, name, le))",
+              "expr": "round(sum(irate(nginx_ingress_controller_requests{controller_pod=~\"$controller\",controller_class=~\"$controller_class\",controller_namespace=~\"$namespace\",ingress=~\"$ingress\"}[2m])) by (ingress), 0.01)",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{instance}} {{name}}",
+              "legendFormat": "{{ingress}}",
               "refId": "A"
             }
           ],
@@ -372,9 +340,9 @@
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Work Queue Latency",
+          "title": "Request Rate",
           "tooltip": {
-            "shared": false,
+            "shared": true,
             "sort": 0,
             "value_type": "individual"
           },
@@ -390,18 +358,109 @@
           },
           "yaxes": [
             {
-              "format": "s",
+              "format": "rps",
               "label": null,
-              "logBase": 1,
+              "logBase": 2,
               "max": null,
               "min": null,
               "show": true
             },
             {
-              "format": "s",
+              "format": "rps",
               "label": null,
               "logBase": 1,
               "max": null,
+              "min": null,
+              "show": true
+            }
+          ]
+        },
+        {
+          "aliasColors": {
+
+          },
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "$datasource",
+          "fill": 1,
+          "gridPos": {
+
+          },
+          "id": 6,
+          "legend": {
+            "alignAsTable": "true",
+            "avg": false,
+            "current": "true",
+            "max": false,
+            "min": false,
+            "rightSide": "true",
+            "show": "true",
+            "total": false,
+            "values": "true"
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [
+
+          ],
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "repeat": null,
+          "seriesOverrides": [
+
+          ],
+          "spaceLength": 10,
+          "span": 6,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "sum(rate(nginx_ingress_controller_requests{controller_pod=~\"$controller\",controller_class=~\"$controller_class\",namespace=~\"$namespace\",ingress=~\"$ingress\",status!~\"[4-5].*\"}[2m])) by (ingress) / sum(rate(nginx_ingress_controller_requests{controller_pod=~\"$controller\",controller_class=~\"$controller_class\",namespace=~\"$namespace\",ingress=~\"$ingress\"}[2m])) by (ingress)",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "{{ingress}}",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [
+
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Success Rate",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": [
+
+            ]
+          },
+          "yaxes": [
+            {
+              "format": "percentunit",
+              "label": null,
+              "logBase": 1,
+              "max": 1,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "percentunit",
+              "label": null,
+              "logBase": 1,
+              "max": 1,
               "min": null,
               "show": true
             }
@@ -432,20 +491,20 @@
           "gridPos": {
 
           },
-          "id": 6,
+          "id": 7,
           "legend": {
-            "alignAsTable": false,
+            "alignAsTable": "true",
             "avg": false,
-            "current": false,
+            "current": "true",
             "max": false,
             "min": false,
-            "rightSide": false,
-            "show": true,
+            "rightSide": "true",
+            "show": "true",
             "total": false,
-            "values": false
+            "values": "true"
           },
           "lines": true,
-          "linewidth": 1,
+          "linewidth": 2,
           "links": [
 
           ],
@@ -459,37 +518,30 @@
 
           ],
           "spaceLength": 10,
-          "span": 4,
+          "span": 12,
           "stack": false,
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(rest_client_requests_total{job=\"kube-controller-manager\", instance=~\"$instance\",code=~\"2..\"}[5m]))",
+              "expr": "histogram_quantile(0.99, sum(rate(nginx_ingress_controller_request_duration_seconds_bucket{ingress!=\"\",controller_pod=~\"$controller\",controller_class=~\"$controller_class\",controller_namespace=~\"$namespace\",ingress=~\"$ingress\"}[2m])) by (le, ingress))",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "2xx",
+              "legendFormat": "{{ingress}} 99%",
               "refId": "A"
             },
             {
-              "expr": "sum(rate(rest_client_requests_total{job=\"kube-controller-manager\", instance=~\"$instance\",code=~\"3..\"}[5m]))",
+              "expr": "histogram_quantile(0.90, sum(rate(nginx_ingress_controller_request_duration_seconds_bucket{ingress!=\"\",controller_pod=~\"$controller\",controller_class=~\"$controller_class\",controller_namespace=~\"$namespace\",ingress=~\"$ingress\"}[2m])) by (le, ingress))",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "3xx",
+              "legendFormat": "{{ingress}} 90%",
               "refId": "B"
             },
             {
-              "expr": "sum(rate(rest_client_requests_total{job=\"kube-controller-manager\", instance=~\"$instance\",code=~\"4..\"}[5m]))",
+              "expr": "histogram_quantile(0.50, sum(rate(nginx_ingress_controller_request_duration_seconds_bucket{ingress!=\"\",controller_pod=~\"$controller\",controller_class=~\"$controller_class\",controller_namespace=~\"$namespace\",ingress=~\"$ingress\"}[2m])) by (le, ingress))",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "4xx",
+              "legendFormat": "{{ingress}} 50%",
               "refId": "C"
-            },
-            {
-              "expr": "sum(rate(rest_client_requests_total{job=\"kube-controller-manager\", instance=~\"$instance\",code=~\"5..\"}[5m]))",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "5xx",
-              "refId": "D"
             }
           ],
           "thresholds": [
@@ -497,100 +549,9 @@
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Kube API Request Rate",
+          "title": "Latency",
           "tooltip": {
-            "shared": false,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": [
-
-            ]
-          },
-          "yaxes": [
-            {
-              "format": "ops",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "ops",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ]
-        },
-        {
-          "aliasColors": {
-
-          },
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$datasource",
-          "fill": 1,
-          "gridPos": {
-
-          },
-          "id": 7,
-          "legend": {
-            "alignAsTable": false,
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [
-
-          ],
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "repeat": null,
-          "seriesOverrides": [
-
-          ],
-          "spaceLength": 10,
-          "span": 8,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "histogram_quantile(0.99, sum(rate(rest_client_request_latency_seconds_bucket{job=\"kube-controller-manager\", instance=~\"$instance\", verb=\"POST\"}[5m])) by (verb, url, le))",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "{{verb}} {{url}}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [
-
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Post Request Latency 99th Quantile",
-          "tooltip": {
-            "shared": false,
+            "shared": true,
             "sort": 0,
             "value_type": "individual"
           },
@@ -608,9 +569,9 @@
             {
               "format": "s",
               "label": null,
-              "logBase": 1,
+              "logBase": 2,
               "max": null,
-              "min": 0,
+              "min": null,
               "show": true
             },
             {
@@ -618,7 +579,7 @@
               "label": null,
               "logBase": 1,
               "max": null,
-              "min": 0,
+              "min": null,
               "show": true
             }
           ]
@@ -655,117 +616,13 @@
             "current": "true",
             "max": false,
             "min": false,
-            "rightSide": "true",
+            "rightSide": false,
             "show": "true",
             "total": false,
             "values": "true"
           },
           "lines": true,
-          "linewidth": 1,
-          "links": [
-
-          ],
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "repeat": null,
-          "seriesOverrides": [
-
-          ],
-          "spaceLength": 10,
-          "span": 12,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "histogram_quantile(0.99, sum(rate(rest_client_request_latency_seconds_bucket{job=\"kube-controller-manager\", instance=~\"$instance\", verb=\"GET\"}[5m])) by (verb, url, le))",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "{{verb}} {{url}}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [
-
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Get Request Latency 99th Quantile",
-          "tooltip": {
-            "shared": false,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": [
-
-            ]
-          },
-          "yaxes": [
-            {
-              "format": "s",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "s",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": 0,
-              "show": true
-            }
-          ]
-        }
-      ],
-      "repeat": null,
-      "repeatIteration": null,
-      "repeatRowId": null,
-      "showTitle": false,
-      "title": "Dashboard Row",
-      "titleSize": "h6",
-      "type": "row"
-    },
-    {
-      "collapse": false,
-      "collapsed": false,
-      "panels": [
-        {
-          "aliasColors": {
-
-          },
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$datasource",
-          "fill": 1,
-          "gridPos": {
-
-          },
-          "id": 9,
-          "legend": {
-            "alignAsTable": false,
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
+          "linewidth": 2,
           "links": [
 
           ],
@@ -784,10 +641,108 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "process_resident_memory_bytes{job=\"kube-controller-manager\",instance=~\"$instance\"}",
+              "expr": "sum (irate (nginx_ingress_controller_request_size_sum{controller_pod=~\"$controller\",controller_class=~\"$controller_class\",controller_namespace=~\"$namespace\"}[2m]))",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{instance}}",
+              "legendFormat": "received",
+              "refId": "A"
+            },
+            {
+              "expr": "sum (irate (nginx_ingress_controller_response_size_sum{controller_pod=~\"$controller\",controller_class=~\"$controller_class\",controller_namespace=~\"$namespace\"}[2m]))",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "sent",
+              "refId": "B"
+            }
+          ],
+          "thresholds": [
+
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Network I/O Pressure",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": [
+
+            ]
+          },
+          "yaxes": [
+            {
+              "format": "Bps",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "Bps",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ]
+        },
+        {
+          "aliasColors": {
+
+          },
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "$datasource",
+          "fill": 1,
+          "gridPos": {
+
+          },
+          "id": 9,
+          "legend": {
+            "alignAsTable": "true",
+            "avg": false,
+            "current": "true",
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": "true",
+            "total": false,
+            "values": "true"
+          },
+          "lines": true,
+          "linewidth": 2,
+          "links": [
+
+          ],
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "repeat": null,
+          "seriesOverrides": [
+
+          ],
+          "spaceLength": 10,
+          "span": 4,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "avg(nginx_ingress_controller_nginx_process_resident_memory_bytes{controller_pod=~\"$controller\",controller_class=~\"$controller_class\",controller_namespace=~\"$namespace\"}) by (controller_pod)",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "{{controller_pod}}",
               "refId": "A"
             }
           ],
@@ -796,9 +751,9 @@
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Memory",
+          "title": "Avg Memory Usage",
           "tooltip": {
-            "shared": false,
+            "shared": true,
             "sort": 0,
             "value_type": "individual"
           },
@@ -845,18 +800,18 @@
           },
           "id": 10,
           "legend": {
-            "alignAsTable": false,
+            "alignAsTable": "true",
             "avg": false,
-            "current": false,
+            "current": "true",
             "max": false,
             "min": false,
             "rightSide": false,
-            "show": true,
+            "show": "true",
             "total": false,
-            "values": false
+            "values": "true"
           },
           "lines": true,
-          "linewidth": 1,
+          "linewidth": 2,
           "links": [
 
           ],
@@ -875,10 +830,10 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "rate(process_cpu_seconds_total{job=\"kube-controller-manager\",instance=~\"$instance\"}[5m])",
+              "expr": "sum(rate(nginx_ingress_controller_nginx_process_cpu_seconds_total{controller_pod=~\"$controller\",controller_class=~\"$controller_class\",controller_namespace=~\"$namespace\"}[2m])) by (controller_pod)",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{instance}}",
+              "legendFormat": "{{controller_pod}}",
               "refId": "A"
             }
           ],
@@ -887,9 +842,9 @@
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "CPU usage",
+          "title": "Avg CPU Usage",
           "tooltip": {
-            "shared": false,
+            "shared": true,
             "sort": 0,
             "value_type": "individual"
           },
@@ -905,98 +860,7 @@
           },
           "yaxes": [
             {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": 0,
-              "show": true
-            }
-          ]
-        },
-        {
-          "aliasColors": {
-
-          },
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$datasource",
-          "fill": 1,
-          "gridPos": {
-
-          },
-          "id": 11,
-          "legend": {
-            "alignAsTable": false,
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [
-
-          ],
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "repeat": null,
-          "seriesOverrides": [
-
-          ],
-          "spaceLength": 10,
-          "span": 4,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "go_goroutines{job=\"kube-controller-manager\",instance=~\"$instance\"}",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "{{instance}}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [
-
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Goroutines",
-          "tooltip": {
-            "shared": false,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": [
-
-            ]
-          },
-          "yaxes": [
-            {
-              "format": "short",
+              "format": "none",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -1004,7 +868,7 @@
               "show": true
             },
             {
-              "format": "short",
+              "format": "none",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -1026,7 +890,7 @@
   "schemaVersion": 14,
   "style": "dark",
   "tags": [
-    "kubernetes-mixin"
+    "nginx-ingress"
   ],
   "templating": {
     "list": [
@@ -1047,7 +911,7 @@
         "type": "datasource"
       },
       {
-        "allValue": null,
+        "allValue": ".*",
         "current": {
 
         },
@@ -1056,11 +920,89 @@
         "includeAll": true,
         "label": null,
         "multi": false,
-        "name": "instance",
+        "name": "namespace",
         "options": [
 
         ],
-        "query": "label_values(process_cpu_seconds_total{job=\"kube-controller-manager\"}, instance)",
+        "query": "label_values(nginx_ingress_controller_config_hash, controller_namespace)",
+        "refresh": 2,
+        "regex": "",
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [
+
+        ],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": ".*",
+        "current": {
+
+        },
+        "datasource": "$datasource",
+        "hide": 0,
+        "includeAll": true,
+        "label": null,
+        "multi": false,
+        "name": "controller_class",
+        "options": [
+
+        ],
+        "query": "label_values(nginx_ingress_controller_config_hash{namespace=~\"$namespace\"}, controller_class)",
+        "refresh": 2,
+        "regex": "",
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [
+
+        ],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": ".*",
+        "current": {
+
+        },
+        "datasource": "$datasource",
+        "hide": 0,
+        "includeAll": true,
+        "label": null,
+        "multi": false,
+        "name": "controller",
+        "options": [
+
+        ],
+        "query": "label_values(nginx_ingress_controller_config_hash{namespace=~\"$namespace\",controller_class=~\"$controller_class\"}, controller_pod)",
+        "refresh": 2,
+        "regex": "",
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [
+
+        ],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": ".*",
+        "current": {
+
+        },
+        "datasource": "$datasource",
+        "hide": 0,
+        "includeAll": true,
+        "label": null,
+        "multi": false,
+        "name": "ingress",
+        "options": [
+
+        ],
+        "query": "label_values(nginx_ingress_controller_requests{namespace=~\"$namespace\",controller_class=~\"$controller_class\",controller=~\"$controller\"}, ingress)",
         "refresh": 2,
         "regex": "",
         "sort": 0,
@@ -1103,8 +1045,7 @@
       "30d"
     ]
   },
-  "timezone": "",
-  "title": "Kubernetes / Controller Manager",
-  "uid": "72e0e05bef5099e5f049b05fdc429ed4",
+  "timezone": "browser",
+  "title": "Nginx Ingress Controller",
   "version": 0
 }

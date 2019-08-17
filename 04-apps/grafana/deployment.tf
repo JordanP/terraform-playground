@@ -27,7 +27,7 @@ resource "kubernetes_deployment" "grafana" {
       spec {
         container {
           name  = "grafana"
-          image = "grafana/grafana:6.3.2"
+          image = "grafana/grafana:6.3.3"
           env {
             name  = "GF_PATHS_CONFIG"
             value = "/etc/grafana/custom.ini"
@@ -94,6 +94,10 @@ resource "kubernetes_deployment" "grafana" {
             mount_path = "/etc/grafana/dashboards/_prom_"
           }
           volume_mount {
+            name       = "dashboards-nginx"
+            mount_path = "/etc/grafana/dashboards/_nginx_"
+          }
+          volume_mount {
             name       = "dashboards-k8s"
             mount_path = "/etc/grafana/dashboards/_k8s_"
           }
@@ -132,6 +136,12 @@ resource "kubernetes_deployment" "grafana" {
           name = "dashboards-etcd"
           config_map {
             name = kubernetes_config_map.grafana_dashboards_etcd.metadata[0].name
+          }
+        }
+        volume {
+          name = "dashboards-nginx"
+          config_map {
+            name = kubernetes_config_map.grafana_dashboards_nginx.metadata[0].name
           }
         }
         volume {
