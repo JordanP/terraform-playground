@@ -90,6 +90,10 @@ resource "kubernetes_deployment" "grafana" {
             mount_path = "/etc/grafana/dashboards/_etcd_"
           }
           volume_mount {
+            name       = "dashboards-redis"
+            mount_path = "/etc/grafana/dashboards/_redis_"
+          }
+          volume_mount {
             name       = "dashboards-prom"
             mount_path = "/etc/grafana/dashboards/_prom_"
           }
@@ -136,6 +140,12 @@ resource "kubernetes_deployment" "grafana" {
           name = "dashboards-etcd"
           config_map {
             name = kubernetes_config_map.grafana_dashboards_etcd.metadata[0].name
+          }
+        }
+        volume {
+          name = "dashboards-redis"
+          config_map {
+            name = kubernetes_config_map.grafana_dashboards_redis.metadata[0].name
           }
         }
         volume {

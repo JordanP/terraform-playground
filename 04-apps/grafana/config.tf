@@ -121,6 +121,25 @@ resource "kubernetes_config_map" "grafana_dashboards_etcd" {
   }
 }
 
+resource "random_id" "grafana_dashboards_redis_cm_name" {
+  byte_length = 4
+
+  keepers = {
+    data1 = filebase64sha256("${path.module}/config/dashboards/dashboards-redis/redis.json")
+  }
+}
+
+resource "kubernetes_config_map" "grafana_dashboards_redis" {
+  metadata {
+    name      = "grafana-dashboards-redis-${random_id.grafana_dashboards_redis_cm_name.hex}"
+    namespace = var.namespace
+  }
+
+  data = {
+    "redis.json" = file("${path.module}/config/dashboards/dashboards-redis/redis.json")
+  }
+}
+
 resource "random_id" "grafana_dashboards_nginx_cm_name" {
   byte_length = 4
 
