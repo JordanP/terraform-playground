@@ -1,4 +1,4 @@
-resource "random_id" "sql_instance_name" {
+/*resource "random_id" "sql_instance_name" {
   byte_length = 4
 }
 
@@ -72,4 +72,4 @@ output "postgresql_gitlab_password" {
   value     = random_id.postgres_gitlab_password.hex
   sensitive = true
 }
-
+*/

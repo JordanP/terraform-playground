@@ -21,7 +21,20 @@ resource "kubernetes_storage_class" "standard" {
   }
   storage_provisioner = "pd.csi.storage.gke.io"
   parameters = {
-    type = "pd-standard"
+    type             = "pd-standard"
+    replication-type = "regional-pd"
+  }
+  volume_binding_mode = "WaitForFirstConsumer"
+}
+
+resource "kubernetes_storage_class" "ssd" {
+  metadata {
+    name = "ssd"
+  }
+  storage_provisioner = "pd.csi.storage.gke.io"
+  parameters = {
+    type             = "pd-ssd"
+    replication-type = "regional-pd"
   }
   volume_binding_mode = "WaitForFirstConsumer"
 }

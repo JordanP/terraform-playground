@@ -23,6 +23,7 @@ locals {
     "postgresql.install" : "false"
     "global.psql.host" : var.postgresql_host
     "global.psql.database" : var.postgresql_database
+    "global.psql.username" : var.postgresql_username
     "global.psql.password.secret" : kubernetes_secret.gitlab_postgresql_password.metadata[0].name
     "global.psql.password.key" : "postgres-password"
     "global.shell.port" : "8022"

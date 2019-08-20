@@ -35,7 +35,7 @@ EOF
 resource "kubernetes_config_map" "rabbitmq_config" {
   metadata {
     name      = "rabbitmq-config-${random_id.config_map_suffix.hex}"
-    namespace = kubernetes_namespace.rabbitmq[0].metadata.0.name
+    namespace = (var.namespace != "default" ? kubernetes_namespace.rabbitmq[0].metadata.0.name : "default")
   }
   data = random_id.config_map_suffix.keepers
 }

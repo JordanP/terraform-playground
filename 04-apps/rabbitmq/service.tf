@@ -1,7 +1,7 @@
 resource "kubernetes_service" "rabbitmq" {
   metadata {
     name      = "rabbitmq"
-    namespace = kubernetes_namespace.rabbitmq[0].metadata.0.name
+    namespace = (var.namespace != "default" ? kubernetes_namespace.rabbitmq[0].metadata.0.name : "default")
   }
   spec {
     cluster_ip = "None"

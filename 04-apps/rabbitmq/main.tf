@@ -13,7 +13,7 @@ resource "random_string" "erlang_cookie" {
 resource "kubernetes_secret" "rabbitmq_config" {
   metadata {
     name      = "rabbitmq-config"
-    namespace = kubernetes_namespace.rabbitmq[0].metadata.0.name
+    namespace = (var.namespace != "default" ? kubernetes_namespace.rabbitmq[0].metadata.0.name : "default")
   }
 
   data = {

@@ -1,7 +1,7 @@
 resource "kubernetes_stateful_set" "rabbitmq" {
   metadata {
     name      = "rabbitmq"
-    namespace = kubernetes_namespace.rabbitmq[0].metadata.0.name
+    namespace = (var.namespace != "default" ? kubernetes_namespace.rabbitmq[0].metadata.0.name : "default")
   }
   spec {
     service_name = "rabbitmq"
@@ -9,7 +9,7 @@ resource "kubernetes_stateful_set" "rabbitmq" {
     volume_claim_template {
       metadata {
         name      = "rabbitmq-data"
-        namespace = kubernetes_namespace.rabbitmq[0].metadata.0.name
+        namespace = (var.namespace != "default" ? kubernetes_namespace.rabbitmq[0].metadata.0.name : "default")
       }
       spec {
         storage_class_name = var.disk_type
@@ -179,6 +179,8 @@ resource "kubernetes_stateful_set" "rabbitmq" {
         app = "rabbitmq"
       }
     }
-
+    update_strategy {
+      type = "RollingUpdate"
+    }
   }
 }

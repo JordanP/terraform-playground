@@ -39,7 +39,7 @@ resource "kubernetes_stateful_set" "csi_gce_pd_controller" {
         }
         container {
           name  = "csi-attacher"
-          image = "gke.gcr.io/csi-attacher:v1.2.0-gke.0"
+          image = "gke.gcr.io/csi-attacher:v1.2.1-gke.0"
           args = [
             "--v=5",
             "--csi-address=/csi/csi.sock"

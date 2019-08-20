@@ -139,7 +139,7 @@ resource "kubernetes_stateful_set" "prometheus" {
         access_modes = ["ReadWriteOnce"]
         resources {
           requests = {
-            storage = "16Gi"
+            storage = "200Gi"
           }
         }
       }
