@@ -63,8 +63,9 @@ module "rabbitmq" {
 module "postgresql" {
   source               = "./postgres"
   namespace            = "default"
-  disk_size            = "20"
-  disk_type            = "ssd"
+  slave_count          = 3
+  slave_disk_size      = "20"
+  slave_disk_type      = "ssd"
   master_node_selector = null
   slave_node_selector  = null
 

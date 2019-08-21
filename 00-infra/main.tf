@@ -53,7 +53,7 @@ module "google-cloud-jordan" {
   # optional
   worker_count       = 3
   controller_type    = "g1-small"
-  worker_type        = "n1-standard-1"
+  worker_type        = "n1-standard-2"
   worker_preemptible = "true"
 }
 

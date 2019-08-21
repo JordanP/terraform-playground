@@ -152,8 +152,10 @@ resource "kubernetes_stateful_set" "rabbitmq" {
               pod_affinity_term {
                 topology_key = "kubernetes.io/hostname"
                 label_selector {
-                  match_labels = {
-                    app = "rabbitmq"
+                  match_expressions {
+                    key      = "app"
+                    operator = "In"
+                    values   = ["rabbitmq"]
                   }
                 }
               }

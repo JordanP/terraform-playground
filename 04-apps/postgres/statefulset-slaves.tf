@@ -8,7 +8,7 @@ resource "kubernetes_stateful_set" "postgresql-slave" {
   }
   spec {
     service_name = kubernetes_service.postgres_headless.metadata.0.name
-    replicas     = 2
+    replicas     = var.slave_count
     selector {
       match_labels = {
         app  = "postgresql"
@@ -141,8 +141,10 @@ resource "kubernetes_stateful_set" "postgresql-slave" {
               pod_affinity_term {
                 topology_key = "kubernetes.io/hostname"
                 label_selector {
-                  match_labels = {
-                    app = "postgresql"
+                  match_expressions {
+                    key      = "app"
+                    operator = "In"
+                    values   = ["postgresql"]
                   }
                 }
               }
@@ -150,7 +152,6 @@ resource "kubernetes_stateful_set" "postgresql-slave" {
           }
         }
       }
-
     }
 
     volume_claim_template {
@@ -159,11 +160,11 @@ resource "kubernetes_stateful_set" "postgresql-slave" {
         namespace = (var.namespace != "default" ? kubernetes_namespace.postgresql[0].metadata.0.name : "default")
       }
       spec {
-        storage_class_name = var.disk_type
+        storage_class_name = var.slave_disk_type
         access_modes       = ["ReadWriteOnce"]
         resources {
           requests = {
-            storage = "${var.disk_size}Gi"
+            storage = "${var.slave_disk_size}Gi"
           }
         }
       }

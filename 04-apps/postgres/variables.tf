@@ -20,9 +20,10 @@ variable "slave_node_selector" {
   }
 }
 
-variable "disk_size" {}
+variable "slave_count" {}
+variable "slave_disk_size" {}
 
-variable "disk_type" {
+variable "slave_disk_type" {
   default = "ssd"
 }
 
