@@ -4,6 +4,9 @@ resource "kubernetes_deployment" "kube_state_metrics" {
   metadata {
     name      = "kube-state-metrics"
     namespace = var.namespace
+    labels = {
+      name = "kube-state-metrics"
+    }
   }
 
   spec {
