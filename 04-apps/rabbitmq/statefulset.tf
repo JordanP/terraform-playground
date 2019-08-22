@@ -2,6 +2,9 @@ resource "kubernetes_stateful_set" "rabbitmq" {
   metadata {
     name      = "rabbitmq"
     namespace = (var.namespace != "default" ? kubernetes_namespace.rabbitmq[0].metadata.0.name : "default")
+    labels = {
+      app = "rabbitmq"
+    }
   }
   spec {
     service_name = "rabbitmq"
@@ -147,16 +150,13 @@ resource "kubernetes_stateful_set" "rabbitmq" {
         }
         affinity {
           pod_anti_affinity {
-            preferred_during_scheduling_ignored_during_execution {
-              weight = 1
-              pod_affinity_term {
-                topology_key = "kubernetes.io/hostname"
-                label_selector {
-                  match_expressions {
-                    key      = "app"
-                    operator = "In"
-                    values   = ["rabbitmq"]
-                  }
+            required_during_scheduling_ignored_during_execution {
+              topology_key = "kubernetes.io/hostname"
+              label_selector {
+                match_expressions {
+                  key      = "app"
+                  operator = "In"
+                  values   = ["rabbitmq"]
                 }
               }
             }

@@ -136,16 +136,13 @@ resource "kubernetes_stateful_set" "postgresql-slave" {
         termination_grace_period_seconds = 30
         affinity {
           pod_anti_affinity {
-            preferred_during_scheduling_ignored_during_execution {
-              weight = 1
-              pod_affinity_term {
-                topology_key = "kubernetes.io/hostname"
-                label_selector {
-                  match_expressions {
-                    key      = "app"
-                    operator = "In"
-                    values   = ["postgresql"]
-                  }
+            required_during_scheduling_ignored_during_execution {
+              topology_key = "kubernetes.io/hostname"
+              label_selector {
+                match_expressions {
+                  key      = "app"
+                  operator = "In"
+                  values   = ["postgresql"]
                 }
               }
             }
