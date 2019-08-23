@@ -11,7 +11,6 @@ locals {
   cluster_name  = "jordan"
   dns_zone      = "jordanpittier.net"
   dns_zone_name = "jordanpittier-net"
-  asset_dir     = "/home/jordan/.secrets/clusters/tf-playground"
 }
 
 resource "google_compute_firewall" "git_clone_ssh" {
@@ -48,7 +47,7 @@ module "google-cloud-jordan" {
 
   # configuration
   ssh_authorized_key = file(pathexpand("~/.ssh/id_rsa.pub"))
-  asset_dir          = local.asset_dir
+  asset_dir          = pathexpand("~/.secrets/clusters/tf-playground")
 
   # optional
   worker_count       = 3

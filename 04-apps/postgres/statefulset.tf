@@ -147,11 +147,11 @@ resource "kubernetes_stateful_set" "postgres_master" {
         namespace = (var.namespace != "default" ? kubernetes_namespace.postgresql[0].metadata.0.name : "default")
       }
       spec {
-        storage_class_name = var.slave_disk_type
+        storage_class_name = var.disk_type
         access_modes       = ["ReadWriteOnce"]
         resources {
           requests = {
-            storage = "${var.slave_disk_size}Gi"
+            storage = "${var.disk_size}Gi"
           }
         }
       }

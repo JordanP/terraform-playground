@@ -8,7 +8,7 @@ resource "kubernetes_stateful_set" "postgresql-slave" {
   }
   spec {
     service_name = kubernetes_service.postgres_headless.metadata.0.name
-    replicas     = var.slave_count
+    replicas     = var.replica_count
     selector {
       match_labels = {
         app  = "postgresql"
@@ -24,7 +24,7 @@ resource "kubernetes_stateful_set" "postgresql-slave" {
         name = "postgresql"
       }
       spec {
-        node_selector = var.slave_node_selector
+        node_selector = var.replica_node_selector
         security_context {
           # https://github.com/docker-library/postgres/blob/ff832cbf1e9ffe150f66f00a0837d5b59083fec9/10/Dockerfile#L16
           run_as_user = 999
@@ -139,10 +139,8 @@ resource "kubernetes_stateful_set" "postgresql-slave" {
             required_during_scheduling_ignored_during_execution {
               topology_key = "kubernetes.io/hostname"
               label_selector {
-                match_expressions {
-                  key      = "app"
-                  operator = "In"
-                  values   = ["postgresql"]
+                match_labels = {
+                  app = "postgresql"
                 }
               }
             }
@@ -157,11 +155,11 @@ resource "kubernetes_stateful_set" "postgresql-slave" {
         namespace = (var.namespace != "default" ? kubernetes_namespace.postgresql[0].metadata.0.name : "default")
       }
       spec {
-        storage_class_name = var.slave_disk_type
+        storage_class_name = var.disk_type
         access_modes       = ["ReadWriteOnce"]
         resources {
           requests = {
-            storage = "${var.slave_disk_size}Gi"
+            storage = "${var.disk_size}Gi"
           }
         }
       }

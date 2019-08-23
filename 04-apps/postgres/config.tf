@@ -1,24 +1,7 @@
 resource "random_id" "postgres_conf" {
   byte_length = 8
   keepers = {
-    "postgresql.conf" = <<EOF
-listen_addresses = '*'
-max_connections = ${var.max_connections}
-shared_buffers = ${var.shared_buffers}
-effective_cache_size = ${var.effective_cache_size}
-maintenance_work_mem = ${var.maintenance_work_mem}
-checkpoint_completion_target = ${var.checkpoint_completion_target}
-wal_buffers = ${var.wal_buffers}
-default_statistics_target = ${var.default_statistics_target}
-random_page_cost = ${var.random_page_cost}
-effective_io_concurrency = ${var.effective_io_concurrency}
-work_mem = ${var.work_mem}
-min_wal_size = ${var.min_wal_size}
-max_wal_size = ${var.max_wal_size}
-max_worker_processes = ${var.max_worker_processes}
-max_parallel_workers_per_gather = ${var.max_parallel_workers_per_gather}
-max_parallel_workers = ${var.max_parallel_workers}
-EOF
+    "postgresql.conf" = var.postgresql_conf
     "00configure.sh"  = <<EOF
 #!/usr/bin/env bash
 set -ueo pipefail

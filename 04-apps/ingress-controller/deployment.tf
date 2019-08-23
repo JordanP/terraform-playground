@@ -1,7 +1,7 @@
 resource "kubernetes_config_map" "tcp_services" {
   metadata {
     name      = "tcp-services"
-    namespace = kubernetes_namespace.ingress.metadata[0].name
+    namespace = (var.namespace != "default" ? kubernetes_namespace.ingress[0].metadata.0.name : "default")
   }
   data = {
     "8022" = "gitlab-ce/${var.gitlab_release_name}-gitlab-shell:22"
@@ -10,7 +10,7 @@ resource "kubernetes_config_map" "tcp_services" {
 resource "kubernetes_deployment" "ingress" {
   metadata {
     name      = "nginx-ingress-controller"
-    namespace = kubernetes_namespace.ingress.metadata[0].name
+    namespace = (var.namespace != "default" ? kubernetes_namespace.ingress[0].metadata.0.name : "default")
   }
   spec {
     replicas = 3
@@ -105,17 +105,12 @@ resource "kubernetes_deployment" "ingress" {
           }
           security_context {
             capabilities {
-              add = [
-                "NET_BIND_SERVICE",
-              ]
-              drop = [
-                "ALL",
-              ]
+              add  = ["NET_BIND_SERVICE", ]
+              drop = ["ALL", ]
             }
             run_as_user = 33
           }
         }
-        restart_policy                   = "Always"
         termination_grace_period_seconds = 60
       }
     }

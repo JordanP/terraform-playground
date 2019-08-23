@@ -2,7 +2,7 @@ resource "kubernetes_service_account" "ingress" {
   automount_service_account_token = true
   metadata {
     name      = "nginx-ingress-serviceaccount"
-    namespace = kubernetes_namespace.ingress.metadata[0].name
+    namespace = (var.namespace != "default" ? kubernetes_namespace.ingress[0].metadata.0.name : "default")
   }
 }
 
@@ -17,7 +17,7 @@ resource "kubernetes_cluster_role_binding" "ingress" {
   }
   subject {
     kind      = "ServiceAccount"
-    namespace = kubernetes_namespace.ingress.metadata[0].name
+    namespace = (var.namespace != "default" ? kubernetes_namespace.ingress[0].metadata.0.name : "default")
     name      = kubernetes_service_account.ingress.metadata[0].name
   }
 }
@@ -117,7 +117,7 @@ resource "kubernetes_cluster_role" "ingress" {
 resource "kubernetes_role_binding" "ingress" {
   metadata {
     name      = "ingress"
-    namespace = kubernetes_namespace.ingress.metadata[0].name
+    namespace = (var.namespace != "default" ? kubernetes_namespace.ingress[0].metadata.0.name : "default")
   }
   role_ref {
     api_group = "rbac.authorization.k8s.io"
@@ -126,7 +126,7 @@ resource "kubernetes_role_binding" "ingress" {
   }
   subject {
     kind      = "ServiceAccount"
-    namespace = kubernetes_namespace.ingress.metadata[0].name
+    namespace = (var.namespace != "default" ? kubernetes_namespace.ingress[0].metadata.0.name : "default")
     name      = kubernetes_service_account.ingress.metadata[0].name
   }
 }
@@ -134,7 +134,7 @@ resource "kubernetes_role_binding" "ingress" {
 resource "kubernetes_role" "ingress" {
   metadata {
     name      = "ingress"
-    namespace = kubernetes_namespace.ingress.metadata[0].name
+    namespace = (var.namespace != "default" ? kubernetes_namespace.ingress[0].metadata.0.name : "default")
   }
   rule {
     api_groups = [

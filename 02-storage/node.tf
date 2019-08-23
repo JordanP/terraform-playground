@@ -1,4 +1,3 @@
-
 resource "kubernetes_daemonset" "node" {
   metadata {
     name      = "csi-gce-pd-node"

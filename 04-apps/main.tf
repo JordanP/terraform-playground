@@ -55,35 +55,39 @@ module "redis" {
 module "rabbitmq" {
   source        = "./rabbitmq"
   namespace     = "default"
-  disk_size     = "200"
   image         = "rabbitmq:3.7.17"
+  replica_count = 3
+  disk_size     = 200
   node_selector = null
 }
 
 module "postgresql" {
-  source               = "./postgres"
-  namespace            = "default"
-  slave_count          = 3
-  slave_disk_size      = "20"
-  slave_disk_type      = "ssd"
-  master_node_selector = null
-  slave_node_selector  = null
+  source                = "./postgres"
+  namespace             = "default"
+  image                 = "postgres:11.5"
+  replica_count         = 3
+  disk_size             = 20
+  master_node_selector  = null
+  replica_node_selector = null
 
-  max_connections                 = 20
-  shared_buffers                  = "1GB"
-  effective_cache_size            = "3GB"
-  maintenance_work_mem            = "256MB"
-  checkpoint_completion_target    = "0.7"
-  wal_buffers                     = "16MB"
-  default_statistics_target       = "100"
-  random_page_cost                = "1.1"
-  effective_io_concurrency        = "200"
-  work_mem                        = "52428kB"
-  min_wal_size                    = "1GB"
-  max_wal_size                    = "2GB"
-  max_worker_processes            = "2"
-  max_parallel_workers_per_gather = "1"
-  max_parallel_workers            = "2"
+  postgresql_conf = <<EOF
+listen_addresses = '*'
+max_connections = 50
+shared_buffers = 1792MB
+effective_cache_size = 5376MB
+maintenance_work_mem = 448MB
+checkpoint_completion_target = 0.7
+wal_buffers = 16MB
+default_statistics_target = 100
+random_page_cost = 1.1
+effective_io_concurrency = 200
+work_mem = 36700kB
+min_wal_size = 1GB
+max_wal_size = 2GB
+max_worker_processes = 2
+max_parallel_workers_per_gather = 1
+max_parallel_workers = 2
+EOF
 }
 
 # terraform destroy -auto-approve -target module.gitlab

@@ -1,3 +1,64 @@
+locals {
+  volumes = [
+    {
+      name       = "config"
+      mount_path = "/etc/grafana"
+      config_map = kubernetes_config_map.grafana_config.metadata[0].name
+    },
+    {
+      name       = "datasources"
+      mount_path = "/etc/grafana/provisioning/datasources"
+      config_map = kubernetes_config_map.grafana_datasources.metadata[0].name
+    },
+    {
+      name       = "providers"
+      mount_path = "/etc/grafana/provisioning/dashboards"
+      config_map = kubernetes_config_map.grafana_providers.metadata[0].name
+    },
+    {
+      name       = "dashboards-etcd"
+      mount_path = "/etc/grafana/dashboards/etcd"
+      config_map = kubernetes_config_map.grafana_dashboards_etcd.metadata[0].name
+    },
+    {
+      name       = "dashboards-redis"
+      mount_path = "/etc/grafana/dashboards/redis"
+      config_map = kubernetes_config_map.grafana_dashboards_redis.metadata[0].name
+    },
+    {
+      name       = "dashboards-prom"
+      mount_path = "/etc/grafana/dashboards/prom"
+      config_map = kubernetes_config_map.grafana_dashboards_prom.metadata[0].name
+    },
+    {
+      name       = "dashboards-nginx"
+      mount_path = "/etc/grafana/dashboards/nginx"
+      config_map = kubernetes_config_map.grafana_dashboards_nginx.metadata[0].name
+    },
+    {
+      name       = "dashboards-k8s"
+      mount_path = "/etc/grafana/dashboards/k8s"
+      config_map = kubernetes_config_map.grafana_dashboards_k8s.metadata[0].name
+    },
+    {
+      name       = "dashboards-k8s-nodes"
+      mount_path = "/etc/grafana/dashboards/k8s-nodes"
+      config_map = kubernetes_config_map.grafana_dashboards_k8s_nodes.metadata[0].name
+    },
+    {
+      name       = "dashboards-k8s-resources"
+      mount_path = "/etc/grafana/dashboards/k8s-resources"
+      config_map = kubernetes_config_map.grafana_dashboards_k8s_resources.metadata[0].name
+    },
+
+    {
+      name       = "dashboards-nodes"
+      mount_path = "/etc/grafana/dashboards/nodes"
+      config_map = kubernetes_config_map.grafana_dashboards_nodes.metadata[0].name
+    }
+  ]
+}
+
 resource "kubernetes_deployment" "grafana" {
   metadata {
     name      = "grafana"
@@ -73,115 +134,21 @@ resource "kubernetes_deployment" "grafana" {
               memory = "200Mi"
             }
           }
-          volume_mount {
-            name       = "config"
-            mount_path = "/etc/grafana"
-          }
-          volume_mount {
-            name       = "datasources"
-            mount_path = "/etc/grafana/provisioning/datasources"
-          }
-          volume_mount {
-            name       = "providers"
-            mount_path = "/etc/grafana/provisioning/dashboards"
-          }
-          volume_mount {
-            name       = "dashboards-etcd"
-            mount_path = "/etc/grafana/dashboards/_etcd_"
-          }
-          volume_mount {
-            name       = "dashboards-redis"
-            mount_path = "/etc/grafana/dashboards/_redis_"
-          }
-          volume_mount {
-            name       = "dashboards-prom"
-            mount_path = "/etc/grafana/dashboards/_prom_"
-          }
-          volume_mount {
-            name       = "dashboards-nginx"
-            mount_path = "/etc/grafana/dashboards/_nginx_"
-          }
-          volume_mount {
-            name       = "dashboards-k8s"
-            mount_path = "/etc/grafana/dashboards/_k8s_"
-          }
-          volume_mount {
-            name       = "dashboards-k8s-nodes"
-            mount_path = "/etc/grafana/dashboards/_k8s-nodes_"
-          }
-          volume_mount {
-            name       = "dashboards-k8s-resources"
-            mount_path = "/etc/grafana/dashboards/_k8s-resources_"
-          }
-          volume_mount {
-            name       = "dashboards-nodes"
-            mount_path = "/etc/grafana/dashboards/_nodes_"
+          dynamic "volume_mount" {
+            for_each = local.volumes
+            content {
+              name       = volume_mount.value.name
+              mount_path = volume_mount.value.mount_path
+            }
           }
         }
-        volume {
-          name = "config"
-          config_map {
-            name = kubernetes_config_map.grafana_config.metadata[0].name
-          }
-        }
-        volume {
-          name = "datasources"
-          config_map {
-            name = kubernetes_config_map.grafana_datasources.metadata[0].name
-          }
-        }
-        volume {
-          name = "providers"
-          config_map {
-            name = kubernetes_config_map.grafana_providers.metadata[0].name
-          }
-        }
-        volume {
-          name = "dashboards-etcd"
-          config_map {
-            name = kubernetes_config_map.grafana_dashboards_etcd.metadata[0].name
-          }
-        }
-        volume {
-          name = "dashboards-redis"
-          config_map {
-            name = kubernetes_config_map.grafana_dashboards_redis.metadata[0].name
-          }
-        }
-        volume {
-          name = "dashboards-nginx"
-          config_map {
-            name = kubernetes_config_map.grafana_dashboards_nginx.metadata[0].name
-          }
-        }
-        volume {
-          name = "dashboards-prom"
-          config_map {
-            name = kubernetes_config_map.grafana_dashboards_prom.metadata[0].name
-          }
-        }
-        volume {
-          name = "dashboards-k8s"
-          config_map {
-            name = kubernetes_config_map.grafana_dashboards_k8s.metadata[0].name
-          }
-        }
-        volume {
-          name = "dashboards-k8s-nodes"
-          config_map {
-            name = kubernetes_config_map.grafana_dashboards_k8s_nodes.metadata[0].name
-          }
-        }
-        volume {
-          name = "dashboards-k8s-resources"
-          config_map {
-            name = kubernetes_config_map.grafana_dashboards_k8s_resources.metadata[0].name
-          }
-        }
-        volume {
-          name = "dashboards-nodes"
-          config_map {
-            name = kubernetes_config_map.grafana_dashboards_nodes.metadata[0].name
+        dynamic "volume" {
+          for_each = local.volumes
+          content {
+            name = volume.value.name
+            config_map {
+              name = volume.value.config_map
+            }
           }
         }
       }

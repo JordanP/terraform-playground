@@ -1,7 +1,7 @@
 resource "kubernetes_service" "ingress" {
   metadata {
     name      = "nginx-ingress-controller"
-    namespace = kubernetes_namespace.ingress.metadata[0].name
+    namespace = (var.namespace != "default" ? kubernetes_namespace.ingress[0].metadata.0.name : "default")
     annotations = {
       "prometheus.io/scrape" = "true"
       "prometheus.io/port"   = "10254"

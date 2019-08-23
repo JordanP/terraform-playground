@@ -34,26 +34,26 @@ resource "kubernetes_secret" "gitlab_initial_root_password" {
   }
 }
 
-resource "random_id" "gitlab_wildcard_certificate_name_suffix" {
+resource "random_id" "wildcard_certificate_name_suffix" {
   byte_length = 4
 
   keepers = {
-    "tls.crt" = base64sha256(file("${path.module}/certs/jordanpittier.net.cer"))
-    "tls.key" = base64sha256(file("${path.module}/certs/jordanpittier.net.key"))
+    "tls.crt" = base64sha256(file("${path.module}/../certs/jordanpittier.net.cer"))
+    "tls.key" = base64sha256(file("${path.module}/../certs/jordanpittier.net.key"))
   }
 }
 
-resource "kubernetes_secret" "gitlab_wildcard_certificate" {
+resource "kubernetes_secret" "wildcard_certificate" {
   metadata {
     namespace = kubernetes_namespace.gitlab_ce.metadata[0].name
-    name      = "my-wild-card-certificate-${random_id.gitlab_wildcard_certificate_name_suffix.hex}"
+    name      = "wildcard-jordanpittier-net-${random_id.wildcard_certificate_name_suffix.hex}"
   }
 
   type = "kubernetes.io/tls"
 
   data = {
-    "tls.crt" = file("${path.module}/certs/jordanpittier.net.cer")
-    "tls.key" = file("${path.module}/certs/jordanpittier.net.key")
+    "tls.crt" = file("${path.module}/../certs/jordanpittier.net.cer")
+    "tls.key" = file("${path.module}/../certs/jordanpittier.net.key")
   }
 }
 

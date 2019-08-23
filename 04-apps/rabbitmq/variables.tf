@@ -2,17 +2,15 @@ variable "namespace" {
   default = "default"
 }
 
-variable "replica_count" {
-  default = 3
-}
+variable "image" {}
+
+variable "replica_count" {}
+
+variable "disk_size" {}
 
 variable "disk_type" {
   default = "standard"
 }
-
-variable "disk_size" {}
-
-variable "image" {}
 
 variable "node_selector" {
   type = map(string)

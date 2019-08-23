@@ -32,7 +32,7 @@ locals {
     "certmanager-issuer.image.tag" : "v1.14.0"
     "certmanager.install" : "false"
     "global.ingress.configureCertmanager" : "false"
-    "global.ingress.tls.secretName" : kubernetes_secret.gitlab_wildcard_certificate.metadata[0].name
+    "global.ingress.tls.secretName" : kubernetes_secret.wildcard_certificate.metadata[0].name
     "registry.storage.secret" : kubernetes_secret.gitlab_gcs_storage.metadata[0].name
     "registry.storage.key" : "config"
     "registry.storage.extraKey" : "keyfile"

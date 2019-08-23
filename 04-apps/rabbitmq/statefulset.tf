@@ -153,10 +153,8 @@ resource "kubernetes_stateful_set" "rabbitmq" {
             required_during_scheduling_ignored_during_execution {
               topology_key = "kubernetes.io/hostname"
               label_selector {
-                match_expressions {
-                  key      = "app"
-                  operator = "In"
-                  values   = ["rabbitmq"]
+                match_labels = {
+                  app = "rabbitmq"
                 }
               }
             }

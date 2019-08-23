@@ -48,7 +48,6 @@ resource "kubernetes_stateful_set" "csi_gce_pd_controller" {
             mount_path = "/csi"
             name       = "socket-dir"
           }
-
         }
         container {
           name  = "gce-pd-driver"
