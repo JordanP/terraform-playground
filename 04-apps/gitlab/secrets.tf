@@ -43,6 +43,11 @@ resource "random_id" "wildcard_certificate_name_suffix" {
   }
 }
 
+data "google_kms_secret" "tls_key" {
+  crypto_key = var.kms_crypto_key
+  ciphertext = file("${path.module}/../certs/jordanpittier.net.key")
+}
+
 resource "kubernetes_secret" "wildcard_certificate" {
   metadata {
     namespace = kubernetes_namespace.gitlab_ce.metadata[0].name
@@ -53,7 +58,7 @@ resource "kubernetes_secret" "wildcard_certificate" {
 
   data = {
     "tls.crt" = file("${path.module}/../certs/jordanpittier.net.cer")
-    "tls.key" = file("${path.module}/../certs/jordanpittier.net.key")
+    "tls.key" = data.google_kms_secret.tls_key.plaintext
   }
 }
 

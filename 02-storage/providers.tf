@@ -1,5 +1,5 @@
 provider "google" {
-  version = "2.9.0"
+  version = "2.13.0"
 
   credentials = file("../account.json")
   project     = "terraform-playground-237915"

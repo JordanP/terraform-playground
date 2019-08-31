@@ -16,6 +16,7 @@ resource "kubernetes_deployment" "redis" {
         }
       }
       spec {
+        service_account_name = kubernetes_service_account.redis.metadata.0.name
         security_context {
           # https://github.com/docker-library/redis/blob/0b2910f292fa6ac32318cb2acc84355b11aa8a7a/5.0/alpine/Dockerfile#L4
           run_as_user = 999

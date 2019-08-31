@@ -38,9 +38,10 @@ module "nginx" {
 }
 
 module "grafana" {
-  source    = "./grafana"
-  namespace = kubernetes_namespace.monitoring.metadata[0].name
-  hostname  = data.terraform_remote_state.infra.outputs.monitoring_hostname
+  source         = "./grafana"
+  namespace      = kubernetes_namespace.monitoring.metadata[0].name
+  hostname       = data.terraform_remote_state.infra.outputs.monitoring_hostname
+  kms_crypto_key = data.terraform_remote_state.infra.outputs.my_crypto_key
 }
 
 module "prometheus" {
@@ -92,12 +93,12 @@ EOF
 
 # terraform destroy -auto-approve -target module.gitlab
 module "gitlab" {
-  source                = "./gitlab"
-  helm_release_name     = local.gitlab_release_name
-  postgresql_host       = module.postgresql.postgres_rw_service
-  postgresql_database   = "postgres"
-  postgresql_username   = "postgres"
-  postgresql_password   = module.postgresql.postgres_password
-  force_destroy_buckets = "true"
-  redis_password        = module.redis.redis_password
+  source              = "./gitlab"
+  helm_release_name   = local.gitlab_release_name
+  postgresql_host     = module.postgresql.postgres_rw_service
+  postgresql_database = "postgres"
+  postgresql_username = "postgres"
+  postgresql_password = module.postgresql.postgres_password
+  redis_password      = module.redis.redis_password
+  kms_crypto_key      = data.terraform_remote_state.infra.outputs.my_crypto_key
 }

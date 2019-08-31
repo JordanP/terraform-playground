@@ -32,7 +32,6 @@ resource "google_project_iam_member" "project" {
   member  = "serviceAccount:${google_service_account.my_gce_pd_csi_sa.email}"
 }
 
-
 resource "google_service_account_key" "default" {
   service_account_id = google_service_account.my_gce_pd_csi_sa.account_id
 }
@@ -46,7 +45,6 @@ resource "kubernetes_secret" "cloud_sa" {
     "cloud-sa.json" = base64decode(google_service_account_key.default.private_key)
   }
 }
-
 
 resource "kubernetes_service_account" "csi_node_sa" {
   automount_service_account_token = true

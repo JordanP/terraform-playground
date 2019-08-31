@@ -11,8 +11,7 @@ resource "kubernetes_stateful_set" "rabbitmq" {
     replicas     = var.replica_count
     volume_claim_template {
       metadata {
-        name      = "rabbitmq-data"
-        namespace = (var.namespace != "default" ? kubernetes_namespace.rabbitmq[0].metadata.0.name : "default")
+        name = "rabbitmq-data"
       }
       spec {
         storage_class_name = var.disk_type

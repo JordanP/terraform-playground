@@ -40,10 +40,7 @@ resource "kubernetes_stateful_set" "csi_gce_pd_controller" {
         container {
           name  = "csi-attacher"
           image = "gke.gcr.io/csi-attacher:v1.2.1-gke.0"
-          args = [
-            "--v=5",
-            "--csi-address=/csi/csi.sock"
-          ]
+          args  = ["--v=5", "--csi-address=/csi/csi.sock"]
           volume_mount {
             mount_path = "/csi"
             name       = "socket-dir"
@@ -52,10 +49,7 @@ resource "kubernetes_stateful_set" "csi_gce_pd_controller" {
         container {
           name  = "gce-pd-driver"
           image = "gke.gcr.io/gcp-compute-persistent-disk-csi-driver:v0.5.1-gke.0"
-          args = [
-            "--v=5",
-            "--endpoint=unix:/csi/csi.sock"
-          ]
+          args  = ["--v=5", "--endpoint=unix:/csi/csi.sock"]
           env {
             name  = "GOOGLE_APPLICATION_CREDENTIALS"
             value = "/etc/cloud-sa/cloud-sa.json"

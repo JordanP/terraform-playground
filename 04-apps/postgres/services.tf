@@ -45,7 +45,7 @@ resource "kubernetes_service" "postgres_ro" {
 
     selector = {
       app  = "postgresql"
-      role = "slave"
+      role = "replica"
     }
 
     type = "ClusterIP"

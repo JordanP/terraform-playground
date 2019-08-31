@@ -3,3 +3,5 @@ variable "namespace" {
 }
 
 variable "hostname" {}
+
+variable "kms_crypto_key" {}

@@ -38,7 +38,7 @@ save 300 10
 save 900 1
 EOF
     "configure.sh" = <<EOF
-    set -e
+    set -ue
     cat /configmap/redis.conf > /etc/redis/redis.conf
     echo "requirepass $REDIS_PASSWORD" >> /etc/redis/redis.conf
     chmod 640 /etc/redis/redis.conf

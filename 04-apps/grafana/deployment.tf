@@ -86,6 +86,7 @@ resource "kubernetes_deployment" "grafana" {
         }*/
       }
       spec {
+        service_account_name = kubernetes_service_account.grafana.metadata.0.name
         container {
           name  = "grafana"
           image = "grafana/grafana:6.3.3"

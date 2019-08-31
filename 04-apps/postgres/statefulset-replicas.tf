@@ -1,4 +1,4 @@
-resource "kubernetes_stateful_set" "postgresql-slave" {
+resource "kubernetes_stateful_set" "postgresql_replica" {
   metadata {
     labels = {
       app = "postgresql"
@@ -12,19 +12,21 @@ resource "kubernetes_stateful_set" "postgresql-slave" {
     selector {
       match_labels = {
         app  = "postgresql"
-        role = "slave"
+        role = "replica"
       }
     }
     template {
       metadata {
         labels = {
           app  = "postgresql"
-          role = "slave"
+          role = "replica"
         }
         name = "postgresql"
       }
       spec {
-        node_selector = var.replica_node_selector
+        node_selector                   = var.replica_node_selector
+        service_account_name            = kubernetes_service_account.postgres.metadata.0.name
+        automount_service_account_token = true
         security_context {
           # https://github.com/docker-library/postgres/blob/ff832cbf1e9ffe150f66f00a0837d5b59083fec9/10/Dockerfile#L16
           run_as_user = 999
@@ -151,8 +153,7 @@ resource "kubernetes_stateful_set" "postgresql-slave" {
 
     volume_claim_template {
       metadata {
-        name      = "pg-data"
-        namespace = (var.namespace != "default" ? kubernetes_namespace.postgresql[0].metadata.0.name : "default")
+        name = "pg-data"
       }
       spec {
         storage_class_name = var.disk_type
