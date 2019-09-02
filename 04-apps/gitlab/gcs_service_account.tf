@@ -33,9 +33,7 @@ resource "google_storage_bucket" "gitlab_storage" {
 
 resource "google_storage_bucket_iam_member" "gitlab_object_admin" {
   count  = length(local.all-buckets)
-  bucket = "${element(local.all-buckets, count.index)}-jpittier"
+  bucket = google_storage_bucket.gitlab_storage[count.index].name
   member = "serviceAccount:${google_service_account.gitlab_storage.email}"
   role   = "roles/storage.objectAdmin"
-  depends_on = [
-  "google_storage_bucket.gitlab_storage"]
 }

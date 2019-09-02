@@ -55,7 +55,7 @@ module "redis" {
 
 module "rabbitmq" {
   source        = "./rabbitmq"
-  namespace     = "default"
+  namespace     = "rabbitmq"
   image         = "rabbitmq:3.7.17"
   replica_count = 3
   disk_size     = 200
@@ -64,7 +64,7 @@ module "rabbitmq" {
 
 module "postgresql" {
   source                = "./postgres"
-  namespace             = "default"
+  namespace             = "postgres"
   image                 = "postgres:11.5"
   replica_count         = 3
   disk_size             = 20

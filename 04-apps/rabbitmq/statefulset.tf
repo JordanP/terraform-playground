@@ -59,6 +59,9 @@ resource "kubernetes_stateful_set" "rabbitmq" {
         container {
           name  = "rabbitmq"
           image = var.image
+          security_context {
+            allow_privilege_escalation = false
+          }
           lifecycle {
             pre_stop {
               exec {

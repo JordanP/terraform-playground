@@ -63,9 +63,11 @@ resource "kubernetes_stateful_set" "postgres_master" {
               }
             }
           }
-          image             = var.image
-          args              = ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
-          image_pull_policy = "Always"
+          image = var.image
+          args  = ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
+          security_context {
+            allow_privilege_escalation = false
+          }
           liveness_probe {
             initial_delay_seconds = 30
             timeout_seconds       = 5

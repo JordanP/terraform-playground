@@ -62,6 +62,9 @@ resource "kubernetes_deployment" "redis" {
         container {
           name  = "redis"
           image = "redis:5.0-alpine"
+          security_context {
+            allow_privilege_escalation = false
+          }
           port {
             container_port = 6379
             name           = "redis"

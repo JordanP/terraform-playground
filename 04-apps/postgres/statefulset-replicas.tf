@@ -66,8 +66,9 @@ resource "kubernetes_stateful_set" "postgresql_replica" {
           }
           image = var.image
           args  = ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf", "-c", "hot_standby_feedback=on"]
-
-          image_pull_policy = "Always"
+          security_context {
+            allow_privilege_escalation = false
+          }
           liveness_probe {
             initial_delay_seconds = 30
             timeout_seconds       = 5
@@ -142,7 +143,8 @@ resource "kubernetes_stateful_set" "postgresql_replica" {
               topology_key = "kubernetes.io/hostname"
               label_selector {
                 match_labels = {
-                  app = "postgresql"
+                  app  = "postgresql"
+                  role = "replica"
                 }
               }
             }
