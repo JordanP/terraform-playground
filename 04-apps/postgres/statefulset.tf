@@ -133,12 +133,8 @@ resource "kubernetes_stateful_set" "postgres_master" {
         volume {
           name = "postgres-bootstrap"
           config_map {
-            name         = kubernetes_config_map.postgres_conf.metadata.0.name
+            name         = kubernetes_config_map.postgres_initd_script.metadata.0.name
             default_mode = "0750"
-            items {
-              key  = "00configure.sh"
-              path = "00configure.sh"
-            }
           }
         }
 
