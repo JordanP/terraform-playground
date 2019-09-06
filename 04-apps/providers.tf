@@ -1,5 +1,5 @@
 provider "google" {
-  version = "2.13.0"
+  version = "~> 2.13"
 
   credentials = file("../account.json")
   project     = "terraform-playground-237915"
@@ -18,6 +18,8 @@ provider "helm" {
 }
 
 provider "kubernetes" {
+  version = "~> 1.9"
+
   config_path = "${local.asset_dir}/auth/kubeconfig"
 }
 

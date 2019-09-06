@@ -38,10 +38,11 @@ module "nginx" {
 }
 
 module "grafana" {
-  source         = "./grafana"
-  namespace      = kubernetes_namespace.monitoring.metadata[0].name
-  hostname       = data.terraform_remote_state.infra.outputs.monitoring_hostname
-  kms_crypto_key = data.terraform_remote_state.infra.outputs.my_crypto_key
+  source          = "./grafana"
+  namespace       = kubernetes_namespace.monitoring.metadata[0].name
+  hostname        = data.terraform_remote_state.infra.outputs.monitoring_hostname
+  tls_certificate = data.terraform_remote_state.infra.outputs.certificate
+  tls_private_key = data.terraform_remote_state.infra.outputs.private_key
 }
 
 module "prometheus" {
@@ -100,5 +101,6 @@ module "gitlab" {
   postgresql_username = "postgres"
   postgresql_password = module.postgresql.postgres_password
   redis_password      = module.redis.redis_password
-  kms_crypto_key      = data.terraform_remote_state.infra.outputs.my_crypto_key
+  tls_certificate     = data.terraform_remote_state.infra.outputs.certificate
+  tls_private_key     = data.terraform_remote_state.infra.outputs.private_key
 }

@@ -35,8 +35,3 @@ resource "google_dns_record_set" "gitlab" {
     google_compute_forwarding_rule.gitlab.ip_address,
   ]
 }
-
-output "monitoring_hostname" {
-  value = "monitoring.${local.dns_zone}"
-}
-

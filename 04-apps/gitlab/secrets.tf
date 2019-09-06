@@ -38,14 +38,9 @@ resource "random_id" "wildcard_certificate_name_suffix" {
   byte_length = 4
 
   keepers = {
-    "tls.crt" = base64sha256(file("${path.module}/../certs/jordanpittier.net.cer"))
-    "tls.key" = base64sha256(file("${path.module}/../certs/jordanpittier.net.key"))
+    "tls.crt" = sha256(var.tls_certificate)
+    "tls.key" = sha256(var.tls_private_key)
   }
-}
-
-data "google_kms_secret" "tls_key" {
-  crypto_key = var.kms_crypto_key
-  ciphertext = file("${path.module}/../certs/jordanpittier.net.key")
 }
 
 resource "kubernetes_secret" "wildcard_certificate" {
@@ -57,8 +52,8 @@ resource "kubernetes_secret" "wildcard_certificate" {
   type = "kubernetes.io/tls"
 
   data = {
-    "tls.crt" = file("${path.module}/../certs/jordanpittier.net.cer")
-    "tls.key" = data.google_kms_secret.tls_key.plaintext
+    "tls.crt" = var.tls_certificate
+    "tls.key" = var.tls_private_key
   }
 }
 

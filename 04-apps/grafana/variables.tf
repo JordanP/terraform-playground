@@ -3,5 +3,5 @@ variable "namespace" {
 }
 
 variable "hostname" {}
-
-variable "kms_crypto_key" {}
+variable "tls_certificate" {}
+variable "tls_private_key" {}
