@@ -55,4 +55,3 @@ module "google-cloud-jordan" {
   worker_type        = "n1-standard-2"
   worker_preemptible = "true"
 }
-
