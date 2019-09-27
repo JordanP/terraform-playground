@@ -22,7 +22,3 @@ provider "kubernetes" {
 
   config_path = "${local.asset_dir}/auth/kubeconfig"
 }
-
-terraform {
-  required_version = ">= 0.12"
-}

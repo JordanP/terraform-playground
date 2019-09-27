@@ -1,4 +1,6 @@
 terraform {
+  required_version = ">= 0.12"
+
   backend "gcs" {
     credentials = "../account.json"
     bucket      = "tf-playground-tf-state"
@@ -37,7 +39,7 @@ resource "google_compute_forwarding_rule" "gitlab" {
 }
 
 module "google-cloud-jordan" {
-  source = "git::https://github.com/poseidon/typhoon//google-cloud/container-linux/kubernetes?ref=c42139beaa1d14917b4b53e1c0597c637bde6266"
+  source = "git::https://github.com/poseidon/typhoon//google-cloud/container-linux/kubernetes?ref=8703f2c3c57597e5c60832198bfa2ae7971cff87"
 
   # Google Cloud
   cluster_name  = local.cluster_name

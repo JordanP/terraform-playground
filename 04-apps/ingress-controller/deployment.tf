@@ -1,12 +1,3 @@
-resource "kubernetes_config_map" "tcp_services" {
-  metadata {
-    name      = "tcp-services"
-    namespace = (var.namespace != "default" ? kubernetes_namespace.ingress[0].metadata.0.name : "default")
-  }
-  data = {
-    "8022" = "gitlab-ce/${var.gitlab_release_name}-gitlab-shell:22"
-  }
-}
 resource "kubernetes_deployment" "ingress" {
   metadata {
     name      = "nginx-ingress-controller"
@@ -41,6 +32,7 @@ resource "kubernetes_deployment" "ingress" {
           image = "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.25.1"
           args = [
             "/nginx-ingress-controller",
+            "--configmap=$(POD_NAMESPACE)/${kubernetes_config_map.config.metadata.0.name}",
             "--ingress-class=public",
             "--tcp-services-configmap=$(POD_NAMESPACE)/tcp-services",
           ]
@@ -115,4 +107,5 @@ resource "kubernetes_deployment" "ingress" {
       }
     }
   }
+  depends_on = [kubernetes_config_map.config]
 }

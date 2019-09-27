@@ -1,4 +1,6 @@
 terraform {
+  required_version = ">= 0.12"
+
   backend "gcs" {
     credentials = "../account.json"
     bucket      = "tf-playground-tf-state"
