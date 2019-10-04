@@ -89,7 +89,7 @@ resource "kubernetes_deployment" "grafana" {
         service_account_name = kubernetes_service_account.grafana.metadata.0.name
         container {
           name  = "grafana"
-          image = "grafana/grafana:6.3.6"
+          image = "grafana/grafana:6.4.1"
           env {
             name  = "GF_PATHS_CONFIG"
             value = "/etc/grafana/custom.ini"

@@ -17,7 +17,7 @@ locals {
 
 resource "google_compute_firewall" "git_clone_ssh" {
   name    = "git-clone-ssh"
-  network = module.google-cloud-jordan.network_name
+  network = module.google_cloud_jordan.network_name
 
   allow {
     protocol = "TCP"
@@ -34,12 +34,12 @@ resource "google_compute_firewall" "git_clone_ssh" {
 
 resource "google_compute_forwarding_rule" "gitlab" {
   name       = "gitlab"
-  target     = module.google-cloud-jordan.worker_target_pool
+  target     = module.google_cloud_jordan.worker_target_pool
   port_range = "1-65535"
 }
 
-module "google-cloud-jordan" {
-  source = "git::https://github.com/poseidon/typhoon//google-cloud/container-linux/kubernetes?ref=8703f2c3c57597e5c60832198bfa2ae7971cff87"
+module "google_cloud_jordan" {
+  source = "git::https://github.com/poseidon/typhoon//google-cloud/container-linux/kubernetes?ref=f82266ac8c436bc451690179673f092c2a351a48"
 
   # Google Cloud
   cluster_name  = local.cluster_name
@@ -52,8 +52,29 @@ module "google-cloud-jordan" {
   asset_dir          = pathexpand("~/.secrets/clusters/tf-playground")
 
   # optional
-  worker_count       = 3
   controller_type    = "n1-standard-1"
+  worker_count       = 1
   worker_type        = "n1-standard-2"
-  worker_preemptible = "true"
+  worker_preemptible = true
+  worker_node_labels = ["node_type=ingress"]
+}
+
+module "google_cloud_jordan_worker_pool" {
+  source = "git::https://github.com/poseidon/typhoon//google-cloud/container-linux/kubernetes/workers?ref=f82266ac8c436bc451690179673f092c2a351a48"
+
+  # Google Cloud
+  region       = "europe-west4"
+  network      = module.google_cloud_jordan.network_name
+  cluster_name = local.cluster_name
+
+  # configuration
+  name               = "default"
+  kubeconfig         = module.google_cloud_jordan.kubeconfig
+  ssh_authorized_key = file(pathexpand("~/.ssh/id_rsa.pub"))
+
+  # optional
+  worker_count = 2
+  machine_type = "n1-standard-2"
+  preemptible  = true
+  node_labels  = ["node_type=default"]
 }

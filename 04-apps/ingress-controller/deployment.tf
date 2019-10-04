@@ -4,7 +4,7 @@ resource "kubernetes_deployment" "ingress" {
     namespace = (var.namespace != "default" ? kubernetes_namespace.ingress[0].metadata.0.name : "default")
   }
   spec {
-    replicas = 3
+    replicas = 1
     strategy {
       rolling_update {
         max_unavailable = 1
@@ -27,14 +27,17 @@ resource "kubernetes_deployment" "ingress" {
       spec {
         service_account_name            = kubernetes_service_account.ingress.metadata[0].name
         automount_service_account_token = true
+        node_selector = {
+          node_type = "ingress"
+        }
         container {
           name  = "nginx-ingress-controller"
-          image = "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.25.1"
+          image = "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.26.1"
           args = [
             "/nginx-ingress-controller",
-            "--configmap=$(POD_NAMESPACE)/${kubernetes_config_map.config.metadata.0.name}",
+            "--configmap=$(POD_NAMESPACE)/${kubernetes_config_map.nginx_configuration.metadata.0.name}",
             "--ingress-class=public",
-            "--tcp-services-configmap=$(POD_NAMESPACE)/tcp-services",
+            "--tcp-services-configmap=$(POD_NAMESPACE)/${kubernetes_config_map.tcp_services.metadata.0.name}",
           ]
           env {
             name = "POD_NAME"
@@ -95,6 +98,13 @@ resource "kubernetes_deployment" "ingress" {
             success_threshold = 1
             timeout_seconds   = 5
           }
+          lifecycle {
+            pre_stop {
+              exec {
+                command = ["/wait-shutdown"]
+              }
+            }
+          }
           security_context {
             capabilities {
               add  = ["NET_BIND_SERVICE", ]
@@ -103,9 +113,9 @@ resource "kubernetes_deployment" "ingress" {
             run_as_user = 33
           }
         }
-        termination_grace_period_seconds = 60
+        termination_grace_period_seconds = 300
       }
     }
   }
-  depends_on = [kubernetes_config_map.config]
+  depends_on = [kubernetes_config_map.nginx_configuration]
 }

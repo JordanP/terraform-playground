@@ -28,8 +28,8 @@ locals {
     "global.psql.password.key" : "postgres-password"
     "global.shell.port" : "8022"
     "gitlab-runner.runners.privileged" : "true"
-    "certmanager-issuer.image.repository" : "gcr.io/google_containers/hyperkube"
-    "certmanager-issuer.image.tag" : "v1.14.0"
+    #"certmanager-issuer.image.repository" : "gcr.io/google_containers/hyperkube"
+    #"certmanager-issuer.image.tag" : "v1.14.0"
     "certmanager.install" : "false"
     "global.ingress.configureCertmanager" : "false"
     "global.ingress.tls.secretName" : kubernetes_secret.wildcard_certificate.metadata[0].name
@@ -60,7 +60,7 @@ locals {
 resource "helm_release" "gitlab" {
   name       = var.helm_release_name
   repository = data.helm_repository.gitlab.metadata[0].name
-  version    = "1.9.6"
+  version    = "2.3.2"
   chart      = "gitlab"
   timeout    = 600
   namespace  = kubernetes_namespace.gitlab_ce.metadata[0].name

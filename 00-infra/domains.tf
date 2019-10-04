@@ -19,7 +19,7 @@ resource "google_dns_record_set" "apps" {
   ttl          = 300
 
   rrdatas = [
-    module.google-cloud-jordan.ingress_static_ipv4,
+    module.google_cloud_jordan.ingress_static_ipv4,
   ]
 }
 
