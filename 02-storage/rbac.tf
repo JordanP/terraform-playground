@@ -184,3 +184,46 @@ resource "kubernetes_cluster_role_binding" "csi_controller_attacher_binding" {
     namespace = kubernetes_namespace.gce_pd_csi.metadata.0.name
   }
 }
+
+// Resizer must be able to work with PVCs, PVs, SCs.
+resource "kubernetes_cluster_role" "csi_gce_pd_resizer_role" {
+  metadata {
+    name = "csi-gce-pd-resizer-role"
+  }
+  rule {
+    verbs      = ["get", "list", "watch", "update", "patch"]
+    api_groups = [""]
+    resources  = ["persistentvolumes"]
+  }
+  rule {
+    verbs      = ["get", "list", "watch"]
+    api_groups = [""]
+    resources  = ["persistentvolumeclaims"]
+  }
+  rule {
+    verbs      = ["update", "patch"]
+    resources  = ["persistentvolumeclaims/status"]
+    api_groups = [""]
+  }
+  rule {
+    verbs      = ["list", "watch", "create", "update", "patch"]
+    resources  = ["events"]
+    api_groups = [""]
+  }
+}
+
+resource "kubernetes_cluster_role_binding" "csi_gce_pd_resizer_binding" {
+  metadata {
+    name = "csi-gce-pd-resizer-binding"
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = kubernetes_cluster_role.csi_gce_pd_resizer_role.metadata.0.name
+  }
+  subject {
+    kind = "ServiceAccount"
+    name = kubernetes_service_account.csi_controller_sa.metadata.0.name
+    namespace = kubernetes_service_account.csi_controller_sa.metadata.0.namespace
+  }
+}

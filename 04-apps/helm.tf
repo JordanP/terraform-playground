@@ -59,7 +59,7 @@ resource "kubernetes_deployment" "tiller_with_rbac" {
         automount_service_account_token = true
         container {
           name  = "tiller"
-          image = "gcr.io/kubernetes-helm/tiller:v2.14.1"
+          image = "gcr.io/kubernetes-helm/tiller:v2.15.1"
 
           port {
             name           = "tiller"

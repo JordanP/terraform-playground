@@ -39,7 +39,7 @@ resource "google_compute_forwarding_rule" "gitlab" {
 }
 
 module "google_cloud_jordan" {
-  source = "git::https://github.com/poseidon/typhoon//google-cloud/container-linux/kubernetes?ref=f82266ac8c436bc451690179673f092c2a351a48"
+  source = "git::https://github.com/poseidon/typhoon//google-cloud/container-linux/kubernetes?ref=4775e9d0f72a7edd7358163d8aa114e1242cc20c"
 
   # Google Cloud
   cluster_name  = local.cluster_name
@@ -60,7 +60,7 @@ module "google_cloud_jordan" {
 }
 
 module "google_cloud_jordan_worker_pool" {
-  source = "git::https://github.com/poseidon/typhoon//google-cloud/container-linux/kubernetes/workers?ref=f82266ac8c436bc451690179673f092c2a351a48"
+  source = "git::https://github.com/poseidon/typhoon//google-cloud/container-linux/kubernetes/workers?ref=4775e9d0f72a7edd7358163d8aa114e1242cc20c"
 
   # Google Cloud
   region       = "europe-west4"
