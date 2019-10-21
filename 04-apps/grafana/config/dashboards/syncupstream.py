@@ -6,12 +6,13 @@ import yaml
 
 me = os.path.dirname(os.path.realpath(__file__))
 urls = [
+    "https://raw.githubusercontent.com/poseidon/typhoon/master/addons/grafana/dashboards-coredns.yaml",
     "https://raw.githubusercontent.com/poseidon/typhoon/master/addons/grafana/dashboards-etcd.yaml",
     "https://raw.githubusercontent.com/poseidon/typhoon/master/addons/grafana/dashboards-k8s-nodes.yaml",
     "https://raw.githubusercontent.com/poseidon/typhoon/master/addons/grafana/dashboards-k8s-resources.yaml",
     "https://raw.githubusercontent.com/poseidon/typhoon/master/addons/grafana/dashboards-k8s.yaml",
-    "https://raw.githubusercontent.com/poseidon/typhoon/master/addons/grafana/dashboards-prom.yaml",
     "https://raw.githubusercontent.com/poseidon/typhoon/master/addons/grafana/dashboards-nginx-ingress.yaml"
+    "https://raw.githubusercontent.com/poseidon/typhoon/master/addons/grafana/dashboards-prom.yaml",
 ]
 
 for url in urls:

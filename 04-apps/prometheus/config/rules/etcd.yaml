@@ -4,6 +4,17 @@
       "name": "etcd",
       "rules": [
         {
+          "alert": "etcdMembersDown",
+          "annotations": {
+            "message": "etcd cluster \"{{ $labels.job }}\": members are down ({{ $value }})."
+          },
+          "expr": "max by (job) (\n  sum by (job) (up{job=~\".*etcd.*\"} == bool 0)\nor\n  count by (job,endpoint) (\n    sum by (job,endpoint,To) (rate(etcd_network_peer_sent_failures_total{job=~\".*etcd.*\"}[3m])) > 0.01\n  )\n)\n> 0\n",
+          "for": "3m",
+          "labels": {
+            "severity": "critical"
+          }
+        },
+        {
           "alert": "etcdInsufficientMembers",
           "annotations": {
             "message": "etcd cluster \"{{ $labels.job }}\": insufficient members ({{ $value }})."

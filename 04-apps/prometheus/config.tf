@@ -22,10 +22,9 @@ resource "random_id" "prometheus_rules_cm_name" {
 
   keepers = {
     data1 = filebase64sha256("${path.module}/config/rules/etcd.yaml")
-    data2 = filebase64sha256("${path.module}/config/rules/extra.yaml")
-    data3 = filebase64sha256("${path.module}/config/rules/kube.yaml")
-    data4 = filebase64sha256("${path.module}/config/rules/kubeprom.yaml")
-    data5 = filebase64sha256("${path.module}/config/rules/prom.yaml")
+    data2 = filebase64sha256("${path.module}/config/rules/kube.yaml")
+    data3 = filebase64sha256("${path.module}/config/rules/prom.yaml")
+    data4 = filebase64sha256("${path.module}/config/rules/typhoon.yaml")
   }
 }
 
@@ -36,10 +35,9 @@ resource "kubernetes_config_map" "prometheus_rules" {
   }
 
   data = {
-    "etcd.yaml"     = file("${path.module}/config/rules/etcd.yaml")
-    "extra.yaml"    = file("${path.module}/config/rules/extra.yaml")
-    "kube.yaml"     = file("${path.module}/config/rules/kube.yaml")
-    "kubeprom.yaml" = file("${path.module}/config/rules/kubeprom.yaml")
-    "prom.yaml"     = file("${path.module}/config/rules/prom.yaml")
+    "etcd.yaml"    = file("${path.module}/config/rules/etcd.yaml")
+    "kube.yaml"    = file("${path.module}/config/rules/kube.yaml")
+    "prom.yaml"    = file("${path.module}/config/rules/prom.yaml")
+    "typhoon.yaml" = file("${path.module}/config/rules/typhoon.yaml")
   }
 }

@@ -32,7 +32,6 @@ resource "random_id" "grafana_dashboards_k8s_nodes_cm_name" {
 
   keepers = {
     data1 = filebase64sha256("${path.module}/config/dashboards/dashboards-k8s-nodes/kubelet.json")
-    data2 = filebase64sha256("${path.module}/config/dashboards/dashboards-k8s-nodes/nodes.json")
     data3 = filebase64sha256("${path.module}/config/dashboards/dashboards-k8s-nodes/proxy.json")
   }
 }
@@ -45,7 +44,6 @@ resource "kubernetes_config_map" "grafana_dashboards_k8s_nodes" {
 
   data = {
     "kubelet.json" = file("${path.module}/config/dashboards/dashboards-k8s-nodes/kubelet.json")
-    "nodes.json"   = file("${path.module}/config/dashboards/dashboards-k8s-nodes/nodes.json")
     "proxy.json"   = file("${path.module}/config/dashboards/dashboards-k8s-nodes/proxy.json")
   }
 }
@@ -54,8 +52,7 @@ resource "random_id" "grafana_dashboards_k8s_resources_cm_name" {
   byte_length = 4
 
   keepers = {
-    data1 = filebase64sha256("${path.module}/config/dashboards/dashboards-k8s-resources/k8s-cluster-rsrc-use.json")
-    data2 = filebase64sha256("${path.module}/config/dashboards/dashboards-k8s-resources/k8s-node-rsrc-use.json")
+    data1 = filebase64sha256("${path.module}/config/dashboards/dashboards-k8s-resources/k8s-resources-node.json")
     data3 = filebase64sha256("${path.module}/config/dashboards/dashboards-k8s-resources/k8s-resources-cluster.json")
     data4 = filebase64sha256("${path.module}/config/dashboards/dashboards-k8s-resources/k8s-resources-namespace.json")
     data5 = filebase64sha256("${path.module}/config/dashboards/dashboards-k8s-resources/k8s-resources-pod.json")
@@ -71,8 +68,7 @@ resource "kubernetes_config_map" "grafana_dashboards_k8s_resources" {
   }
 
   data = {
-    "k8s-cluster-rsrc-use.json"              = file("${path.module}/config/dashboards/dashboards-k8s-resources/k8s-cluster-rsrc-use.json")
-    "k8s-node-rsrc-use.json"                 = file("${path.module}/config/dashboards/dashboards-k8s-resources/k8s-node-rsrc-use.json")
+    "k8s-resources-node.json"                = file("${path.module}/config/dashboards/dashboards-k8s-resources/k8s-resources-node.json")
     "k8s-resources-cluster.json"             = file("${path.module}/config/dashboards/dashboards-k8s-resources/k8s-resources-cluster.json")
     "k8s-resources-namespace.json"           = file("${path.module}/config/dashboards/dashboards-k8s-resources/k8s-resources-namespace.json")
     "k8s-resources-pod.json"                 = file("${path.module}/config/dashboards/dashboards-k8s-resources/k8s-resources-pod.json")

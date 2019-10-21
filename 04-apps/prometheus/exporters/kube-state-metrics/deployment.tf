@@ -54,7 +54,7 @@ resource "kubernetes_deployment" "kube_state_metrics" {
           liveness_probe {
             http_get {
               path = "/healthz"
-              port = "8080"
+              port = "8081"
             }
 
             initial_delay_seconds = 5
@@ -63,54 +63,6 @@ resource "kubernetes_deployment" "kube_state_metrics" {
 
         }
 
-        container {
-          name  = "addon-resizer"
-          image = "k8s.gcr.io/addon-resizer:1.8.5"
-
-          resources {
-            limits {
-              cpu    = "100m"
-              memory = "30Mi"
-            }
-
-            requests {
-              cpu    = "100m"
-              memory = "30Mi"
-            }
-          }
-
-          env {
-            name = "MY_POD_NAME"
-
-            value_from {
-              field_ref {
-                field_path = "metadata.name"
-              }
-            }
-          }
-
-          env {
-            name = "MY_POD_NAMESPACE"
-
-            value_from {
-              field_ref {
-                field_path = "metadata.namespace"
-              }
-            }
-          }
-
-          command = [
-            "/pod_nanny",
-            "--container=kube-state-metrics",
-            "--cpu=100m",
-            "--extra-cpu=1m",
-            "--memory=100Mi",
-            "--extra-memory=2Mi",
-            "--threshold=5",
-            "--deployment=kube-state-metrics",
-          ]
-
-        }
       }
     }
   }

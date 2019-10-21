@@ -88,18 +88,6 @@
           }
         },
         {
-          "alert": "PrometheusTSDBWALCorruptions",
-          "annotations": {
-            "description": "Prometheus {{$labels.instance}} has detected {{$value | humanize}} corruptions of the write-ahead log (WAL) over the last 3h.",
-            "summary": "Prometheus is detecting WAL corruptions."
-          },
-          "expr": "increase(tsdb_wal_corruptions_total{job=\"prometheus\"}[3h]) > 0\n",
-          "for": "4h",
-          "labels": {
-            "severity": "warning"
-          }
-        },
-        {
           "alert": "PrometheusNotIngestingSamples",
           "annotations": {
             "description": "Prometheus {{$labels.instance}} is not ingesting samples.",
@@ -114,7 +102,7 @@
         {
           "alert": "PrometheusDuplicateTimestamps",
           "annotations": {
-            "description": "Prometheus {{$labels.instance}} is dropping {{$value | humanize}} samples/s with different values but duplicated timestamp.",
+            "description": "Prometheus {{$labels.instance}} is dropping {{ printf \"%.4g\" $value  }} samples/s with different values but duplicated timestamp.",
             "summary": "Prometheus is dropping samples with duplicate timestamps."
           },
           "expr": "rate(prometheus_target_scrapes_sample_duplicate_timestamp_total{job=\"prometheus\"}[5m]) > 0\n",
@@ -126,7 +114,7 @@
         {
           "alert": "PrometheusOutOfOrderTimestamps",
           "annotations": {
-            "description": "Prometheus {{$labels.instance}} is dropping {{$value | humanize}} samples/s with timestamps arriving out of order.",
+            "description": "Prometheus {{$labels.instance}} is dropping {{ printf \"%.4g\" $value  }} samples/s with timestamps arriving out of order.",
             "summary": "Prometheus drops samples with out-of-order timestamps."
           },
           "expr": "rate(prometheus_target_scrapes_sample_out_of_order_total{job=\"prometheus\"}[5m]) > 0\n",
@@ -157,6 +145,18 @@
           "for": "15m",
           "labels": {
             "severity": "critical"
+          }
+        },
+        {
+          "alert": "PrometheusRemoteWriteDesiredShards",
+          "annotations": {
+            "description": "Prometheus {{$labels.instance}} remote write desired shards calculation wants to run {{ printf $value }} shards, which is more than the max of {{ printf `prometheus_remote_storage_shards_max{instance=\"%s\",job=\"prometheus\"}` $labels.instance | query | first | value }}.",
+            "summary": "Prometheus remote write desired shards calculation wants to run more than configured max shards."
+          },
+          "expr": "# Without max_over_time, failed scrapes could create false negatives, see\n# https://www.robustperception.io/alerting-on-gauges-in-prometheus-2-0 for details.\n(\n  max_over_time(prometheus_remote_storage_shards_desired{job=\"prometheus\"}[5m])\n> on(job, instance) group_right\n  max_over_time(prometheus_remote_storage_shards_max{job=\"prometheus\"}[5m])\n)\n",
+          "for": "15m",
+          "labels": {
+            "severity": "warning"
           }
         },
         {

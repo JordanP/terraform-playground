@@ -5,6 +5,7 @@ resource "kubernetes_service" "prometheus" {
 
     annotations = {
       "prometheus.io/scrape" = "true"
+      "prometheus.io/port"   = "9090"
     }
   }
 
