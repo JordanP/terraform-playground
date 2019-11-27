@@ -804,7 +804,7 @@
         "query": "label_values(kube_statefulset_metadata_generation, cluster)",
         "refresh": 2,
         "regex": "",
-        "sort": 0,
+        "sort": 1,
         "tagValuesQuery": "",
         "tags": [
 
@@ -830,7 +830,7 @@
         "query": "label_values(kube_statefulset_metadata_generation{job=\"kube-state-metrics\", cluster=\"$cluster\"}, namespace)",
         "refresh": 2,
         "regex": "",
-        "sort": 0,
+        "sort": 1,
         "tagValuesQuery": "",
         "tags": [
 
@@ -856,7 +856,7 @@
         "query": "label_values(kube_statefulset_metadata_generation{job=\"kube-state-metrics\", cluster=\"$cluster\", namespace=\"$namespace\"}, statefulset)",
         "refresh": 2,
         "regex": "",
-        "sort": 0,
+        "sort": 1,
         "tagValuesQuery": "",
         "tags": [
 

@@ -46,14 +46,18 @@ locals {
       config_map = kubernetes_config_map.grafana_dashboards_k8s_nodes.metadata[0].name
     },
     {
-      name       = "dashboards-k8s-resources"
-      mount_path = "/etc/grafana/dashboards/k8s-resources"
-      config_map = kubernetes_config_map.grafana_dashboards_k8s_resources.metadata[0].name
+      name       = "dashboards-k8s-resources-1"
+      mount_path = "/etc/grafana/dashboards/k8s-resources-1"
+      config_map = kubernetes_config_map.grafana_dashboards_k8s_resources_1.metadata[0].name
     },
-
     {
-      name       = "dashboards-nodes"
-      mount_path = "/etc/grafana/dashboards/nodes"
+      name       = "dashboards-k8s-resources-2"
+      mount_path = "/etc/grafana/dashboards/k8s-resources-2"
+      config_map = kubernetes_config_map.grafana_dashboards_k8s_resources_2.metadata[0].name
+    },
+    {
+      name       = "dashboards-node-exporter"
+      mount_path = "/etc/grafana/dashboards/node-exporter"
       config_map = kubernetes_config_map.grafana_dashboards_nodes.metadata[0].name
     }
   ]
@@ -89,7 +93,7 @@ resource "kubernetes_deployment" "grafana" {
         service_account_name = kubernetes_service_account.grafana.metadata.0.name
         container {
           name  = "grafana"
-          image = "grafana/grafana:6.4.3"
+          image = "grafana/grafana:6.4.4"
           env {
             name  = "GF_PATHS_CONFIG"
             value = "/etc/grafana/custom.ini"

@@ -25,90 +25,6 @@
       "collapsed": false,
       "panels": [
         {
-          "cacheTimeout": null,
-          "colorBackground": false,
-          "colorValue": false,
-          "colors": [
-            "#299c46",
-            "rgba(237, 129, 40, 0.89)",
-            "#d44a3a"
-          ],
-          "datasource": "$datasource",
-          "format": "none",
-          "gauge": {
-            "maxValue": 100,
-            "minValue": 0,
-            "show": false,
-            "thresholdLabels": false,
-            "thresholdMarkers": true
-          },
-          "gridPos": {
-
-          },
-          "id": 2,
-          "interval": null,
-          "links": [
-
-          ],
-          "mappingType": 1,
-          "mappingTypes": [
-            {
-              "name": "value to text",
-              "value": 1
-            },
-            {
-              "name": "range to text",
-              "value": 2
-            }
-          ],
-          "maxDataPoints": 100,
-          "nullPointMode": "connected",
-          "nullText": null,
-          "postfix": "",
-          "postfixFontSize": "50%",
-          "prefix": "",
-          "prefixFontSize": "50%",
-          "rangeMaps": [
-            {
-              "from": "null",
-              "text": "N/A",
-              "to": "null"
-            }
-          ],
-          "span": 2,
-          "sparkline": {
-            "fillColor": "rgba(31, 118, 189, 0.18)",
-            "full": false,
-            "lineColor": "rgb(31, 120, 193)",
-            "show": false
-          },
-          "tableColumn": "",
-          "targets": [
-            {
-              "expr": "sum(up{job=\"kube-controller-manager\"})",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "",
-              "refId": "A"
-            }
-          ],
-          "thresholds": "",
-          "title": "Up",
-          "tooltip": {
-            "shared": false
-          },
-          "type": "singlestat",
-          "valueFontSize": "80%",
-          "valueMaps": [
-            {
-              "op": "=",
-              "text": "N/A",
-              "value": "null"
-            }
-          ],
-          "valueName": "min"
-        },
-        {
           "aliasColors": {
 
           },
@@ -120,17 +36,17 @@
           "gridPos": {
 
           },
-          "id": 3,
+          "id": 2,
           "legend": {
-            "alignAsTable": "true",
+            "alignAsTable": false,
             "avg": false,
-            "current": "true",
+            "current": false,
             "max": false,
             "min": false,
-            "rightSide": "true",
-            "show": "true",
+            "rightSide": false,
+            "show": true,
             "total": false,
-            "values": "true"
+            "values": false
           },
           "lines": true,
           "linewidth": 1,
@@ -147,15 +63,16 @@
 
           ],
           "spaceLength": 10,
-          "span": 10,
-          "stack": false,
+          "span": 6,
+          "stack": true,
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(workqueue_adds_total{job=\"kube-controller-manager\", instance=~\"$instance\"}[5m])) by (instance, name)",
+              "expr": "(\n  (1 - rate(node_cpu_seconds_total{job=\"node-exporter\", mode=\"idle\", instance=\"$instance\"}[$__interval]))\n/ ignoring(cpu) group_left\n  count without (cpu)( node_cpu_seconds_total{job=\"node-exporter\", mode=\"idle\", instance=\"$instance\"})\n)\n",
               "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "{{instance}} {{name}}",
+              "interval": "1m",
+              "intervalFactor": 5,
+              "legendFormat": "{{cpu}}",
               "refId": "A"
             }
           ],
@@ -164,9 +81,9 @@
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Work Queue Add Rate",
+          "title": "CPU Usage",
           "tooltip": {
-            "shared": false,
+            "shared": true,
             "sort": 0,
             "value_type": "individual"
           },
@@ -182,19 +99,131 @@
           },
           "yaxes": [
             {
-              "format": "ops",
+              "format": "percentunit",
               "label": null,
               "logBase": 1,
-              "max": null,
-              "min": null,
+              "max": 1,
+              "min": 0,
               "show": true
             },
             {
-              "format": "ops",
+              "format": "percentunit",
+              "label": null,
+              "logBase": 1,
+              "max": 1,
+              "min": 0,
+              "show": true
+            }
+          ]
+        },
+        {
+          "aliasColors": {
+
+          },
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "$datasource",
+          "fill": 0,
+          "gridPos": {
+
+          },
+          "id": 3,
+          "legend": {
+            "alignAsTable": false,
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "rightSide": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [
+
+          ],
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "repeat": null,
+          "seriesOverrides": [
+
+          ],
+          "spaceLength": 10,
+          "span": 6,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "node_load1{job=\"node-exporter\", instance=\"$instance\"}",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "1m load average",
+              "refId": "A"
+            },
+            {
+              "expr": "node_load5{job=\"node-exporter\", instance=\"$instance\"}",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "5m load average",
+              "refId": "B"
+            },
+            {
+              "expr": "node_load15{job=\"node-exporter\", instance=\"$instance\"}",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "15m load average",
+              "refId": "C"
+            },
+            {
+              "expr": "count(node_cpu_seconds_total{job=\"node-exporter\", instance=\"$instance\", mode=\"idle\"})",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "logical cores",
+              "refId": "D"
+            }
+          ],
+          "thresholds": [
+
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Load Average",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": [
+
+            ]
+          },
+          "yaxes": [
+            {
+              "format": "short",
               "label": null,
               "logBase": 1,
               "max": null,
-              "min": null,
+              "min": 0,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": 0,
               "show": true
             }
           ]
@@ -226,15 +255,15 @@
           },
           "id": 4,
           "legend": {
-            "alignAsTable": "true",
+            "alignAsTable": false,
             "avg": false,
-            "current": "true",
+            "current": false,
             "max": false,
             "min": false,
-            "rightSide": "true",
-            "show": "true",
+            "rightSide": false,
+            "show": true,
             "total": false,
-            "values": "true"
+            "values": false
           },
           "lines": true,
           "linewidth": 1,
@@ -251,16 +280,37 @@
 
           ],
           "spaceLength": 10,
-          "span": 12,
-          "stack": false,
+          "span": 9,
+          "stack": true,
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(workqueue_depth{job=\"kube-controller-manager\", instance=~\"$instance\"}[5m])) by (instance, name)",
+              "expr": "(\n  node_memory_MemTotal_bytes{job=\"node-exporter\", instance=\"$instance\"}\n-\n  node_memory_MemFree_bytes{job=\"node-exporter\", instance=\"$instance\"}\n-\n  node_memory_Buffers_bytes{job=\"node-exporter\", instance=\"$instance\"}\n-\n  node_memory_Cached_bytes{job=\"node-exporter\", instance=\"$instance\"}\n)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{instance}} {{name}}",
+              "legendFormat": "memory used",
               "refId": "A"
+            },
+            {
+              "expr": "node_memory_Buffers_bytes{job=\"node-exporter\", instance=\"$instance\"}",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "memory buffers",
+              "refId": "B"
+            },
+            {
+              "expr": "node_memory_Cached_bytes{job=\"node-exporter\", instance=\"$instance\"}",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "memory cached",
+              "refId": "C"
+            },
+            {
+              "expr": "node_memory_MemFree_bytes{job=\"node-exporter\", instance=\"$instance\"}",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "memory free",
+              "refId": "D"
             }
           ],
           "thresholds": [
@@ -268,9 +318,9 @@
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Work Queue Depth",
+          "title": "Memory Usage",
           "tooltip": {
-            "shared": false,
+            "shared": true,
             "sort": 0,
             "value_type": "individual"
           },
@@ -286,7 +336,7 @@
           },
           "yaxes": [
             {
-              "format": "short",
+              "format": "bytes",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -294,7 +344,7 @@
               "show": true
             },
             {
-              "format": "short",
+              "format": "bytes",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -302,110 +352,87 @@
               "show": true
             }
           ]
-        }
-      ],
-      "repeat": null,
-      "repeatIteration": null,
-      "repeatRowId": null,
-      "showTitle": false,
-      "title": "Dashboard Row",
-      "titleSize": "h6",
-      "type": "row"
-    },
-    {
-      "collapse": false,
-      "collapsed": false,
-      "panels": [
+        },
         {
-          "aliasColors": {
-
-          },
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
+          "cacheTimeout": null,
+          "colorBackground": false,
+          "colorValue": false,
+          "colors": [
+            "rgba(50, 172, 45, 0.97)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(245, 54, 54, 0.9)"
+          ],
           "datasource": "$datasource",
-          "fill": 1,
+          "format": "percent",
+          "gauge": {
+            "maxValue": 100,
+            "minValue": 0,
+            "show": true,
+            "thresholdLabels": false,
+            "thresholdMarkers": true
+          },
           "gridPos": {
 
           },
           "id": 5,
-          "legend": {
-            "alignAsTable": "true",
-            "avg": false,
-            "current": "true",
-            "max": false,
-            "min": false,
-            "rightSide": "true",
-            "show": "true",
-            "total": false,
-            "values": "true"
-          },
-          "lines": true,
-          "linewidth": 1,
+          "interval": null,
           "links": [
 
           ],
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "repeat": null,
-          "seriesOverrides": [
-
+          "mappingType": 1,
+          "mappingTypes": [
+            {
+              "name": "value to text",
+              "value": 1
+            },
+            {
+              "name": "range to text",
+              "value": 2
+            }
           ],
-          "spaceLength": 10,
-          "span": 12,
-          "stack": false,
-          "steppedLine": false,
+          "maxDataPoints": 100,
+          "nullPointMode": "connected",
+          "nullText": null,
+          "postfix": "",
+          "postfixFontSize": "50%",
+          "prefix": "",
+          "prefixFontSize": "50%",
+          "rangeMaps": [
+            {
+              "from": "null",
+              "text": "N/A",
+              "to": "null"
+            }
+          ],
+          "span": 3,
+          "sparkline": {
+            "fillColor": "rgba(31, 118, 189, 0.18)",
+            "full": false,
+            "lineColor": "rgb(31, 120, 193)",
+            "show": false
+          },
+          "tableColumn": "",
           "targets": [
             {
-              "expr": "histogram_quantile(0.99, sum(rate(workqueue_queue_duration_seconds_bucket{job=\"kube-controller-manager\", instance=~\"$instance\"}[5m])) by (instance, name, le))",
+              "expr": "100 -\n(\n  node_memory_MemAvailable_bytes{job=\"node-exporter\", instance=\"$instance\"}\n/\n  node_memory_MemTotal_bytes{job=\"node-exporter\", instance=\"$instance\"}\n* 100\n)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{instance}} {{name}}",
+              "legendFormat": "",
               "refId": "A"
             }
           ],
-          "thresholds": [
-
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Work Queue Latency",
-          "tooltip": {
-            "shared": false,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": [
-
-            ]
-          },
-          "yaxes": [
+          "thresholds": "80, 90",
+          "title": "Memory Usage",
+          "type": "singlestat",
+          "valueFontSize": "80%",
+          "valueMaps": [
             {
-              "format": "s",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "s",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
+              "op": "=",
+              "text": "N/A",
+              "value": "null"
             }
-          ]
+          ],
+          "valueName": "current"
         }
       ],
       "repeat": null,
@@ -428,7 +455,7 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "$datasource",
-          "fill": 1,
+          "fill": 0,
           "gridPos": {
 
           },
@@ -456,40 +483,43 @@
           "renderer": "flot",
           "repeat": null,
           "seriesOverrides": [
-
+            {
+              "alias": "/ read| written/",
+              "yaxis": 1
+            },
+            {
+              "alias": "/ io time/",
+              "yaxis": 2
+            }
           ],
           "spaceLength": 10,
-          "span": 4,
+          "span": 6,
           "stack": false,
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(rate(rest_client_requests_total{job=\"kube-controller-manager\", instance=~\"$instance\",code=~\"2..\"}[5m]))",
+              "expr": "rate(node_disk_read_bytes_total{job=\"node-exporter\", instance=\"$instance\", device!~\"dm.*\"}[$__interval])",
               "format": "time_series",
+              "interval": "1m",
               "intervalFactor": 2,
-              "legendFormat": "2xx",
+              "legendFormat": "{{device}} read",
               "refId": "A"
             },
             {
-              "expr": "sum(rate(rest_client_requests_total{job=\"kube-controller-manager\", instance=~\"$instance\",code=~\"3..\"}[5m]))",
+              "expr": "rate(node_disk_written_bytes_total{job=\"node-exporter\", instance=\"$instance\", device!~\"dm.*\"}[$__interval])",
               "format": "time_series",
+              "interval": "1m",
               "intervalFactor": 2,
-              "legendFormat": "3xx",
+              "legendFormat": "{{device}} written",
               "refId": "B"
             },
             {
-              "expr": "sum(rate(rest_client_requests_total{job=\"kube-controller-manager\", instance=~\"$instance\",code=~\"4..\"}[5m]))",
+              "expr": "rate(node_disk_io_time_seconds_total{job=\"node-exporter\", instance=\"$instance\", device!~\"dm.*\"}[$__interval])",
               "format": "time_series",
+              "interval": "1m",
               "intervalFactor": 2,
-              "legendFormat": "4xx",
+              "legendFormat": "{{device}} io time",
               "refId": "C"
-            },
-            {
-              "expr": "sum(rate(rest_client_requests_total{job=\"kube-controller-manager\", instance=~\"$instance\",code=~\"5..\"}[5m]))",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "5xx",
-              "refId": "D"
             }
           ],
           "thresholds": [
@@ -497,9 +527,9 @@
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Kube API Request Rate",
+          "title": "Disk I/O",
           "tooltip": {
-            "shared": false,
+            "shared": true,
             "sort": 0,
             "value_type": "individual"
           },
@@ -515,7 +545,7 @@
           },
           "yaxes": [
             {
-              "format": "ops",
+              "format": "bytes",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -523,7 +553,7 @@
               "show": true
             },
             {
-              "format": "ops",
+              "format": "s",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -568,19 +598,33 @@
           "renderer": "flot",
           "repeat": null,
           "seriesOverrides": [
-
+            {
+              "alias": "used",
+              "color": "#E0B400"
+            },
+            {
+              "alias": "available",
+              "color": "#73BF69"
+            }
           ],
           "spaceLength": 10,
-          "span": 8,
-          "stack": false,
+          "span": 6,
+          "stack": true,
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.99, sum(rate(rest_client_request_latency_seconds_bucket{job=\"kube-controller-manager\", instance=~\"$instance\", verb=\"POST\"}[5m])) by (verb, url, le))",
+              "expr": "sum(\n  max by (device) (\n    node_filesystem_size_bytes{job=\"node-exporter\", instance=\"$instance\", fstype!~\"tmpfs|nsfs|vfat\"}\n  -\n    node_filesystem_avail_bytes{job=\"node-exporter\", instance=\"$instance\", fstype!~\"tmpfs|nsfs|vfat\"}\n  )\n)\n",
               "format": "time_series",
               "intervalFactor": 2,
-              "legendFormat": "{{verb}} {{url}}",
+              "legendFormat": "used",
               "refId": "A"
+            },
+            {
+              "expr": "sum(\n  max by (device) (\n    node_filesystem_avail_bytes{job=\"node-exporter\", instance=\"$instance\", fstype!~\"tmpfs|nsfs|vfat\"}\n  )\n)\n",
+              "format": "time_series",
+              "intervalFactor": 2,
+              "legendFormat": "available",
+              "refId": "B"
             }
           ],
           "thresholds": [
@@ -588,9 +632,9 @@
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Post Request Latency 99th Quantile",
+          "title": "Disk Space Usage",
           "tooltip": {
-            "shared": false,
+            "shared": true,
             "sort": 0,
             "value_type": "individual"
           },
@@ -606,7 +650,7 @@
           },
           "yaxes": [
             {
-              "format": "s",
+              "format": "bytes",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -614,7 +658,7 @@
               "show": true
             },
             {
-              "format": "s",
+              "format": "bytes",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -644,21 +688,21 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "$datasource",
-          "fill": 1,
+          "fill": 0,
           "gridPos": {
 
           },
           "id": 8,
           "legend": {
-            "alignAsTable": "true",
+            "alignAsTable": false,
             "avg": false,
-            "current": "true",
+            "current": false,
             "max": false,
             "min": false,
-            "rightSide": "true",
-            "show": "true",
+            "rightSide": false,
+            "show": true,
             "total": false,
-            "values": "true"
+            "values": false
           },
           "lines": true,
           "linewidth": 1,
@@ -675,15 +719,16 @@
 
           ],
           "spaceLength": 10,
-          "span": 12,
+          "span": 6,
           "stack": false,
           "steppedLine": false,
           "targets": [
             {
-              "expr": "histogram_quantile(0.99, sum(rate(rest_client_request_latency_seconds_bucket{job=\"kube-controller-manager\", instance=~\"$instance\", verb=\"GET\"}[5m])) by (verb, url, le))",
+              "expr": "rate(node_network_receive_bytes_total{job=\"node-exporter\", instance=\"$instance\", device!=\"lo\"}[$__interval])",
               "format": "time_series",
+              "interval": "1m",
               "intervalFactor": 2,
-              "legendFormat": "{{verb}} {{url}}",
+              "legendFormat": "{{device}}",
               "refId": "A"
             }
           ],
@@ -692,9 +737,9 @@
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Get Request Latency 99th Quantile",
+          "title": "Network Received",
           "tooltip": {
-            "shared": false,
+            "shared": true,
             "sort": 0,
             "value_type": "individual"
           },
@@ -710,7 +755,7 @@
           },
           "yaxes": [
             {
-              "format": "s",
+              "format": "bytes",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -718,7 +763,7 @@
               "show": true
             },
             {
-              "format": "s",
+              "format": "bytes",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -726,20 +771,7 @@
               "show": true
             }
           ]
-        }
-      ],
-      "repeat": null,
-      "repeatIteration": null,
-      "repeatRowId": null,
-      "showTitle": false,
-      "title": "Dashboard Row",
-      "titleSize": "h6",
-      "type": "row"
-    },
-    {
-      "collapse": false,
-      "collapsed": false,
-      "panels": [
+        },
         {
           "aliasColors": {
 
@@ -748,7 +780,7 @@
           "dashLength": 10,
           "dashes": false,
           "datasource": "$datasource",
-          "fill": 1,
+          "fill": 0,
           "gridPos": {
 
           },
@@ -779,15 +811,16 @@
 
           ],
           "spaceLength": 10,
-          "span": 4,
+          "span": 6,
           "stack": false,
           "steppedLine": false,
           "targets": [
             {
-              "expr": "process_resident_memory_bytes{job=\"kube-controller-manager\",instance=~\"$instance\"}",
+              "expr": "rate(node_network_transmit_bytes_total{job=\"node-exporter\", instance=\"$instance\", device!=\"lo\"}[$__interval])",
               "format": "time_series",
+              "interval": "1m",
               "intervalFactor": 2,
-              "legendFormat": "{{instance}}",
+              "legendFormat": "{{device}}",
               "refId": "A"
             }
           ],
@@ -796,9 +829,9 @@
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Memory",
+          "title": "Network Transmitted",
           "tooltip": {
-            "shared": false,
+            "shared": true,
             "sort": 0,
             "value_type": "individual"
           },
@@ -818,7 +851,7 @@
               "label": null,
               "logBase": 1,
               "max": null,
-              "min": null,
+              "min": 0,
               "show": true
             },
             {
@@ -826,189 +859,7 @@
               "label": null,
               "logBase": 1,
               "max": null,
-              "min": null,
-              "show": true
-            }
-          ]
-        },
-        {
-          "aliasColors": {
-
-          },
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$datasource",
-          "fill": 1,
-          "gridPos": {
-
-          },
-          "id": 10,
-          "legend": {
-            "alignAsTable": false,
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [
-
-          ],
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "repeat": null,
-          "seriesOverrides": [
-
-          ],
-          "spaceLength": 10,
-          "span": 4,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "rate(process_cpu_seconds_total{job=\"kube-controller-manager\",instance=~\"$instance\"}[5m])",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "{{instance}}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [
-
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "CPU usage",
-          "tooltip": {
-            "shared": false,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": [
-
-            ]
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
               "min": 0,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": 0,
-              "show": true
-            }
-          ]
-        },
-        {
-          "aliasColors": {
-
-          },
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "$datasource",
-          "fill": 1,
-          "gridPos": {
-
-          },
-          "id": 11,
-          "legend": {
-            "alignAsTable": false,
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [
-
-          ],
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "repeat": null,
-          "seriesOverrides": [
-
-          ],
-          "spaceLength": 10,
-          "span": 4,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "go_goroutines{job=\"kube-controller-manager\",instance=~\"$instance\"}",
-              "format": "time_series",
-              "intervalFactor": 2,
-              "legendFormat": "{{instance}}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [
-
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Goroutines",
-          "tooltip": {
-            "shared": false,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": [
-
-            ]
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
               "show": true
             }
           ]
@@ -1026,7 +877,7 @@
   "schemaVersion": 14,
   "style": "dark",
   "tags": [
-    "kubernetes-mixin"
+
   ],
   "templating": {
     "list": [
@@ -1053,17 +904,17 @@
         },
         "datasource": "$datasource",
         "hide": 0,
-        "includeAll": true,
+        "includeAll": false,
         "label": null,
         "multi": false,
         "name": "instance",
         "options": [
 
         ],
-        "query": "label_values(process_cpu_seconds_total{job=\"kube-controller-manager\"}, instance)",
+        "query": "label_values(node_exporter_build_info{job=\"node-exporter\"}, instance)",
         "refresh": 2,
         "regex": "",
-        "sort": 1,
+        "sort": 0,
         "tagValuesQuery": "",
         "tags": [
 
@@ -1104,7 +955,7 @@
     ]
   },
   "timezone": "",
-  "title": "Kubernetes / Controller Manager",
-  "uid": "72e0e05bef5099e5f049b05fdc429ed4",
+  "title": "Nodes",
+  "uid": "fa49a4706d07a042595b664c87fb33ea",
   "version": 0
 }

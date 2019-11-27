@@ -222,8 +222,8 @@ resource "kubernetes_cluster_role_binding" "csi_gce_pd_resizer_binding" {
     name      = kubernetes_cluster_role.csi_gce_pd_resizer_role.metadata.0.name
   }
   subject {
-    kind = "ServiceAccount"
-    name = kubernetes_service_account.csi_controller_sa.metadata.0.name
+    kind      = "ServiceAccount"
+    name      = kubernetes_service_account.csi_controller_sa.metadata.0.name
     namespace = kubernetes_service_account.csi_controller_sa.metadata.0.namespace
   }
 }

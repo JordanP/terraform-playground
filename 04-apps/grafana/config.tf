@@ -48,32 +48,50 @@ resource "kubernetes_config_map" "grafana_dashboards_k8s_nodes" {
   }
 }
 
-resource "random_id" "grafana_dashboards_k8s_resources_cm_name" {
+resource "random_id" "grafana_dashboards_k8s_resources_1_cm_name" {
   byte_length = 4
 
   keepers = {
-    data1 = filebase64sha256("${path.module}/config/dashboards/dashboards-k8s-resources/k8s-resources-node.json")
-    data3 = filebase64sha256("${path.module}/config/dashboards/dashboards-k8s-resources/k8s-resources-cluster.json")
-    data4 = filebase64sha256("${path.module}/config/dashboards/dashboards-k8s-resources/k8s-resources-namespace.json")
-    data5 = filebase64sha256("${path.module}/config/dashboards/dashboards-k8s-resources/k8s-resources-pod.json")
-    data6 = filebase64sha256("${path.module}/config/dashboards/dashboards-k8s-resources/k8s-resources-workload.json")
-    data7 = filebase64sha256("${path.module}/config/dashboards/dashboards-k8s-resources/k8s-resources-workloads-namespace.json")
+    data3 = filebase64sha256("${path.module}/config/dashboards/dashboards-k8s-resources-1/k8s-resources-cluster.json")
+    data4 = filebase64sha256("${path.module}/config/dashboards/dashboards-k8s-resources-1/k8s-resources-namespace.json")
+    data1 = filebase64sha256("${path.module}/config/dashboards/dashboards-k8s-resources-1/k8s-resources-node.json")
   }
 }
 
-resource "kubernetes_config_map" "grafana_dashboards_k8s_resources" {
+resource "kubernetes_config_map" "grafana_dashboards_k8s_resources_1" {
   metadata {
-    name      = "grafana-dashboards-k8s-resources-${random_id.grafana_dashboards_k8s_resources_cm_name.hex}"
+    name      = "grafana-dashboards-k8s-resources-${random_id.grafana_dashboards_k8s_resources_1_cm_name.hex}"
     namespace = var.namespace
   }
 
   data = {
-    "k8s-resources-node.json"                = file("${path.module}/config/dashboards/dashboards-k8s-resources/k8s-resources-node.json")
-    "k8s-resources-cluster.json"             = file("${path.module}/config/dashboards/dashboards-k8s-resources/k8s-resources-cluster.json")
-    "k8s-resources-namespace.json"           = file("${path.module}/config/dashboards/dashboards-k8s-resources/k8s-resources-namespace.json")
-    "k8s-resources-pod.json"                 = file("${path.module}/config/dashboards/dashboards-k8s-resources/k8s-resources-pod.json")
-    "k8s-resources-workload.json"            = file("${path.module}/config/dashboards/dashboards-k8s-resources/k8s-resources-workload.json")
-    "k8s-resources-workloads-namespace.json" = file("${path.module}/config/dashboards/dashboards-k8s-resources/k8s-resources-workloads-namespace.json")
+    "k8s-resources-cluster.json"   = file("${path.module}/config/dashboards/dashboards-k8s-resources-1/k8s-resources-cluster.json")
+    "k8s-resources-namespace.json" = file("${path.module}/config/dashboards/dashboards-k8s-resources-1/k8s-resources-namespace.json")
+    "k8s-resources-node.json"      = file("${path.module}/config/dashboards/dashboards-k8s-resources-1/k8s-resources-node.json")
+  }
+}
+
+
+resource "random_id" "grafana_dashboards_k8s_resources_2_cm_name" {
+  byte_length = 4
+
+  keepers = {
+    data5 = filebase64sha256("${path.module}/config/dashboards/dashboards-k8s-resources-2/k8s-resources-pod.json")
+    data6 = filebase64sha256("${path.module}/config/dashboards/dashboards-k8s-resources-2/k8s-resources-workload.json")
+    data7 = filebase64sha256("${path.module}/config/dashboards/dashboards-k8s-resources-2/k8s-resources-workloads-namespace.json")
+  }
+}
+
+resource "kubernetes_config_map" "grafana_dashboards_k8s_resources_2" {
+  metadata {
+    name      = "grafana-dashboards-k8s-resources-${random_id.grafana_dashboards_k8s_resources_2_cm_name.hex}"
+    namespace = var.namespace
+  }
+
+  data = {
+    "k8s-resources-pod.json"                 = file("${path.module}/config/dashboards/dashboards-k8s-resources-2/k8s-resources-pod.json")
+    "k8s-resources-workload.json"            = file("${path.module}/config/dashboards/dashboards-k8s-resources-2/k8s-resources-workload.json")
+    "k8s-resources-workloads-namespace.json" = file("${path.module}/config/dashboards/dashboards-k8s-resources-2/k8s-resources-workloads-namespace.json")
   }
 }
 
@@ -160,7 +178,7 @@ resource "random_id" "grafana_dashboards_nodes_cm_name" {
   byte_length = 4
 
   keepers = {
-    data1 = filebase64sha256("${path.module}/config/dashboards/node-exporter-full.json")
+    data1 = filebase64sha256("${path.module}/config/dashboards/dashboards-node-exporter/nodes.json")
   }
 }
 
@@ -171,7 +189,7 @@ resource "kubernetes_config_map" "grafana_dashboards_nodes" {
   }
 
   data = {
-    "node-exporter-full.json" = file("${path.module}/config/dashboards/node-exporter-full.json")
+    "node-exporter-full.json" = file("${path.module}/config/dashboards/dashboards-node-exporter/nodes.json")
   }
 }
 

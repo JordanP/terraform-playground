@@ -3,9 +3,9 @@ set -ueo pipefail
 
 if [ -n "${MAIN_HOSTNAME:-}" ]; then
     echo "Setting up postgres replica"
-    # remove all data before doing the basebackup
-    pg_ctl -D "$PGDATA" -m fast -w stop
 
+    # remove all data before running pg_basebackup
+    pg_ctl -D "$PGDATA" -m fast -w stop
     rm -rf "${PGDATA:?}"/*
 
     until pg_isready -h "$MAIN_HOSTNAME"; do echo 'waiting for db'; sleep 1; done

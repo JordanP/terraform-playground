@@ -25,6 +25,7 @@ resource "random_id" "prometheus_rules_cm_name" {
     data2 = filebase64sha256("${path.module}/config/rules/kube.yaml")
     data3 = filebase64sha256("${path.module}/config/rules/prom.yaml")
     data4 = filebase64sha256("${path.module}/config/rules/typhoon.yaml")
+    data5 = filebase64sha256("${path.module}/config/rules/node-exporter.yaml")
   }
 }
 
@@ -35,9 +36,10 @@ resource "kubernetes_config_map" "prometheus_rules" {
   }
 
   data = {
-    "etcd.yaml"    = file("${path.module}/config/rules/etcd.yaml")
-    "kube.yaml"    = file("${path.module}/config/rules/kube.yaml")
-    "prom.yaml"    = file("${path.module}/config/rules/prom.yaml")
-    "typhoon.yaml" = file("${path.module}/config/rules/typhoon.yaml")
+    "etcd.yaml"          = file("${path.module}/config/rules/etcd.yaml")
+    "kube.yaml"          = file("${path.module}/config/rules/kube.yaml")
+    "prom.yaml"          = file("${path.module}/config/rules/prom.yaml")
+    "typhoon.yaml"       = file("${path.module}/config/rules/typhoon.yaml")
+    "node-exporter.yaml" = file("${path.module}/config/rules/node-exporter.yaml")
   }
 }
