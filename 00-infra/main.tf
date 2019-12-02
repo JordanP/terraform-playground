@@ -53,28 +53,8 @@ module "google_cloud_jordan" {
 
   # optional
   controller_type    = "n1-standard-1"
-  worker_count       = 1
+  worker_count       = 3
   worker_type        = "n1-standard-2"
   worker_preemptible = true
-  worker_node_labels = ["node_type=ingress"]
-}
-
-module "google_cloud_jordan_worker_pool" {
-  source = "git::https://github.com/poseidon/typhoon//google-cloud/container-linux/kubernetes/workers?ref=4775e9d0f72a7edd7358163d8aa114e1242cc20c"
-
-  # Google Cloud
-  region       = "europe-west4"
-  network      = module.google_cloud_jordan.network_name
-  cluster_name = local.cluster_name
-
-  # configuration
-  name               = "default"
-  kubeconfig         = module.google_cloud_jordan.kubeconfig
-  ssh_authorized_key = file(pathexpand("~/.ssh/id_rsa.pub"))
-
-  # optional
-  worker_count = 2
-  machine_type = "n1-standard-2"
-  preemptible  = true
-  node_labels  = ["node_type=default"]
+  worker_node_labels = ["node_type=standard"]
 }

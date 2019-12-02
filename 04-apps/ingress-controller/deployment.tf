@@ -28,7 +28,7 @@ resource "kubernetes_deployment" "ingress" {
         service_account_name            = kubernetes_service_account.ingress.metadata[0].name
         automount_service_account_token = true
         node_selector = {
-          node_type = "ingress"
+          node_type = "standard"
         }
         container {
           name  = "nginx-ingress-controller"
