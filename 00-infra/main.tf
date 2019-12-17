@@ -39,7 +39,7 @@ resource "google_compute_forwarding_rule" "gitlab" {
 }
 
 module "google_cloud_jordan" {
-  source = "git::https://github.com/poseidon/typhoon//google-cloud/container-linux/kubernetes?ref=4775e9d0f72a7edd7358163d8aa114e1242cc20c"
+  source = "git::https://github.com/poseidon/typhoon//google-cloud/container-linux/kubernetes?ref=0ecb995890e2f6cf28d25177a74d7055cf1a7ab1"
 
   # Google Cloud
   cluster_name  = local.cluster_name
@@ -49,7 +49,6 @@ module "google_cloud_jordan" {
 
   # configuration
   ssh_authorized_key = file(pathexpand("~/.ssh/id_rsa.pub"))
-  asset_dir          = pathexpand("~/.secrets/clusters/tf-playground")
 
   # optional
   controller_type    = "n1-standard-1"
@@ -57,4 +56,10 @@ module "google_cloud_jordan" {
   worker_type        = "n1-standard-2"
   worker_preemptible = true
   worker_node_labels = ["node_type=standard"]
+}
+
+# Obtain cluster kubeconfig
+resource "local_file" "kubeconfig_jordan" {
+  content  = module.google_cloud_jordan.kubeconfig-admin
+  filename = pathexpand("~/.secrets/clusters/tf-playground/kubeconfig")
 }

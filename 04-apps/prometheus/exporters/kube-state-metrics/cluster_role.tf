@@ -128,13 +128,25 @@ resource "kubernetes_cluster_role" "kube_state_metrics" {
 
   rule {
     api_groups = ["storage.k8s.io"]
-    resources  = ["storageclasses"]
+    resources  = ["storageclasses", "volumeattachments"]
     verbs      = ["list", "watch"]
   }
 
   rule {
     api_groups = ["autoscaling.k8s.io"]
     resources  = ["verticalpodautoscalers"]
+    verbs      = ["list", "watch"]
+  }
+
+  rule {
+    api_groups = ["admissionregistration.k8s.io"]
+    resources  = ["mutatingwebhookconfigurations", "validatingwebhookconfigurations"]
+    verbs      = ["list", "watch"]
+  }
+
+  rule {
+    api_groups = ["networking.k8s.io"]
+    resources  = ["networkpolicies"]
     verbs      = ["list", "watch"]
   }
 }

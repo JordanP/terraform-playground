@@ -10,7 +10,7 @@ provider "helm" {
   version = "~> 0.10"
 
   kubernetes {
-    config_path = "${local.asset_dir}/auth/kubeconfig"
+    config_path = pathexpand("~/.secrets/clusters/tf-playground/kubeconfig")
   }
   install_tiller  = false
   service_account = kubernetes_deployment.tiller_with_rbac.spec[0].template[0].spec[0].service_account_name
@@ -18,7 +18,6 @@ provider "helm" {
 }
 
 provider "kubernetes" {
-  version = "~> 1.10"
-
-  config_path = "${local.asset_dir}/auth/kubeconfig"
+  version     = "~> 1.10"
+  config_path = pathexpand("~/.secrets/clusters/tf-playground/kubeconfig")
 }

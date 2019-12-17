@@ -8,5 +8,5 @@ provider "google" {
 
 provider "kubernetes" {
   version     = "~> 1.10"
-  config_path = "/home/jordan/.secrets/clusters/tf-playground/auth/kubeconfig"
+  config_path = pathexpand("~/.secrets/clusters/tf-playground/kubeconfig")
 }

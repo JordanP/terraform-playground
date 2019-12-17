@@ -19,7 +19,6 @@ data "terraform_remote_state" "infra" {
 }
 
 locals {
-  asset_dir           = "/home/jordan/.secrets/clusters/tf-playground"
   gitlab_release_name = "my-gitlab"
 }
 
