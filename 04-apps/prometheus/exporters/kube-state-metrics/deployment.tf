@@ -34,7 +34,7 @@ resource "kubernetes_deployment" "kube_state_metrics" {
         automount_service_account_token = true
         container {
           name  = "kube-state-metrics"
-          image = "quay.io/coreos/kube-state-metrics:v1.9.0-rc.1"
+          image = "quay.io/coreos/kube-state-metrics:v1.9.3"
 
           port {
             name           = "metrics"

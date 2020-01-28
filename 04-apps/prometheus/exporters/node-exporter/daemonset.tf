@@ -85,6 +85,14 @@ resource "kubernetes_daemonset" "node_exporter" {
             read_only  = "true"
           }
         }
+        toleration {
+          key      = "node-role.kubernetes.io/master"
+          operator = "Exists"
+        }
+        toleration {
+          key      = "node.kubernetes.io/not-ready"
+          operator = "Exists"
+        }
 
         volume {
           name = "proc"

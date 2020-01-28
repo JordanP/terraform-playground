@@ -32,7 +32,7 @@ resource "kubernetes_deployment" "ingress" {
         }
         container {
           name  = "nginx-ingress-controller"
-          image = "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.26.1"
+          image = "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.27.1"
           args = [
             "/nginx-ingress-controller",
             "--configmap=$(POD_NAMESPACE)/${kubernetes_config_map.nginx_configuration.metadata.0.name}",
@@ -110,7 +110,7 @@ resource "kubernetes_deployment" "ingress" {
               add  = ["NET_BIND_SERVICE", ]
               drop = ["ALL", ]
             }
-            run_as_user = 33
+            run_as_user = 101
           }
         }
         termination_grace_period_seconds = 300
