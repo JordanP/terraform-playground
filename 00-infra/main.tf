@@ -39,7 +39,7 @@ resource "google_compute_forwarding_rule" "gitlab" {
 }
 
 module "google_cloud_jordan" {
-  source = "git::https://github.com/poseidon/typhoon//google-cloud/container-linux/kubernetes?ref=0ecb995890e2f6cf28d25177a74d7055cf1a7ab1"
+  source = "git::https://github.com/poseidon/typhoon//google-cloud/container-linux/kubernetes?ref=5643ad525fce51a399972d6a0b0750e564732061"
 
   # Google Cloud
   cluster_name  = local.cluster_name

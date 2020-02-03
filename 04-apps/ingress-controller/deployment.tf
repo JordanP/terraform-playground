@@ -4,7 +4,7 @@ resource "kubernetes_deployment" "ingress" {
     namespace = (var.namespace != "default" ? kubernetes_namespace.ingress[0].metadata.0.name : "default")
   }
   spec {
-    replicas = 1
+    replicas = 2
     strategy {
       rolling_update {
         max_unavailable = 1
@@ -32,7 +32,7 @@ resource "kubernetes_deployment" "ingress" {
         }
         container {
           name  = "nginx-ingress-controller"
-          image = "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.27.1"
+          image = "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.28.0"
           args = [
             "/nginx-ingress-controller",
             "--configmap=$(POD_NAMESPACE)/${kubernetes_config_map.nginx_configuration.metadata.0.name}",

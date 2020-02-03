@@ -24,10 +24,5 @@ resource "kubernetes_service" "ingress" {
       port        = 443
       target_port = "443"
     }
-    port {
-      name        = "metrics"
-      port        = 10254
-      target_port = 10254
-    }
   }
 }
