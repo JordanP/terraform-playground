@@ -18,7 +18,7 @@
   "links": [
 
   ],
-  "refresh": "",
+  "refresh": "10s",
   "rows": [
     {
       "collapse": false,
@@ -122,15 +122,15 @@
           },
           "id": 3,
           "legend": {
-            "alignAsTable": "true",
+            "alignAsTable": true,
             "avg": false,
-            "current": "true",
+            "current": true,
             "max": false,
             "min": false,
-            "rightSide": "true",
-            "show": "true",
+            "rightSide": true,
+            "show": true,
             "total": false,
-            "values": "true"
+            "values": true
           },
           "lines": true,
           "linewidth": 1,
@@ -234,15 +234,15 @@
           },
           "id": 4,
           "legend": {
-            "alignAsTable": "true",
+            "alignAsTable": true,
             "avg": false,
-            "current": "true",
+            "current": true,
             "max": false,
             "min": false,
-            "rightSide": "true",
-            "show": "true",
+            "rightSide": true,
+            "show": true,
             "total": false,
-            "values": "true"
+            "values": true
           },
           "lines": true,
           "linewidth": 1,
@@ -575,15 +575,15 @@
           },
           "id": 7,
           "legend": {
-            "alignAsTable": "true",
+            "alignAsTable": true,
             "avg": false,
-            "current": "true",
+            "current": true,
             "max": false,
             "min": false,
-            "rightSide": "true",
-            "show": "true",
+            "rightSide": true,
+            "show": true,
             "total": false,
-            "values": "true"
+            "values": true
           },
           "lines": true,
           "linewidth": 1,
@@ -957,8 +957,8 @@
     "list": [
       {
         "current": {
-          "text": "Prometheus",
-          "value": "Prometheus"
+          "text": "default",
+          "value": "default"
         },
         "hide": 0,
         "label": null,

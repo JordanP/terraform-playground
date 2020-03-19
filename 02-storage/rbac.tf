@@ -46,10 +46,10 @@ resource "kubernetes_secret" "cloud_sa" {
   }
 }
 
-resource "kubernetes_service_account" "csi_node_sa" {
+resource "kubernetes_service_account" "csi_gce_pd_node_sa" {
   automount_service_account_token = true
   metadata {
-    name      = "csi-node-sa"
+    name      = "csi-gce-pd-node-sa"
     namespace = kubernetes_namespace.gce_pd_csi.metadata.0.name
   }
 }
@@ -76,7 +76,7 @@ resource "kubernetes_cluster_role_binding" "driver_registrar_binding" {
   }
   subject {
     kind      = "ServiceAccount"
-    name      = kubernetes_service_account.csi_node_sa.metadata.0.name
+    name      = kubernetes_service_account.csi_gce_pd_node_sa.metadata.0.name
     namespace = kubernetes_namespace.gce_pd_csi.metadata.0.name
   }
 }
@@ -84,14 +84,14 @@ resource "kubernetes_cluster_role_binding" "driver_registrar_binding" {
 resource "kubernetes_service_account" "csi_controller_sa" {
   automount_service_account_token = true
   metadata {
-    name      = "csi-controller-sa"
+    name      = "csi-gce-pd-controller-sa"
     namespace = kubernetes_namespace.gce_pd_csi.metadata.0.name
   }
 }
 
 resource "kubernetes_cluster_role" "external_provisioner_role" {
   metadata {
-    name = "external-provisioner-role"
+    name = "csi-gce-pd-provisioner-role"
   }
   rule {
     verbs      = ["get", "list", "watch", "create", "delete"]
@@ -128,7 +128,7 @@ resource "kubernetes_cluster_role" "external_provisioner_role" {
 
 resource "kubernetes_cluster_role_binding" "csi_controller_provisioner_binding" {
   metadata {
-    name = "csi-controller-provisioner-binding"
+    name = "csi-gce-pd-controller-provisioner-binding"
   }
   role_ref {
     api_group = "rbac.authorization.k8s.io"
@@ -144,7 +144,7 @@ resource "kubernetes_cluster_role_binding" "csi_controller_provisioner_binding" 
 
 resource "kubernetes_cluster_role" "external_attacher_role" {
   metadata {
-    name = "external-attacher-role"
+    name = "csi-gce-pd-attacher-role"
   }
   rule {
     api_groups = [""]
@@ -166,11 +166,16 @@ resource "kubernetes_cluster_role" "external_attacher_role" {
     resources  = ["volumeattachments"]
     verbs      = ["get", "list", "watch", "update", "patch"]
   }
+  rule {
+    api_groups = ["storage.k8s.io"]
+    resources  = ["volumeattachments/status"]
+    verbs      = ["patch"]
+  }
 }
 
 resource "kubernetes_cluster_role_binding" "csi_controller_attacher_binding" {
   metadata {
-    name = "csi-controller-attacher-binding"
+    name = "csi-gce-pd-controller-attacher-binding"
   }
 
   role_ref {
@@ -225,5 +230,32 @@ resource "kubernetes_cluster_role_binding" "csi_gce_pd_resizer_binding" {
     kind      = "ServiceAccount"
     name      = kubernetes_service_account.csi_controller_sa.metadata.0.name
     namespace = kubernetes_service_account.csi_controller_sa.metadata.0.namespace
+  }
+}
+
+resource "kubernetes_cluster_role" "csi_gce_pd_node_deploy" {
+  metadata {
+    name = "csi-gce-pd-node-deploy"
+  }
+  rule {
+    verbs          = ["use"]
+    api_groups     = ["policy"]
+    resources      = ["podsecuritypolicies"]
+    resource_names = ["csi-gce-pd-node-psp"]
+  }
+}
+
+resource "kubernetes_cluster_role_binding" "csi_gce-pd_node" {
+  metadata {
+    name = "csi-gce-pd-node"
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = kubernetes_cluster_role.csi_gce_pd_node_deploy.metadata.0.name
+  }
+  subject {
+    kind = "ServiceAccount"
+    name = kubernetes_service_account.csi_gce_pd_node_sa.metadata.0.name
   }
 }

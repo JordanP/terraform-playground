@@ -132,7 +132,9 @@ resource "kubernetes_stateful_set" "postgresql_replica" {
             default_mode = "0750"
           }
         }
-        termination_grace_period_seconds = 30
+        # It is recommended that in a Kubernetes environment you set the terminationGracePeriodSeconds parameter
+        # to be two (2) seconds higher than the PGCTLTIMEOUT value that defaults to 60.
+        termination_grace_period_seconds = 62
         affinity {
           pod_anti_affinity {
             required_during_scheduling_ignored_during_execution {

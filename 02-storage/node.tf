@@ -16,7 +16,7 @@ resource "kubernetes_daemonset" "node" {
         }
       }
       spec {
-        service_account_name            = kubernetes_service_account.csi_node_sa.metadata.0.name
+        service_account_name            = kubernetes_service_account.csi_gce_pd_node_sa.metadata.0.name
         automount_service_account_token = true
         container {
           name  = "csi-driver-registrar"
@@ -54,7 +54,7 @@ resource "kubernetes_daemonset" "node" {
           security_context {
             privileged = true
           }
-          image = "gke.gcr.io/gcp-compute-persistent-disk-csi-driver:v0.6.0-gke.0"
+          image = "gke.gcr.io/gcp-compute-persistent-disk-csi-driver:v0.7.0-gke.0"
           args  = ["--v=5", "--endpoint=unix:/csi/csi.sock"]
           env {
             name  = "GOOGLE_APPLICATION_CREDENTIALS"

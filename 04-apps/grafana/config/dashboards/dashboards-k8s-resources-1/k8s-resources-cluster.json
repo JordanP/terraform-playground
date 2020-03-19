@@ -2455,8 +2455,8 @@
     "list": [
       {
         "current": {
-          "text": "Prometheus",
-          "value": "Prometheus"
+          "text": "default",
+          "value": "default"
         },
         "hide": 0,
         "label": null,
@@ -2505,7 +2505,7 @@
           "text": "5m",
           "value": "5m"
         },
-        "datasource": "prometheus",
+        "datasource": "$datasource",
         "hide": 2,
         "includeAll": false,
         "label": null,
@@ -2529,6 +2529,33 @@
         ],
         "tagsQuery": "",
         "type": "interval",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "text": "",
+          "value": ""
+        },
+        "datasource": "$datasource",
+        "hide": 2,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "cluster",
+        "options": [
+
+        ],
+        "query": "label_values(node_cpu_seconds_total, cluster)",
+        "refresh": 2,
+        "regex": "",
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [
+
+        ],
+        "tagsQuery": "",
+        "type": "query",
         "useTags": false
       }
     ]

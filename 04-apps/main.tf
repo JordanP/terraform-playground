@@ -68,7 +68,7 @@ module "postgresql" {
   source                = "./postgres"
   namespace             = "postgres"
   image                 = "postgres:11.5"
-  replica_count         = 3
+  replica_count         = 1
   disk_size             = 20
   master_node_selector  = null
   replica_node_selector = null

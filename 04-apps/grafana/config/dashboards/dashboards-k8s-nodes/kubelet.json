@@ -18,7 +18,7 @@
   "links": [
 
   ],
-  "refresh": "",
+  "refresh": "10s",
   "rows": [
     {
       "collapse": false,
@@ -555,15 +555,15 @@
           },
           "id": 8,
           "legend": {
-            "alignAsTable": "true",
+            "alignAsTable": true,
             "avg": false,
-            "current": "true",
+            "current": true,
             "max": false,
             "min": false,
-            "rightSide": "true",
-            "show": "true",
+            "rightSide": true,
+            "show": true,
             "total": false,
-            "values": "true"
+            "values": true
           },
           "lines": true,
           "linewidth": 1,
@@ -646,15 +646,15 @@
           },
           "id": 9,
           "legend": {
-            "alignAsTable": "true",
+            "alignAsTable": true,
             "avg": false,
-            "current": "true",
+            "current": true,
             "max": false,
             "min": false,
-            "rightSide": "true",
-            "show": "true",
+            "rightSide": true,
+            "show": true,
             "total": false,
-            "values": "true"
+            "values": true
           },
           "lines": true,
           "linewidth": 1,
@@ -750,15 +750,15 @@
           },
           "id": 10,
           "legend": {
-            "alignAsTable": "true",
+            "alignAsTable": true,
             "avg": false,
-            "current": "true",
+            "current": true,
             "max": false,
             "min": false,
-            "rightSide": "true",
-            "show": "true",
+            "rightSide": true,
+            "show": true,
             "total": false,
-            "values": "true"
+            "values": true
           },
           "lines": true,
           "linewidth": 1,
@@ -854,15 +854,15 @@
           },
           "id": 11,
           "legend": {
-            "alignAsTable": "true",
+            "alignAsTable": true,
             "avg": false,
-            "current": "true",
+            "current": true,
             "max": false,
             "min": false,
-            "rightSide": "true",
-            "show": "true",
+            "rightSide": true,
+            "show": true,
             "total": false,
-            "values": "true"
+            "values": true
           },
           "lines": true,
           "linewidth": 1,
@@ -952,15 +952,15 @@
           },
           "id": 12,
           "legend": {
-            "alignAsTable": "true",
+            "alignAsTable": true,
             "avg": false,
-            "current": "true",
+            "current": true,
             "max": false,
             "min": false,
-            "rightSide": "true",
-            "show": "true",
+            "rightSide": true,
+            "show": true,
             "total": false,
-            "values": "true"
+            "values": true
           },
           "lines": true,
           "linewidth": 1,
@@ -1063,17 +1063,17 @@
           },
           "id": 13,
           "legend": {
-            "alignAsTable": "true",
+            "alignAsTable": true,
             "avg": false,
-            "current": "true",
-            "hideEmpty": "true",
-            "hideZero": "true",
+            "current": true,
+            "hideEmpty": true,
+            "hideZero": true,
             "max": false,
             "min": false,
-            "rightSide": "true",
-            "show": "true",
+            "rightSide": true,
+            "show": true,
             "total": false,
-            "values": "true"
+            "values": true
           },
           "lines": true,
           "linewidth": 1,
@@ -1156,17 +1156,17 @@
           },
           "id": 14,
           "legend": {
-            "alignAsTable": "true",
+            "alignAsTable": true,
             "avg": false,
-            "current": "true",
-            "hideEmpty": "true",
-            "hideZero": "true",
+            "current": true,
+            "hideEmpty": true,
+            "hideZero": true,
             "max": false,
             "min": false,
-            "rightSide": "true",
-            "show": "true",
+            "rightSide": true,
+            "show": true,
             "total": false,
-            "values": "true"
+            "values": true
           },
           "lines": true,
           "linewidth": 1,
@@ -1262,17 +1262,17 @@
           },
           "id": 15,
           "legend": {
-            "alignAsTable": "true",
+            "alignAsTable": true,
             "avg": false,
-            "current": "true",
-            "hideEmpty": "true",
-            "hideZero": "true",
+            "current": true,
+            "hideEmpty": true,
+            "hideZero": true,
             "max": false,
             "min": false,
-            "rightSide": "true",
+            "rightSide": true,
             "show": true,
             "total": false,
-            "values": "true"
+            "values": true
           },
           "lines": true,
           "linewidth": 1,
@@ -1368,15 +1368,15 @@
           },
           "id": 16,
           "legend": {
-            "alignAsTable": "true",
+            "alignAsTable": true,
             "avg": false,
-            "current": "true",
+            "current": true,
             "max": false,
             "min": false,
-            "rightSide": "true",
-            "show": "true",
+            "rightSide": true,
+            "show": true,
             "total": false,
-            "values": "true"
+            "values": true
           },
           "lines": true,
           "linewidth": 1,
@@ -1459,15 +1459,15 @@
           },
           "id": 17,
           "legend": {
-            "alignAsTable": "true",
+            "alignAsTable": true,
             "avg": false,
-            "current": "true",
+            "current": true,
             "max": false,
             "min": false,
-            "rightSide": "true",
-            "show": "true",
+            "rightSide": true,
+            "show": true,
             "total": false,
-            "values": "true"
+            "values": true
           },
           "lines": true,
           "linewidth": 1,
@@ -1564,15 +1564,15 @@
           },
           "id": 18,
           "legend": {
-            "alignAsTable": "true",
+            "alignAsTable": true,
             "avg": false,
-            "current": "true",
+            "current": true,
             "max": false,
             "min": false,
-            "rightSide": "true",
-            "show": "true",
+            "rightSide": true,
+            "show": true,
             "total": false,
-            "values": "true"
+            "values": true
           },
           "lines": true,
           "linewidth": 1,
@@ -1655,15 +1655,15 @@
           },
           "id": 19,
           "legend": {
-            "alignAsTable": "true",
+            "alignAsTable": true,
             "avg": false,
-            "current": "true",
+            "current": true,
             "max": false,
             "min": false,
-            "rightSide": "true",
-            "show": "true",
+            "rightSide": true,
+            "show": true,
             "total": false,
-            "values": "true"
+            "values": true
           },
           "lines": true,
           "linewidth": 1,
@@ -1759,15 +1759,15 @@
           },
           "id": 20,
           "legend": {
-            "alignAsTable": "true",
+            "alignAsTable": true,
             "avg": false,
-            "current": "true",
+            "current": true,
             "max": false,
             "min": false,
-            "rightSide": "true",
-            "show": "true",
+            "rightSide": true,
+            "show": true,
             "total": false,
-            "values": "true"
+            "values": true
           },
           "lines": true,
           "linewidth": 1,
@@ -1988,15 +1988,15 @@
           },
           "id": 22,
           "legend": {
-            "alignAsTable": "true",
+            "alignAsTable": true,
             "avg": false,
-            "current": "true",
+            "current": true,
             "max": false,
             "min": false,
-            "rightSide": "true",
-            "show": "true",
+            "rightSide": true,
+            "show": true,
             "total": false,
-            "values": "true"
+            "values": true
           },
           "lines": true,
           "linewidth": 1,
@@ -2370,8 +2370,8 @@
     "list": [
       {
         "current": {
-          "text": "Prometheus",
-          "value": "Prometheus"
+          "text": "default",
+          "value": "default"
         },
         "hide": 0,
         "label": null,
@@ -2424,7 +2424,7 @@
         "options": [
 
         ],
-        "query": "label_values(kubelet_runtime_operations{cluster=\"$cluster\", job=\"kubelet\"}, instance)",
+        "query": "label_values(kubelet_runtime_operations_total{cluster=\"$cluster\", job=\"kubelet\"}, instance)",
         "refresh": 2,
         "regex": "",
         "sort": 1,
