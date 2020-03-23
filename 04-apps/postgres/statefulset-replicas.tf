@@ -118,11 +118,7 @@ resource "kubernetes_stateful_set" "postgresql_replica" {
         volume {
           name = "postgres-config"
           config_map {
-            name = kubernetes_config_map.postgres_conf.metadata.0.name
-            items {
-              key  = "postgresql.conf"
-              path = "postgresql.conf"
-            }
+            name = kubernetes_config_map.postgres_conf_replica.metadata.0.name
           }
         }
         volume {

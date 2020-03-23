@@ -12,6 +12,6 @@ variable "disk_type" {
 variable "node_selector" {
   type = map(string)
   default = {
-    node_type = "rabbitmq"
+    node_type = "standard"
   }
 }

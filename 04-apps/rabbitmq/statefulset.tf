@@ -65,7 +65,7 @@ resource "kubernetes_stateful_set" "rabbitmq" {
           lifecycle {
             pre_stop {
               exec {
-                command = ["rabbitmqctl", "stop"]
+                command = ["rabbitmqctl", "shutdown"]
               }
             }
           }

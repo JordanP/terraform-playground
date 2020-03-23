@@ -1,17 +1,27 @@
-resource "random_id" "postgres_conf" {
-  byte_length = 8
-  keepers = {
-    "postgresql.conf" = var.postgresql_conf
-  }
-}
-
-resource "kubernetes_config_map" "postgres_conf" {
+resource "kubernetes_config_map" "postgres_conf_primary" {
   metadata {
-    name      = "postgresql-config-${random_id.postgres_conf.hex}"
+    name      = "postgresql-config-primary"
     namespace = (var.namespace != "default" ? kubernetes_namespace.postgresql[0].metadata.0.name : "default")
   }
   data = {
-    "postgresql.conf" = var.postgresql_conf
+    "postgresql.conf" = templatefile(var.postgresql_conf_template, {
+      "max_connections" : var.postgresql_primary_max_connections
+      "work_mem" : var.postgresql_primary_work_mem
+    })
+  }
+}
+
+resource "kubernetes_config_map" "postgres_conf_replica" {
+  metadata {
+    name      = "postgresql-config-replica"
+    namespace = (var.namespace != "default" ? kubernetes_namespace.postgresql[0].metadata.0.name : "default")
+  }
+  data = {
+    "postgresql.conf" = templatefile(var.postgresql_conf_template, {
+      # Needs to be higher than on primary otherwise replica won't start.
+      "max_connections" : max(var.postgresql_replica_max_connections, var.postgresql_primary_max_connections)
+      "work_mem" : var.postgresql_replica_work_mem
+    })
   }
 }
 

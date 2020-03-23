@@ -73,24 +73,21 @@ module "postgresql" {
   master_node_selector  = null
   replica_node_selector = null
 
-  postgresql_conf = <<EOF
-listen_addresses = '*'
-max_connections = 50
-shared_buffers = 1792MB
-effective_cache_size = 5376MB
-maintenance_work_mem = 448MB
-checkpoint_completion_target = 0.7
-wal_buffers = 16MB
-default_statistics_target = 100
-random_page_cost = 1.1
-effective_io_concurrency = 200
-work_mem = 36700kB
-min_wal_size = 1GB
-max_wal_size = 2GB
-max_worker_processes = 2
-max_parallel_workers_per_gather = 1
-max_parallel_workers = 2
-EOF
+  postgresql_conf_template           = abspath("postgres/files/postgresql.conf.tpl")
+  postgresql_primary_max_connections = 50
+  postgresql_primary_work_mem        = "36700kB"
+  # Needs to be higher than primary:
+  # hot standby is not possible because max_connections = XX is a lower setting than on the master server
+  postgresql_replica_max_connections = 60
+  postgresql_replica_work_mem        = "30MB"
+}
+
+module "pgbouncer" {
+  source                       = "./pgbouncer"
+  namespace                    = "postgres"
+  pg_primary_hostname          = module.postgresql.postgres_rw_service
+  pg_primary_postgres_password = module.postgresql.postgres_password
+  max_client_conn              = 100
 }
 
 # terraform destroy -auto-approve -target module.gitlab
