@@ -133,12 +133,12 @@ resource "kubernetes_stateful_set" "postgres_master" {
             default_mode = "0750"
           }
         }
-        # Note(JordanP): we may want to reduce this period. As this is the master, we are not that interested in graceful
+        # Note(JordanP): As this is the master, we are not that interested in graceful
         # shutdown. We want this to restart ASAP to limit downtime.
         # When a pod is deleted, it is sent a SIGTERM which PG interprets as "Smart Shutdown mode", which "lets existing
         # sessions end their work normally". Maybe we should investigate a "preStop" hook that would do a PG
-        # "Fast Shutdown".
-        termination_grace_period_seconds = 30
+        # "Fast Shutdown", but it's brutal and probably better to have a short "smart shutdown" period.
+        termination_grace_period_seconds = 5
       }
     }
     volume_claim_template {

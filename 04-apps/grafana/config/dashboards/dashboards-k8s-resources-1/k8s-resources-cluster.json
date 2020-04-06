@@ -56,7 +56,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "1 - avg(rate(node_cpu_seconds_total{mode=\"idle\", cluster=\"$cluster\"}[1m]))",
+              "expr": "1 - avg(rate(node_cpu_seconds_total{mode=\"idle\", cluster=\"$cluster\"}[$__interval]))",
               "format": "time_series",
               "instant": true,
               "intervalFactor": 2,
@@ -1558,7 +1558,7 @@
           ],
           "targets": [
             {
-              "expr": "sum(irate(container_network_receive_bytes_total{cluster=\"$cluster\", namespace=~\".+\"}[$interval])) by (namespace)",
+              "expr": "sum(irate(container_network_receive_bytes_total{cluster=\"$cluster\", namespace=~\".+\"}[$__interval])) by (namespace)",
               "format": "table",
               "instant": true,
               "intervalFactor": 2,
@@ -1567,7 +1567,7 @@
               "step": 10
             },
             {
-              "expr": "sum(irate(container_network_transmit_bytes_total{cluster=\"$cluster\", namespace=~\".+\"}[$interval])) by (namespace)",
+              "expr": "sum(irate(container_network_transmit_bytes_total{cluster=\"$cluster\", namespace=~\".+\"}[$__interval])) by (namespace)",
               "format": "table",
               "instant": true,
               "intervalFactor": 2,
@@ -1576,7 +1576,7 @@
               "step": 10
             },
             {
-              "expr": "sum(irate(container_network_receive_packets_total{cluster=\"$cluster\", namespace=~\".+\"}[$interval])) by (namespace)",
+              "expr": "sum(irate(container_network_receive_packets_total{cluster=\"$cluster\", namespace=~\".+\"}[$__interval])) by (namespace)",
               "format": "table",
               "instant": true,
               "intervalFactor": 2,
@@ -1585,7 +1585,7 @@
               "step": 10
             },
             {
-              "expr": "sum(irate(container_network_transmit_packets_total{cluster=\"$cluster\", namespace=~\".+\"}[$interval])) by (namespace)",
+              "expr": "sum(irate(container_network_transmit_packets_total{cluster=\"$cluster\", namespace=~\".+\"}[$__interval])) by (namespace)",
               "format": "table",
               "instant": true,
               "intervalFactor": 2,
@@ -1594,7 +1594,7 @@
               "step": 10
             },
             {
-              "expr": "sum(irate(container_network_receive_packets_dropped_total{cluster=\"$cluster\", namespace=~\".+\"}[$interval])) by (namespace)",
+              "expr": "sum(irate(container_network_receive_packets_dropped_total{cluster=\"$cluster\", namespace=~\".+\"}[$__interval])) by (namespace)",
               "format": "table",
               "instant": true,
               "intervalFactor": 2,
@@ -1603,7 +1603,7 @@
               "step": 10
             },
             {
-              "expr": "sum(irate(container_network_transmit_packets_dropped_total{cluster=\"$cluster\", namespace=~\".+\"}[$interval])) by (namespace)",
+              "expr": "sum(irate(container_network_transmit_packets_dropped_total{cluster=\"$cluster\", namespace=~\".+\"}[$__interval])) by (namespace)",
               "format": "table",
               "instant": true,
               "intervalFactor": 2,
@@ -1703,7 +1703,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(irate(container_network_receive_bytes_total{cluster=\"$cluster\", namespace=~\".+\"}[$interval])) by (namespace)",
+              "expr": "sum(irate(container_network_receive_bytes_total{cluster=\"$cluster\", namespace=~\".+\"}[$__interval])) by (namespace)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{namespace}}",
@@ -1801,7 +1801,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(irate(container_network_transmit_bytes_total{cluster=\"$cluster\", namespace=~\".+\"}[$interval])) by (namespace)",
+              "expr": "sum(irate(container_network_transmit_bytes_total{cluster=\"$cluster\", namespace=~\".+\"}[$__interval])) by (namespace)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{namespace}}",
@@ -1899,7 +1899,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "avg(irate(container_network_receive_bytes_total{cluster=\"$cluster\", namespace=~\".+\"}[$interval])) by (namespace)",
+              "expr": "avg(irate(container_network_receive_bytes_total{cluster=\"$cluster\", namespace=~\".+\"}[$__interval])) by (namespace)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{namespace}}",
@@ -1997,7 +1997,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "avg(irate(container_network_transmit_bytes_total{cluster=\"$cluster\", namespace=~\".+\"}[$interval])) by (namespace)",
+              "expr": "avg(irate(container_network_transmit_bytes_total{cluster=\"$cluster\", namespace=~\".+\"}[$__interval])) by (namespace)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{namespace}}",
@@ -2095,7 +2095,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(irate(container_network_receive_packets_total{cluster=\"$cluster\", namespace=~\".+\"}[$interval])) by (namespace)",
+              "expr": "sum(irate(container_network_receive_packets_total{cluster=\"$cluster\", namespace=~\".+\"}[$__interval])) by (namespace)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{namespace}}",
@@ -2193,7 +2193,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(irate(container_network_receive_packets_total{cluster=\"$cluster\", namespace=~\".+\"}[$interval])) by (namespace)",
+              "expr": "sum(irate(container_network_receive_packets_total{cluster=\"$cluster\", namespace=~\".+\"}[$__interval])) by (namespace)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{namespace}}",
@@ -2291,7 +2291,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(irate(container_network_receive_packets_dropped_total{cluster=\"$cluster\", namespace=~\".+\"}[$interval])) by (namespace)",
+              "expr": "sum(irate(container_network_receive_packets_dropped_total{cluster=\"$cluster\", namespace=~\".+\"}[$__interval])) by (namespace)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{namespace}}",
@@ -2389,7 +2389,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(irate(container_network_transmit_packets_dropped_total{cluster=\"$cluster\", namespace=~\".+\"}[$interval])) by (namespace)",
+              "expr": "sum(irate(container_network_transmit_packets_dropped_total{cluster=\"$cluster\", namespace=~\".+\"}[$__interval])) by (namespace)",
               "format": "time_series",
               "intervalFactor": 2,
               "legendFormat": "{{namespace}}",
@@ -2494,41 +2494,6 @@
         ],
         "tagsQuery": "",
         "type": "query",
-        "useTags": false
-      },
-      {
-        "allValue": null,
-        "auto": false,
-        "auto_count": 30,
-        "auto_min": "10s",
-        "current": {
-          "text": "5m",
-          "value": "5m"
-        },
-        "datasource": "$datasource",
-        "hide": 2,
-        "includeAll": false,
-        "label": null,
-        "multi": false,
-        "name": "interval",
-        "options": [
-          {
-            "selected": true,
-            "text": "4h",
-            "value": "4h"
-          }
-        ],
-        "query": "4h",
-        "refresh": 2,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 1,
-        "tagValuesQuery": "",
-        "tags": [
-
-        ],
-        "tagsQuery": "",
-        "type": "interval",
         "useTags": false
       },
       {

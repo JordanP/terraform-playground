@@ -94,7 +94,9 @@ resource "kubernetes_daemonset" "node" {
             mount_path = "/sys"
             name       = "sys"
           }
-
+        }
+        node_selector = {
+          "kubernetes.io/os" = "linux"
         }
         volume {
           name = "registration-dir"
@@ -157,6 +159,9 @@ resource "kubernetes_daemonset" "node" {
           secret {
             secret_name = kubernetes_secret.cloud_sa.metadata.0.name
           }
+        }
+        toleration {
+          operator = "Exists"
         }
       }
     }

@@ -35,7 +35,6 @@ resource "kubernetes_config_map" "postgres_initd_script" {
   }
 }
 
-
 resource "random_id" "postgres_password" {
   byte_length = 16
 }
@@ -46,7 +45,7 @@ resource "random_id" "replica_password" {
 
 resource "kubernetes_secret" "postgres" {
   metadata {
-    name      = "postgres-${random_id.postgres_password.hex}"
+    name      = "postgres"
     namespace = (var.namespace != "default" ? kubernetes_namespace.postgresql[0].metadata.0.name : "default")
   }
   data = {

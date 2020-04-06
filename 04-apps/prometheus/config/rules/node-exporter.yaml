@@ -1,6 +1,55 @@
 {
   "groups": [
     {
+      "name": "node-exporter.rules",
+      "rules": [
+        {
+          "expr": "count without (cpu) (\n  count without (mode) (\n    node_cpu_seconds_total{job=\"node-exporter\"}\n  )\n)\n",
+          "record": "instance:node_num_cpu:sum"
+        },
+        {
+          "expr": "1 - avg without (cpu, mode) (\n  rate(node_cpu_seconds_total{job=\"node-exporter\", mode=\"idle\"}[1m])\n)\n",
+          "record": "instance:node_cpu_utilisation:rate1m"
+        },
+        {
+          "expr": "(\n  node_load1{job=\"node-exporter\"}\n/\n  instance:node_num_cpu:sum{job=\"node-exporter\"}\n)\n",
+          "record": "instance:node_load1_per_cpu:ratio"
+        },
+        {
+          "expr": "1 - (\n  node_memory_MemAvailable_bytes{job=\"node-exporter\"}\n/\n  node_memory_MemTotal_bytes{job=\"node-exporter\"}\n)\n",
+          "record": "instance:node_memory_utilisation:ratio"
+        },
+        {
+          "expr": "rate(node_vmstat_pgmajfault{job=\"node-exporter\"}[1m])\n",
+          "record": "instance:node_vmstat_pgmajfault:rate1m"
+        },
+        {
+          "expr": "rate(node_disk_io_time_seconds_total{job=\"node-exporter\", device!~\"dm.*\"}[1m])\n",
+          "record": "instance_device:node_disk_io_time_seconds:rate1m"
+        },
+        {
+          "expr": "rate(node_disk_io_time_weighted_seconds_total{job=\"node-exporter\", device!~\"dm.*\"}[1m])\n",
+          "record": "instance_device:node_disk_io_time_weighted_seconds:rate1m"
+        },
+        {
+          "expr": "sum without (device) (\n  rate(node_network_receive_bytes_total{job=\"node-exporter\", device!=\"lo\"}[1m])\n)\n",
+          "record": "instance:node_network_receive_bytes_excluding_lo:rate1m"
+        },
+        {
+          "expr": "sum without (device) (\n  rate(node_network_transmit_bytes_total{job=\"node-exporter\", device!=\"lo\"}[1m])\n)\n",
+          "record": "instance:node_network_transmit_bytes_excluding_lo:rate1m"
+        },
+        {
+          "expr": "sum without (device) (\n  rate(node_network_receive_drop_total{job=\"node-exporter\", device!=\"lo\"}[1m])\n)\n",
+          "record": "instance:node_network_receive_drop_excluding_lo:rate1m"
+        },
+        {
+          "expr": "sum without (device) (\n  rate(node_network_transmit_drop_total{job=\"node-exporter\", device!=\"lo\"}[1m])\n)\n",
+          "record": "instance:node_network_transmit_drop_excluding_lo:rate1m"
+        }
+      ]
+    },
+    {
       "name": "node-exporter",
       "rules": [
         {
@@ -119,6 +168,41 @@
           },
           "expr": "increase(node_network_transmit_errs_total[2m]) > 10\n",
           "for": "1h",
+          "labels": {
+            "severity": "warning"
+          }
+        },
+        {
+          "alert": "NodeHighNumberConntrackEntriesUsed",
+          "annotations": {
+            "description": "{{ $value | humanizePercentage }} of conntrack entries are used",
+            "summary": "Number of conntrack are getting close to the limit"
+          },
+          "expr": "(node_nf_conntrack_entries / node_nf_conntrack_entries_limit) > 0.75\n",
+          "labels": {
+            "severity": "warning"
+          }
+        },
+        {
+          "alert": "NodeClockSkewDetected",
+          "annotations": {
+            "message": "Clock on {{ $labels.instance }} is out of sync by more than 300s. Ensure NTP is configured correctly on this host.",
+            "summary": "Clock skew detected."
+          },
+          "expr": "(\n  node_timex_offset_seconds > 0.05\nand\n  deriv(node_timex_offset_seconds[5m]) >= 0\n)\nor\n(\n  node_timex_offset_seconds < -0.05\nand\n  deriv(node_timex_offset_seconds[5m]) <= 0\n)\n",
+          "for": "10m",
+          "labels": {
+            "severity": "warning"
+          }
+        },
+        {
+          "alert": "NodeClockNotSynchronising",
+          "annotations": {
+            "message": "Clock on {{ $labels.instance }} is not synchronising. Ensure NTP is configured on this host.",
+            "summary": "Clock not synchronising."
+          },
+          "expr": "min_over_time(node_timex_sync_status[5m]) == 0\n",
+          "for": "10m",
           "labels": {
             "severity": "warning"
           }

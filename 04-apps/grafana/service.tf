@@ -5,7 +5,7 @@ resource "kubernetes_service" "grafana" {
 
     annotations = {
       "prometheus.io/scrape" = "true"
-      "prometheus.io/port"   = "10254'"
+      "prometheus.io/port"   = "8080'"
     }
   }
 

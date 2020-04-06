@@ -3,7 +3,7 @@ output "monitoring_hostname" {
 }
 
 output "certificate" {
-  value     = acme_certificate.default.certificate_pem
+  value     = "${acme_certificate.default.certificate_pem}${acme_certificate.default.issuer_pem}"
   sensitive = true
 }
 

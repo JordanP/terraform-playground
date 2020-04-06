@@ -17,11 +17,6 @@ resource "kubernetes_service" "pgbouncer" {
       name = "pgbouncer"
     }
     type = "ClusterIP"
-    # Headless service: no kube-proxy (no load balancing or proxying done)
-    cluster_ip = "None"
-    # For headless Services that define selectors, the endpoints controller creates
-    # Endpoints records in the API, and modifies the DNS configuration to return records
-    # (addresses) that point directly to the Pods backing the Service
     selector = {
       app = "pg-bouncer"
     }

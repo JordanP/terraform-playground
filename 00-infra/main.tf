@@ -39,7 +39,7 @@ resource "google_compute_forwarding_rule" "gitlab" {
 }
 
 module "google_cloud_jordan" {
-  source = "git::https://github.com/poseidon/typhoon//google-cloud/container-linux/kubernetes?ref=5643ad525fce51a399972d6a0b0750e564732061"
+  source = "git::https://github.com/poseidon/typhoon//google-cloud/container-linux/kubernetes?ref=d47d40b51789166b64e57791ede306ebc2fae0c7"
 
   # Google Cloud
   cluster_name  = local.cluster_name
@@ -51,9 +51,9 @@ module "google_cloud_jordan" {
   ssh_authorized_key = file(pathexpand("~/.ssh/id_rsa.pub"))
 
   # optional
-  controller_type    = "n1-standard-1"
+  controller_type    = "e2-small"
   worker_count       = 3
-  worker_type        = "n1-standard-2"
+  worker_type        = "e2-medium"
   worker_preemptible = true
   worker_node_labels = ["node_type=standard"]
 }
