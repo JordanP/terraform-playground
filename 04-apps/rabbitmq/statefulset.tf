@@ -144,7 +144,7 @@ resource "kubernetes_stateful_set" "rabbitmq" {
             name = "RABBITMQ_ERLANG_COOKIE"
             value_from {
               secret_key_ref {
-                name = kubernetes_secret.rabbitmq_config.metadata.0.name
+                name = kubernetes_secret.rabbitmq.metadata.0.name
                 key  = "erlang-cookie"
               }
             }
@@ -165,7 +165,7 @@ resource "kubernetes_stateful_set" "rabbitmq" {
         volume {
           name = "configmap"
           config_map {
-            name = kubernetes_config_map.rabbitmq_config.metadata.0.name
+            name = kubernetes_config_map.rabbitmq.metadata.0.name
           }
         }
         volume {

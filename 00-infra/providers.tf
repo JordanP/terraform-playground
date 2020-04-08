@@ -6,13 +6,12 @@ provider "google" {
   region      = "europe-west4"
 }
 
-
 provider "ct" {
   version = "0.5.0"
 }
 
 provider "acme" {
-  version = "~> 1.4"
+  version = "~> 1.5"
 
   server_url = "https://acme-v02.api.letsencrypt.org/directory"
 }

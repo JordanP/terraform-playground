@@ -27,9 +27,7 @@ resource "kubernetes_deployment" "ingress" {
       spec {
         service_account_name            = kubernetes_service_account.ingress.metadata[0].name
         automount_service_account_token = true
-        node_selector = {
-          node_type = "standard"
-        }
+        node_selector                   = var.node_selector
         container {
           name  = "nginx-ingress-controller"
           image = "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.30.0"

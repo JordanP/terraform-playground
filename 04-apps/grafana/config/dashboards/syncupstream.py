@@ -12,7 +12,7 @@ urls = [
     "https://raw.githubusercontent.com/poseidon/typhoon/master/addons/grafana/dashboards-k8s-resources-1.yaml",
     "https://raw.githubusercontent.com/poseidon/typhoon/master/addons/grafana/dashboards-k8s-resources-2.yaml",
     "https://raw.githubusercontent.com/poseidon/typhoon/master/addons/grafana/dashboards-k8s.yaml",
-    "https://raw.githubusercontent.com/poseidon/typhoon/master/addons/grafana/dashboards-nginx-ingress.yaml"
+    "https://raw.githubusercontent.com/poseidon/typhoon/master/addons/grafana/dashboards-nginx-ingress.yaml",
     "https://raw.githubusercontent.com/poseidon/typhoon/master/addons/grafana/dashboards-prom.yaml",
     "https://raw.githubusercontent.com/poseidon/typhoon/master/addons/grafana/dashboards-node-exporter.yaml",
 ]

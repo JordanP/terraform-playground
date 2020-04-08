@@ -102,3 +102,13 @@ module "gitlab" {
   tls_certificate     = data.terraform_remote_state.infra.outputs.certificate
   tls_private_key     = data.terraform_remote_state.infra.outputs.private_key
 }
+
+output "redis_password" {
+  value     = module.redis.redis_password
+  sensitive = true
+}
+
+output "postgres_password" {
+  value     = module.postgresql.postgres_password
+  sensitive = true
+}

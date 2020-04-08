@@ -1,37 +1,20 @@
 locals {
-  app-domains = [
-    "monitoring",
-  ]
-
-  gitlab-domains = [
-    "gitlab",
-    "registry",
-    "minio",
-  ]
+  domains = {
+    monitoring = module.google_cloud_jordan.ingress_static_ipv4
+    gitlab     = google_compute_forwarding_rule.gitlab.ip_address
+    registry   = google_compute_forwarding_rule.gitlab.ip_address
+    minio      = google_compute_forwarding_rule.gitlab.ip_address
+  }
 }
 
 resource "google_dns_record_set" "apps" {
-  count = length(local.app-domains)
+  for_each = local.domains
 
   managed_zone = local.dns_zone_name
-  name         = "${element(local.app-domains, count.index)}.${local.dns_zone}."
+  name         = "${each.key}.${local.dns_zone}."
   type         = "A"
   ttl          = 300
 
-  rrdatas = [
-    module.google_cloud_jordan.ingress_static_ipv4,
-  ]
+  rrdatas = [each.value]
 }
 
-resource "google_dns_record_set" "gitlab" {
-  count = length(local.gitlab-domains)
-
-  managed_zone = local.dns_zone_name
-  name         = "${element(local.gitlab-domains, count.index)}.${local.dns_zone}."
-  type         = "A"
-  ttl          = 300
-
-  rrdatas = [
-    google_compute_forwarding_rule.gitlab.ip_address,
-  ]
-}

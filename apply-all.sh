@@ -6,4 +6,4 @@ do
   cd "$d" || exit
   terraform apply -auto-approve && sleep 60
   cd .. || exit
-done < <(find . -maxdepth 1 -mindepth 1 -type d -iname "0*" -print0)
+done < <(find . -maxdepth 1 -mindepth 1 -type d -iname "0*" -print0 | sort -z)

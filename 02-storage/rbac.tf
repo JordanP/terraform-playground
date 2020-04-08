@@ -245,7 +245,7 @@ resource "kubernetes_cluster_role" "csi_gce_pd_node_deploy" {
   }
 }
 
-resource "kubernetes_cluster_role_binding" "csi_gce-pd_node" {
+resource "kubernetes_cluster_role_binding" "csi_gce_pd_node" {
   metadata {
     name = "csi-gce-pd-node"
   }

@@ -31,11 +31,26 @@ EOF
   }
 }
 
-
-resource "kubernetes_config_map" "rabbitmq_config" {
+resource "kubernetes_config_map" "rabbitmq" {
   metadata {
-    name      = "rabbitmq-config-${random_id.config_map_suffix.hex}"
+    name      = "rabbitmq-${random_id.config_map_suffix.hex}"
     namespace = (var.namespace != "default" ? kubernetes_namespace.rabbitmq[0].metadata.0.name : "default")
   }
   data = random_id.config_map_suffix.keepers
+}
+
+resource "random_string" "erlang_cookie" {
+  length  = 48
+  special = false
+}
+
+resource "kubernetes_secret" "rabbitmq" {
+  metadata {
+    name      = "rabbitmq"
+    namespace = (var.namespace != "default" ? kubernetes_namespace.rabbitmq[0].metadata.0.name : "default")
+  }
+
+  data = {
+    erlang-cookie = random_string.erlang_cookie.result
+  }
 }

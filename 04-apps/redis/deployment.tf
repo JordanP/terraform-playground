@@ -85,7 +85,7 @@ resource "kubernetes_deployment" "redis" {
             read_only  = true
           }
           volume_mount {
-            mount_path = "/data/redis"
+            mount_path = local.data_path
             name       = "redis-data"
           }
           liveness_probe {

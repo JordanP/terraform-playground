@@ -22,7 +22,7 @@ default_pool_size = ${var.default_pool_size}
 max_client_conn = ${var.max_client_conn}
 ;; Close connections which are in "IDLE in transaction" state longer than this many *seconds*.
 idle_transaction_timeout = 60
-ignore_startup_parameters=options
+ignore_startup_parameters=options,extra_float_digits
 stats_users = datadog
     EOF
     # PG's md5 is md5(password+User)

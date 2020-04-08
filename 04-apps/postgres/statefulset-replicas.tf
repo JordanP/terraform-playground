@@ -48,6 +48,10 @@ resource "kubernetes_stateful_set" "postgresql_replica" {
             value = kubernetes_service.postgres_rw.metadata.0.name
           }
           env {
+            name  = "POSTGRES_PASSWORD"
+            value = "doesntmatter"
+          }
+          env {
             name  = "REPLICA_USER"
             value = "replica"
           }
@@ -59,10 +63,6 @@ resource "kubernetes_stateful_set" "postgresql_replica" {
                 key  = "REPLICA_PASSWORD"
               }
             }
-          }
-          env {
-            name  = "TRIGGER_FILE"
-            value = "/tmp/postgresql.trigger.5432"
           }
           image = var.image
           args  = ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf", "-c", "hot_standby_feedback=on"]

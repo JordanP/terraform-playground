@@ -1,3 +1,7 @@
+locals {
+  data_path = "/data/redis"
+}
+
 resource "random_id" "redis_password" {
   byte_length = 16
 }
@@ -29,9 +33,9 @@ logfile ""
 # database count (picked from Omnibus' redis.conf)
 databases 16
 # Database filename
-dbfilename my-gitlab-redis.rdb
+dbfilename dump.rdb
 # Working Directory (where DB is written)
-dir /data/redis
+dir ${local.data_path}
 # Configure persistence snapshotting
 save 60 1000
 save 300 10

@@ -54,6 +54,21 @@ resource "kubernetes_deployment" "pg_bouncer" {
               }
             }
           }
+          liveness_probe {
+            tcp_socket {
+              port = "5432"
+            }
+            initial_delay_seconds = 60
+            period_seconds        = 10
+          }
+          readiness_probe {
+            tcp_socket {
+              port = "5432"
+            }
+            initial_delay_seconds = 20
+            failure_threshold     = 6
+            period_seconds        = 10
+          }
         }
         volume {
           name = "pgbouncer-config"
