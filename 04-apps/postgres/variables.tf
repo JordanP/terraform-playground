@@ -9,10 +9,20 @@ variable "disk_type" {
   default = "ssd"
 }
 
-variable "master_node_selector" {
+variable "primary_node_selector" {
   type = map(string)
   default = {
     node_type = "standard"
+  }
+}
+variable "resources" {
+  type = object({
+    cpu    = string
+    memory = string
+  })
+  default = {
+    cpu    = "500m"
+    memory = "768Mi"
   }
 }
 

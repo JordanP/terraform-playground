@@ -115,5 +115,4 @@ resource "kubernetes_deployment" "ingress" {
       }
     }
   }
-  depends_on = [kubernetes_config_map.nginx_configuration]
 }

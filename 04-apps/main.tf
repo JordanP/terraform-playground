@@ -70,7 +70,7 @@ module "postgresql" {
   image                 = "postgres:11.7"
   replica_count         = 1
   disk_size             = 20
-  master_node_selector  = null
+  primary_node_selector = null
   replica_node_selector = null
 
   postgresql_conf_template           = abspath("postgres/files/postgresql.conf.tpl")

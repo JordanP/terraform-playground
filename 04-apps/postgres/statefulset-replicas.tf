@@ -102,6 +102,16 @@ resource "kubernetes_stateful_set" "postgresql_replica" {
             mount_path = "/docker-entrypoint-initdb.d/"
             name       = "postgres-bootstrap"
           }
+          resources {
+            requests {
+              cpu    = var.resources.cpu
+              memory = var.resources.memory
+            }
+            limits {
+              cpu    = var.resources.cpu
+              memory = var.resources.memory
+            }
+          }
         }
         init_container {
           name    = "init-chmod-data"

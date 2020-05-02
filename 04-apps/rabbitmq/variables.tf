@@ -15,3 +15,13 @@ variable "node_selector" {
     node_type = "standard"
   }
 }
+variable "resources" {
+  type = object({
+    cpu    = string
+    memory = string
+  })
+  default = {
+    cpu    = "200m"
+    memory = "384Mi"
+  }
+}

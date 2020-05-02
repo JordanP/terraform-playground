@@ -39,9 +39,10 @@ resource "google_compute_forwarding_rule" "gitlab" {
 }
 
 module "google_cloud_jordan" {
-  source = "git::https://github.com/poseidon/typhoon//google-cloud/container-linux/kubernetes?ref=d47d40b51789166b64e57791ede306ebc2fae0c7"
+  source = "git::https://github.com/poseidon/typhoon//google-cloud/container-linux/kubernetes?ref=e71e27e7696903eb3b10cb30ec267233ae6d771a"
 
   # Google Cloud
+  os_image      = "coreos-stable"
   cluster_name  = local.cluster_name
   region        = "europe-west4"
   dns_zone      = local.dns_zone

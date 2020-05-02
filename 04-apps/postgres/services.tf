@@ -18,7 +18,7 @@ resource "kubernetes_service" "postgres_rw" {
 
     selector = {
       app  = "postgresql"
-      role = "master"
+      role = "primary"
     }
 
     type = "ClusterIP"

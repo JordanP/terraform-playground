@@ -6,14 +6,14 @@ variable "pg_primary_hostname" {
   description = "In the form $servicename.$namespace"
 }
 variable "pg_primary_postgres_password" {}
-variable "resources_requests" {
+variable "resources" {
   type = object({
     cpu    = string
     memory = string
   })
   default = {
-    cpu    = "10m"
-    memory = "256Mi"
+    cpu    = "400m"
+    memory = "512Mi"
   }
 }
 

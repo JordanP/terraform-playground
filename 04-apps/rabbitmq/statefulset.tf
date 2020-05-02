@@ -149,6 +149,16 @@ resource "kubernetes_stateful_set" "rabbitmq" {
               }
             }
           }
+          resources {
+            requests {
+              cpu    = var.resources.cpu
+              memory = var.resources.memory
+            }
+            limits {
+              cpu    = var.resources.cpu
+              memory = var.resources.memory
+            }
+          }
         }
         affinity {
           pod_anti_affinity {

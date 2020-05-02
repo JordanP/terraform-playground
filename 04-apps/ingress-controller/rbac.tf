@@ -43,12 +43,9 @@ resource "kubernetes_cluster_role" "ingress" {
     ]
   }
   rule {
-    api_groups = [
-      "",
-    ]
-    resources = [
-    "events", ]
-    verbs = ["create", "patch"]
+    api_groups = ["", ]
+    resources  = ["events", ]
+    verbs      = ["create", "patch"]
   }
   rule {
     api_groups = [

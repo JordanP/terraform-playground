@@ -38,8 +38,12 @@ resource "kubernetes_deployment" "pg_bouncer" {
           }
           resources {
             requests {
-              cpu    = var.resources_requests.cpu
-              memory = var.resources_requests.memory
+              cpu    = var.resources.cpu
+              memory = var.resources.memory
+            }
+            limits {
+              cpu    = var.resources.cpu
+              memory = var.resources.memory
             }
           }
           lifecycle {

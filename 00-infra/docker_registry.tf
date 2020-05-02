@@ -5,6 +5,7 @@ resource "google_project_service" "container_registry" {
 
 // GCR storage bucket "(eu.)?artifacts.%project%.appspot.com" is created lazily on first push
 resource "null_resource" "init_gcr_storage_bucket" {
+  for_each = toset(["eu.gcr.io", "gcr.io"])
   provisioner "local-exec" {
     environment = {
       CLOUDSDK_CORE_PROJECT = local.project_id
@@ -17,8 +18,8 @@ resource "null_resource" "init_gcr_storage_bucket" {
       # If using a package manager:
       gcloud auth configure-docker && \
       (echo 'FROM scratch'; echo 'LABEL maintainer=jordan.pittier') | \
-      docker build -t eu.gcr.io/${local.project_id}/scratch:latest - && \
-      docker push eu.gcr.io/${local.project_id}/scratch:latest
+      docker build -t ${each.key}/${local.project_id}/scratch:latest - && \
+      docker push ${each.key}/${local.project_id}/scratch:latest
       EOF
   }
   depends_on = [google_project_service.container_registry]

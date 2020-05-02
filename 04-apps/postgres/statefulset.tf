@@ -1,9 +1,9 @@
-resource "kubernetes_stateful_set" "postgres_master" {
+resource "kubernetes_stateful_set" "postgres_primary" {
   metadata {
     labels = {
       app = "postgresql"
     }
-    name      = "pg-master"
+    name      = "pg-primary"
     namespace = (var.namespace != "default" ? kubernetes_namespace.postgresql[0].metadata.0.name : "default")
   }
   spec {
@@ -11,7 +11,7 @@ resource "kubernetes_stateful_set" "postgres_master" {
     selector {
       match_labels = {
         app  = "postgresql"
-        role = "master"
+        role = "primary"
       }
     }
     service_name = kubernetes_service.postgres_headless.metadata.0.name
@@ -19,12 +19,12 @@ resource "kubernetes_stateful_set" "postgres_master" {
       metadata {
         labels = {
           app  = "postgresql"
-          role = "master"
+          role = "primary"
         }
         name = "postgresql"
       }
       spec {
-        node_selector                   = var.master_node_selector
+        node_selector                   = var.primary_node_selector
         service_account_name            = kubernetes_service_account.postgres.metadata.0.name
         automount_service_account_token = true
         security_context {
@@ -106,6 +106,16 @@ resource "kubernetes_stateful_set" "postgres_master" {
           volume_mount {
             mount_path = "/docker-entrypoint-initdb.d/"
             name       = "postgres-bootstrap"
+          }
+          resources {
+            requests {
+              cpu    = var.resources.cpu
+              memory = var.resources.memory
+            }
+            limits {
+              cpu    = var.resources.cpu
+              memory = var.resources.memory
+            }
           }
         }
         init_container {
