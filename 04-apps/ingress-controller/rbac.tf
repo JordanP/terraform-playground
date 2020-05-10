@@ -109,6 +109,11 @@ resource "kubernetes_cluster_role" "ingress" {
       "update",
     ]
   }
+  rule {
+    api_groups = ["networking.k8s.io"]
+    resources  = ["ingressclasses"]
+    verbs      = ["get", "list", "watch"]
+  }
 }
 
 resource "kubernetes_role_binding" "ingress" {

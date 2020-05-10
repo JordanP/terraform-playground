@@ -35,7 +35,7 @@ resource "kubernetes_stateful_set" "postgres_primary" {
         container {
           env {
             name  = "PGDATA"
-            value = "/var/lib/postgresql/data/11"
+            value = "/var/lib/postgresql/data/${local.pgmajor}"
           }
           env {
             name  = "POSTGRES_USER"
@@ -117,6 +117,18 @@ resource "kubernetes_stateful_set" "postgres_primary" {
               memory = var.resources.memory
             }
           }
+          lifecycle {
+            pre_stop {
+              exec {
+                # This is the Fast Shutdown mode. The server disallows new connections and sends all existing server
+                # processes SIGTERM, which will cause them to abort their current transactions and exit promptly. It
+                # then waits for all server processes to exit and finally shuts down.
+                # Postgres entrypoint uses "exec postgres" so postgres has PID 1
+                # For some reason, we have to spawn a shell here command = ["kill", "-s", "INT", "1"] doesn't work
+                command = ["sh", "-c", "kill -s INT 1 && sleep 10"]
+              }
+            }
+          }
         }
         init_container {
           name    = "init-chmod-data"
@@ -146,9 +158,9 @@ resource "kubernetes_stateful_set" "postgres_primary" {
         # Note(JordanP): As this is the master, we are not that interested in graceful
         # shutdown. We want this to restart ASAP to limit downtime.
         # When a pod is deleted, it is sent a SIGTERM which PG interprets as "Smart Shutdown mode", which "lets existing
-        # sessions end their work normally". Maybe we should investigate a "preStop" hook that would do a PG
-        # "Fast Shutdown", but it's brutal and probably better to have a short "smart shutdown" period.
-        termination_grace_period_seconds = 5
+        # sessions end their work normally". But this may take a long time so we have a preStop hook to do a fast
+        # shutdown instead.
+        termination_grace_period_seconds = 10
       }
     }
     volume_claim_template {

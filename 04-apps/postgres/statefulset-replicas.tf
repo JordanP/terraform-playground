@@ -41,7 +41,7 @@ resource "kubernetes_stateful_set" "postgresql_replica" {
           }
           env {
             name  = "PGDATA"
-            value = "/var/lib/postgresql/data/11"
+            value = "/var/lib/postgresql/data/${local.pgmajor}"
           }
           env {
             name  = "MAIN_HOSTNAME"

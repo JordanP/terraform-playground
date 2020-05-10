@@ -39,7 +39,7 @@ resource "kubernetes_stateful_set" "prometheus" {
         }
         container {
           name  = "prometheus"
-          image = "quay.io/prometheus/prometheus:v2.17.2"
+          image = "quay.io/prometheus/prometheus:v2.18.1"
           args = [
             "--web.listen-address=0.0.0.0:9090",
             "--config.file=/etc/prometheus/prometheus.yaml",
