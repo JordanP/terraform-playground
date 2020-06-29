@@ -54,7 +54,9 @@ resource "kubernetes_deployment" "pg_bouncer" {
                 # "got SIGINT, shutting down" and eventually "server connections dropped, exiting"
                 # PGBouncer entrypoint uses "exec pgbouncer" so pgbouncer has PID 1
                 # For some reason, we have to spawn a shell here command = ["kill", "-s", "INT", "1"] doesn't work
-                command = ["sh", "-c", "kill -s INT 1 && sleep ${local.termination_grace_period_seconds}"]
+                # Also, if after some time all the connections have not been closed, then the preStop hook will return
+                # and the regular SIGTERM (fast exit) will proceed
+                command = ["sh", "-c", "kill -s INT 1 && sleep $((${local.termination_grace_period_seconds} - 2))"]
               }
             }
           }

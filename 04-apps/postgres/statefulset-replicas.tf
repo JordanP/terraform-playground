@@ -41,7 +41,7 @@ resource "kubernetes_stateful_set" "postgresql_replica" {
           }
           env {
             name  = "PGDATA"
-            value = "/var/lib/postgresql/data/${local.pgmajor}"
+            value = "${local.pgdata}/${local.pgmajor}"
           }
           env {
             name  = "MAIN_HOSTNAME"
@@ -90,7 +90,7 @@ resource "kubernetes_stateful_set" "postgresql_replica" {
             }
           }
           volume_mount {
-            mount_path = "/var/lib/postgresql/data/"
+            mount_path = local.pgdata
             name       = "pg-data"
           }
           volume_mount {
@@ -112,16 +112,30 @@ resource "kubernetes_stateful_set" "postgresql_replica" {
               memory = var.resources.memory
             }
           }
+          lifecycle {
+            pre_stop {
+              exec {
+                # This is the Fast Shutdown mode. The server disallows new connections and sends all existing server
+                # processes SIGTERM, which will cause them to abort their current transactions and exit promptly. It
+                # then waits for all server processes to exit and finally shuts down.
+                # Postgres entrypoint uses "exec postgres" so postgres has PID 1
+                # For some reason, we have to spawn a shell here command = ["kill", "-s", "INT", "1"] doesn't work
+                # Also, for some reason, using pg_ctl -D ... -m fast didn't work either
+                command = ["sh", "-c", "kill -s INT 1 && sleep $((${local.termination_grace_period_seconds} - 3))"]
+              }
+            }
+          }
         }
+        termination_grace_period_seconds = local.termination_grace_period_seconds
         init_container {
           name    = "init-chmod-data"
-          command = ["sh", "-c", "chown -R 999:999 /var/lib/postgresql/data;"]
+          command = ["sh", "-c", "chown -R 999:999 ${local.pgdata};"]
           image   = "busybox"
           security_context {
             run_as_user = 0
           }
           volume_mount {
-            mount_path = "/var/lib/postgresql/data"
+            mount_path = local.pgdata
             name       = "pg-data"
           }
         }
@@ -138,9 +152,6 @@ resource "kubernetes_stateful_set" "postgresql_replica" {
             default_mode = "0750"
           }
         }
-        # It is recommended that in a Kubernetes environment you set the terminationGracePeriodSeconds parameter
-        # to be two (2) seconds higher than the PGCTLTIMEOUT value that defaults to 60.
-        termination_grace_period_seconds = 62
         affinity {
           pod_anti_affinity {
             required_during_scheduling_ignored_during_execution {

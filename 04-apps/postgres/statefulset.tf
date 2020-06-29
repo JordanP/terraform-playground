@@ -35,7 +35,7 @@ resource "kubernetes_stateful_set" "postgres_primary" {
         container {
           env {
             name  = "PGDATA"
-            value = "/var/lib/postgresql/data/${local.pgmajor}"
+            value = "${local.pgdata}/${local.pgmajor}"
           }
           env {
             name  = "POSTGRES_USER"
@@ -95,7 +95,7 @@ resource "kubernetes_stateful_set" "postgres_primary" {
             protocol       = "TCP"
           }
           volume_mount {
-            mount_path = "/var/lib/postgresql/data"
+            mount_path = local.pgdata
             name       = "pg-data"
           }
           volume_mount {
@@ -125,20 +125,27 @@ resource "kubernetes_stateful_set" "postgres_primary" {
                 # then waits for all server processes to exit and finally shuts down.
                 # Postgres entrypoint uses "exec postgres" so postgres has PID 1
                 # For some reason, we have to spawn a shell here command = ["kill", "-s", "INT", "1"] doesn't work
-                command = ["sh", "-c", "kill -s INT 1 && sleep 10"]
+                # Also, for some reason, using pg_ctl -D ... -m fast didn't work either
+                command = ["sh", "-c", "kill -s INT 1 && sleep $((${local.termination_grace_period_seconds} - 3))"]
               }
             }
           }
         }
+        # Note(JordanP): As this is the master, we are not that interested in graceful
+        # shutdown. We want this to restart ASAP to limit downtime.
+        # When a pod is deleted, it is sent a SIGTERM which PG interprets as "Smart Shutdown mode", which "lets existing
+        # sessions end their work normally". But this may take a long time so we have a preStop hook to do a fast
+        # shutdown instead.
+        termination_grace_period_seconds = local.termination_grace_period_seconds
         init_container {
           name    = "init-chmod-data"
-          command = ["sh", "-c", "chown -R 999:999 /var/lib/postgresql/data;"]
+          command = ["sh", "-c", "chown -R 999:999 ${local.pgdata};"]
           image   = "busybox"
           security_context {
             run_as_user = 0
           }
           volume_mount {
-            mount_path = "/var/lib/postgresql/data"
+            mount_path = local.pgdata
             name       = "pg-data"
           }
         }
@@ -155,12 +162,6 @@ resource "kubernetes_stateful_set" "postgres_primary" {
             default_mode = "0750"
           }
         }
-        # Note(JordanP): As this is the master, we are not that interested in graceful
-        # shutdown. We want this to restart ASAP to limit downtime.
-        # When a pod is deleted, it is sent a SIGTERM which PG interprets as "Smart Shutdown mode", which "lets existing
-        # sessions end their work normally". But this may take a long time so we have a preStop hook to do a fast
-        # shutdown instead.
-        termination_grace_period_seconds = 10
       }
     }
     volume_claim_template {

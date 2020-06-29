@@ -30,7 +30,7 @@ resource "kubernetes_deployment" "ingress" {
         node_selector                   = var.node_selector
         container {
           name  = "nginx-ingress-controller"
-          image = "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.32.0"
+          image = "quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.33.0"
           args = [
             "/nginx-ingress-controller",
             "--configmap=$(POD_NAMESPACE)/${kubernetes_config_map.nginx_configuration.metadata.0.name}",

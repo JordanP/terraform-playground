@@ -58,6 +58,7 @@ resource "random_id" "config" {
   keepers = {
     HTTP_URL   = "https://google.fr"
     REDIS_ADDR = "redis.default:6379"
+    AMQP_URL = "amqp://guest:guest@rabbitmq.rabbitmq:5672"
   }
 }
 

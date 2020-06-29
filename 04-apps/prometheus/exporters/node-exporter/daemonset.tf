@@ -39,7 +39,7 @@ resource "kubernetes_daemonset" "node_exporter" {
 
         container {
           name  = "node-exporter"
-          image = "quay.io/prometheus/node-exporter:v0.18.1"
+          image = "quay.io/prometheus/node-exporter:v1.0.1"
 
           args = [
             "--path.procfs=/host/proc",

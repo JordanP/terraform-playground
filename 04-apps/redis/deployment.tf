@@ -61,7 +61,7 @@ resource "kubernetes_deployment" "redis" {
         }
         container {
           name  = "redis"
-          image = "redis:5.0-alpine"
+          image = "redis:6.0-alpine"
           security_context {
             allow_privilege_escalation = false
           }

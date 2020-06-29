@@ -13,6 +13,7 @@ import (
 
 	"github.com/go-redis/redis"
 	_ "github.com/lib/pq"
+	"github.com/streadway/amqp"
 )
 
 var (
@@ -65,11 +66,36 @@ func pgPing(ctx context.Context, period time.Duration, client *sql.DB) error {
 	}
 }
 
+func rmqDial(ctx context.Context, period time.Duration, amqpURL string) error {
+	for {
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		case <-time.After(period):
+			connection, err := amqp.Dial(amqpURL)
+			if err != nil {
+				log.Println("Failed to dial RMQ:", err)
+				continue
+			}
+			defer connection.Close()
+
+			if _, err := connection.Channel(); err != nil {
+				log.Println("Failed to create a RMQ channel:", err)
+				continue
+			}
+
+			log.Printf("RMQ OK")
+		}
+	}
+
+}
+
 func main() {
 	httpURL := flag.String("http-url", os.Getenv("HTTP_URL"), "HTTP URL to GET")
 	redisAddr := flag.String("redis-addr", os.Getenv("REDIS_ADDR"), "Redis address (localhost:6379)")
 	redisPasswd := flag.String("redis-passwd", os.Getenv("REDIS_PASSWD"), "Redis password")
 	pgDSN := flag.String("pg-dsn", os.Getenv("PG_DSN"), "PG DSN (postgres://user:pass@host/db?sslmode=disable)")
+	amqpURL := flag.String("amq-url", os.Getenv("AMQP_URL"), "RMQ URL (amqp://guest:guest@localhost:5672)")
 	pingPeriod := flag.Duration("ping-period", 500*time.Millisecond, "Ping period")
 	flag.Parse()
 
@@ -98,6 +124,10 @@ func main() {
 			return
 		}
 		log.Println(pgPing(ctx, *pingPeriod, client))
+	}()
+
+	go func() {
+		log.Println(rmqDial(ctx, *pingPeriod, *amqpURL))
 	}()
 
 	select {

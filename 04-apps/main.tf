@@ -58,7 +58,7 @@ module "redis" {
 module "rabbitmq" {
   source        = "./rabbitmq"
   namespace     = "rabbitmq"
-  image         = "rabbitmq:3.7.24"
+  image         = "rabbitmq:3.7.26"
   replica_count = 3
   disk_size     = 200
   node_selector = null
@@ -67,7 +67,7 @@ module "rabbitmq" {
 module "postgresql" {
   source                = "./postgres"
   namespace             = "postgres"
-  image                 = "postgres:11.7"
+  image                 = "postgres:12.3"
   replica_count         = 1
   disk_size             = 20
   primary_node_selector = null
@@ -91,17 +91,17 @@ module "pgbouncer" {
 }
 
 # terraform destroy -auto-approve -target module.gitlab
-module "gitlab" {
-  source              = "./gitlab"
-  helm_release_name   = local.gitlab_release_name
-  postgresql_host     = module.postgresql.postgres_rw_service
-  postgresql_database = "postgres"
-  postgresql_username = "postgres"
-  postgresql_password = module.postgresql.postgres_password
-  redis_password      = module.redis.redis_password
-  tls_certificate     = data.terraform_remote_state.infra.outputs.certificate
-  tls_private_key     = data.terraform_remote_state.infra.outputs.private_key
-}
+//module "gitlab" {
+//  source              = "./gitlab"
+//  helm_release_name   = local.gitlab_release_name
+//  postgresql_host     = module.postgresql.postgres_rw_service
+//  postgresql_database = "postgres"
+//  postgresql_username = "postgres"
+//  postgresql_password = module.postgresql.postgres_password
+//  redis_password      = module.redis.redis_password
+//  tls_certificate     = data.terraform_remote_state.infra.outputs.certificate
+//  tls_private_key     = data.terraform_remote_state.infra.outputs.private_key
+//}
 
 output "redis_password" {
   value     = module.redis.redis_password

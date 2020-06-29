@@ -39,7 +39,7 @@ resource "google_compute_forwarding_rule" "gitlab" {
 }
 
 module "google_cloud_jordan" {
-  source = "git::https://github.com/poseidon/typhoon//google-cloud/container-linux/kubernetes?ref=e71e27e7696903eb3b10cb30ec267233ae6d771a"
+  source = "git::https://github.com/poseidon/typhoon//google-cloud/container-linux/kubernetes?ref=1f83ae7dbb052367e3a599b6b15cabf3eeb033c3"
 
   # Google Cloud
   os_image      = "coreos-stable"
