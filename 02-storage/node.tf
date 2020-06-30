@@ -20,7 +20,7 @@ resource "kubernetes_daemonset" "node" {
         automount_service_account_token = true
         container {
           name  = "csi-driver-registrar"
-          image = "gke.gcr.io/csi-node-driver-registrar:v1.2.0-gke.0"
+          image = "gke.gcr.io/csi-node-driver-registrar:v1.3.0-gke.0"
           args  = ["--v=5", "--csi-address=/csi/csi.sock", "--kubelet-registration-path=/var/lib/kubelet/plugins/pd.csi.storage.gke.io/csi.sock"]
           lifecycle {
             pre_stop {

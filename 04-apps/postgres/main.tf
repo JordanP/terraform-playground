@@ -1,7 +1,7 @@
 locals {
   # Infer the value based on the version set in the docker image name
-  pgmajor = regex("postgres:([0-9]+)", var.image)[0]
-  pgdata = "/var/lib/postgresql/data"
+  pgmajor                          = regex("postgres:([0-9]+)", var.image)[0]
+  pgdata                           = "/var/lib/postgresql/data"
   termination_grace_period_seconds = 20
 }
 

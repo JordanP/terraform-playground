@@ -124,6 +124,16 @@ resource "kubernetes_cluster_role" "external_provisioner_role" {
     resources  = ["nodes"]
     verbs      = ["get", "list", "watch"]
   }
+  rule {
+    api_groups = ["snapshot.storage.k8s.io"]
+    resources  = ["volumesnapshots"]
+    verbs      = ["get", "list"]
+  }
+  rule {
+    api_groups = ["snapshot.storage.k8s.io"]
+    resources  = ["volumesnapshotcontents"]
+    verbs      = ["get", "list"]
+  }
 }
 
 resource "kubernetes_cluster_role_binding" "csi_controller_provisioner_binding" {
@@ -142,7 +152,7 @@ resource "kubernetes_cluster_role_binding" "csi_controller_provisioner_binding" 
   }
 }
 
-resource "kubernetes_cluster_role" "external_attacher_role" {
+resource "kubernetes_cluster_role" "csi_gce_pd_attacher_role" {
   metadata {
     name = "csi-gce-pd-attacher-role"
   }
@@ -181,7 +191,7 @@ resource "kubernetes_cluster_role_binding" "csi_controller_attacher_binding" {
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "ClusterRole"
-    name      = kubernetes_cluster_role.external_attacher_role.metadata.0.name
+    name      = kubernetes_cluster_role.csi_gce_pd_attacher_role.metadata.0.name
   }
   subject {
     kind      = "ServiceAccount"
@@ -257,5 +267,90 @@ resource "kubernetes_cluster_role_binding" "csi_gce_pd_node" {
   subject {
     kind = "ServiceAccount"
     name = kubernetes_service_account.csi_gce_pd_node_sa.metadata.0.name
+  }
+}
+
+resource "kubernetes_cluster_role_binding" "csi_gce_pd_controller" {
+  metadata {
+    name = "csi-gce-pd-controller"
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = kubernetes_cluster_role.csi_gce_pd_node_deploy.metadata.0.name
+  }
+  subject {
+    kind = "ServiceAccount"
+    name = kubernetes_service_account.csi_controller_sa.metadata.0.name
+  }
+}
+
+resource "kubernetes_cluster_role" "csi_gce_pd_snapshotter_role" {
+  metadata {
+    name = "csi-gce-pd-snapshotter-role"
+  }
+  rule {
+    api_groups = [""]
+    resources  = ["events"]
+    verbs      = ["list", "watch", "create", "update", "patch"]
+  }
+  rule {
+    api_groups = ["snapshot.storage.k8s.io"]
+    resources  = ["volumesnapshotclasses"]
+    verbs      = ["get", "list", "watch"]
+  }
+  rule {
+    api_groups = ["snapshot.storage.k8s.io"]
+    resources  = ["volumesnapshotcontents"]
+    verbs      = ["create", "get", "list", "watch", "update", "delete"]
+  }
+  rule {
+    api_groups = ["snapshot.storage.k8s.io"]
+    resources  = ["volumesnapshotcontents/status"]
+    verbs      = ["update"]
+  }
+}
+
+resource "kubernetes_cluster_role_binding" "csi_gce_pd_controller_snapshotter_binding" {
+  metadata {
+    name = "csi-gce-pd-controller-snapshotter-binding"
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "ClusterRole"
+    name      = kubernetes_cluster_role.csi_gce_pd_snapshotter_role.metadata.0.name
+  }
+  subject {
+    kind = "ServiceAccount"
+    name = kubernetes_service_account.csi_controller_sa.metadata.0.name
+  }
+}
+
+resource "kubernetes_role" "csi_gce_pd_leaderelection_role" {
+  metadata {
+    name      = "csi-gce-pd-leaderelection-role"
+    namespace = kubernetes_namespace.gce_pd_csi.metadata.0.name
+  }
+  rule {
+    api_groups = ["coordination.k8s.io"]
+    resources  = ["leases"]
+    verbs      = ["get", "watch", "list", "delete", "update", "create"]
+  }
+}
+
+resource "kubernetes_role_binding" "csi_gce_pd_controller_leaderelection_binding" {
+  metadata {
+    name      = "csi-gce-pd-controller-leaderelection-binding"
+    namespace = kubernetes_namespace.gce_pd_csi.metadata.0.name
+  }
+  role_ref {
+    api_group = "rbac.authorization.k8s.io"
+    kind      = "Role"
+    name      = kubernetes_role.csi_gce_pd_leaderelection_role.metadata.0.name
+  }
+  subject {
+    kind      = "ServiceAccount"
+    name      = kubernetes_service_account.csi_controller_sa.metadata.0.name
+    namespace = kubernetes_service_account.csi_controller_sa.metadata.0.namespace
   }
 }

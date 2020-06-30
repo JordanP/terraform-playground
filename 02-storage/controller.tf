@@ -25,12 +25,24 @@ resource "kubernetes_stateful_set" "csi_gce_pd_controller" {
         automount_service_account_token = true
         container {
           name  = "csi-provisioner"
-          image = "gke.gcr.io/csi-provisioner:v1.5.0-gke.0"
+          image = "gke.gcr.io/csi-provisioner:v1.6.0-gke.0"
           args = [
             "--v=5",
             "--csi-address=/csi/csi.sock",
             "--feature-gates=Topology=true",
+            "--metrics-address=:22011",
+            "--enable-leader-election",
+            "--leader-election-type=leases",
+            "--leader-election-namespace=$(PDCSI_NAMESPACE)",
           ]
+          env {
+            name = "PDCSI_NAMESPACE"
+            value_from {
+              field_ref {
+                field_path = "metadata.namespace"
+              }
+            }
+          }
           volume_mount {
             mount_path = "/csi"
             name       = "socket-dir"
@@ -39,8 +51,22 @@ resource "kubernetes_stateful_set" "csi_gce_pd_controller" {
         }
         container {
           name  = "csi-attacher"
-          image = "gke.gcr.io/csi-attacher:v2.1.1-gke.0"
-          args  = ["--v=5", "--csi-address=/csi/csi.sock"]
+          image = "gke.gcr.io/csi-attacher:v2.2.0-gke.0"
+          args = [
+            "--v=5",
+            "--csi-address=/csi/csi.sock",
+            "--metrics-address=:22012",
+            "--leader-election",
+            "--leader-election-namespace=$(PDCSI_NAMESPACE)",
+          ]
+          env {
+            name = "PDCSI_NAMESPACE"
+            value_from {
+              field_ref {
+                field_path = "metadata.namespace"
+              }
+            }
+          }
           volume_mount {
             mount_path = "/csi"
             name       = "socket-dir"
@@ -48,16 +74,49 @@ resource "kubernetes_stateful_set" "csi_gce_pd_controller" {
         }
         container {
           name  = "csi-resizer"
-          image = "gke.gcr.io/csi-resizer:v0.4.0-gke.0"
-          args  = ["--v=5", "--csi-address=/csi/csi.sock"]
+          image = "gke.gcr.io/csi-resizer:v0.5.0-gke.0"
+          args = [
+            "--v=5",
+            "--csi-address=/csi/csi.sock",
+            "--metrics-address=:22013",
+            "--leader-election",
+            "--leader-election-namespace=$(PDCSI_NAMESPACE)",
+          ]
+          env {
+            name = "PDCSI_NAMESPACE"
+            value_from {
+              field_ref {
+                field_path = "metadata.namespace"
+              }
+            }
+          }
           volume_mount {
             mount_path = "/csi"
             name       = "socket-dir"
           }
         }
         container {
+          name  = "csi-snapshotter"
+          image = "gke.gcr.io/csi-snapshotter:v2.1.1-gke.0"
+          args = [
+            "--v=5",
+            "--csi-address=/csi/csi.sock",
+            "--metrics-address=:22014",
+            "--leader-election",
+            "--leader-election-namespace=$(PDCSI_NAMESPACE)",
+          ]
+          env {
+            name = "PDCSI_NAMESPACE"
+            value_from {
+              field_ref {
+                field_path = "metadata.namespace"
+              }
+            }
+          }
+        }
+        container {
           name  = "gce-pd-driver"
-          image = "gke.gcr.io/gcp-compute-persistent-disk-csi-driver:v0.6.0-gke.0"
+          image = "gke.gcr.io/gcp-compute-persistent-disk-csi-driver:v0.7.0-gke.0"
           args  = ["--v=5", "--endpoint=unix:/csi/csi.sock"]
           env {
             name  = "GOOGLE_APPLICATION_CREDENTIALS"
