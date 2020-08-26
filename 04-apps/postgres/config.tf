@@ -7,6 +7,9 @@ resource "kubernetes_config_map" "postgres_conf_primary" {
     "postgresql.conf" = templatefile(var.postgresql_conf_template, {
       "max_connections" : var.postgresql_primary_max_connections
       "work_mem" : var.postgresql_primary_work_mem
+      "effective_cache_size" : var.postgresql_primary_effective_cache_size
+      "shared_buffers" : var.postgresql_primary_shared_buffers
+      "maintenance_work_mem": var.postgresql_primary_maintenance_work_mem
     })
   }
 }
@@ -21,6 +24,9 @@ resource "kubernetes_config_map" "postgres_conf_replica" {
       # Needs to be higher than on primary otherwise replica won't start.
       "max_connections" : max(var.postgresql_replica_max_connections, var.postgresql_primary_max_connections)
       "work_mem" : var.postgresql_replica_work_mem
+      "effective_cache_size" : var.postgresql_replica_effective_cache_size
+      "shared_buffers" : var.postgresql_replica_shared_buffers
+      "maintenance_work_mem": var.postgresql_replica_maintenance_work_mem
     })
   }
 }

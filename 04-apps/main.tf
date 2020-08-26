@@ -73,13 +73,20 @@ module "postgresql" {
   primary_node_selector = null
   replica_node_selector = null
 
-  postgresql_conf_template           = abspath("postgres/files/postgresql.conf.tpl")
-  postgresql_primary_max_connections = 50
-  postgresql_primary_work_mem        = "36700kB"
+  postgresql_conf_template                = abspath("postgres/files/postgresql.conf.tpl")
+  postgresql_primary_max_connections      = 50
+  postgresql_primary_work_mem             = "32MB"
+  postgresql_primary_effective_cache_size = "5376MB"
+  postgresql_primary_shared_buffers       = "1792MB"
+  postgresql_primary_maintenance_work_mem = "448MB"
+
   # Needs to be higher than primary:
   # hot standby is not possible because max_connections = XX is a lower setting than on the master server
-  postgresql_replica_max_connections = 60
-  postgresql_replica_work_mem        = "30MB"
+  postgresql_replica_max_connections      = 60
+  postgresql_replica_work_mem             = "30MB"
+  postgresql_replica_effective_cache_size = "5000MB"
+  postgresql_replica_shared_buffers       = "1600MB"
+  postgresql_replica_maintenance_work_mem = "400MB"
 }
 
 module "pgbouncer" {

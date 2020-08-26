@@ -1,8 +1,8 @@
 listen_addresses = '*'
 max_connections = ${max_connections}
-shared_buffers = 1792MB
-effective_cache_size = 5376MB
-maintenance_work_mem = 448MB
+shared_buffers = ${shared_buffers}
+effective_cache_size = ${effective_cache_size}
+maintenance_work_mem = ${maintenance_work_mem}
 checkpoint_completion_target = 0.7
 wal_buffers = 16MB
 default_statistics_target = 100

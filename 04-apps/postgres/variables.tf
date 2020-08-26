@@ -36,5 +36,11 @@ variable "replica_node_selector" {
 variable "postgresql_conf_template" {}
 variable "postgresql_primary_max_connections" {}
 variable "postgresql_primary_work_mem" {}
+variable "postgresql_primary_effective_cache_size" {}
+variable "postgresql_primary_shared_buffers" {}
+variable "postgresql_primary_maintenance_work_mem" {}
 variable "postgresql_replica_max_connections" {}
 variable "postgresql_replica_work_mem" {}
+variable "postgresql_replica_effective_cache_size" {}
+variable "postgresql_replica_shared_buffers" {}
+variable "postgresql_replica_maintenance_work_mem" {}
